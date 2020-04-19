@@ -64,6 +64,13 @@ public class ScreenSoulEnchanter extends ContainerScreen<ContainerSoulEnchanter>
         int yStart = (this.height - this.ySize) / 2;
 
         this.blit(xStart, yStart, 0, 0, this.xSize, this.ySize);
+
+        ContainerSoulEnchanter containerSoulEnchanter = this.getContainer();
+
+        if(containerSoulEnchanter.isInfusing()) {
+            int progressScaled = container.getInfuseProgressScaled(24);
+            this.blit(xStart + 74, yStart + 35, 176, 0, progressScaled + 1, 16);
+        }
     }
 
     @Override

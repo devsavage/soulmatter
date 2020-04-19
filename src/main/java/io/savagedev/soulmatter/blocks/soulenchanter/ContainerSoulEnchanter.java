@@ -33,6 +33,8 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIntArray;
+import net.minecraft.util.IntArray;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -44,19 +46,22 @@ public class ContainerSoulEnchanter extends Container
 {
     private final Function<PlayerEntity, Boolean> isUsableByPlayer;
     private final ItemStackHandler inventory;
+    private final IIntArray data;
 
     public ContainerSoulEnchanter(@Nullable ContainerType<?> type, int id, PlayerInventory playerInventory) {
-        this(type, id, playerInventory, p -> false, (new TileEntitySoulEnchanter()).getInventory());
+        this(type, id, playerInventory, p -> false, (new TileEntitySoulEnchanter()).getInventory(), new IntArray(1));
     }
 
-    private ContainerSoulEnchanter(@Nullable ContainerType<?> type, int id, PlayerInventory playerInventory, Function<PlayerEntity, Boolean> isUsableByPlayer, ModItemStackHandler inv) {
+    private ContainerSoulEnchanter(@Nullable ContainerType<?> type, int id, PlayerInventory playerInventory, Function<PlayerEntity, Boolean> isUsableByPlayer, ModItemStackHandler inv, IIntArray data) {
         super(type, id);
 
         this.isUsableByPlayer = isUsableByPlayer;
         this.inventory = inv;
+        this.data = data;
 
-        this.addSlot(new SlotInput(inv, 0, 49, 35));
-        this.addSlot(new SlotOutput(inv, 1, 111, 35));
+        this.addSlot(new SlotSoulInfuser(inv, 0, 8, 62));
+        this.addSlot(new SlotInput(inv, 1, 49, 35));
+        this.addSlot(new SlotOutput(inv, 2, 111, 35));
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
@@ -67,14 +72,16 @@ public class ContainerSoulEnchanter extends Container
         for (int i = 0; i < 9; i++) {
             this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
         }
+
+        this.trackIntArray(data);
     }
 
     public static ContainerSoulEnchanter create(int windowId, PlayerInventory playerInventory) {
         return new ContainerSoulEnchanter(ModContainers.SOUL_ENCHANTER.get(), windowId, playerInventory);
     }
 
-    public static ContainerSoulEnchanter create(int windowId, PlayerInventory playerInventory, Function<PlayerEntity, Boolean> isUsableByPlayer, ModItemStackHandler inventory) {
-        return new ContainerSoulEnchanter(ModContainers.SOUL_ENCHANTER.get(), windowId, playerInventory, isUsableByPlayer, inventory);
+    public static ContainerSoulEnchanter create(int windowId, PlayerInventory playerInventory, Function<PlayerEntity, Boolean> isUsableByPlayer, ModItemStackHandler inventory, IIntArray data) {
+        return new ContainerSoulEnchanter(ModContainers.SOUL_ENCHANTER.get(), windowId, playerInventory, isUsableByPlayer, inventory, data);
     }
 
     @Override
@@ -96,8 +103,7 @@ public class ContainerSoulEnchanter extends Container
                 if (!this.mergeItemStack(itemstack1, 2, this.inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            }
-            else if (!this.mergeItemStack(itemstack1, 0, 2, false)) {
+            } else if (!this.mergeItemStack(itemstack1, 0, 2, false)) {
                 return ItemStack.EMPTY;
             }
 
@@ -110,6 +116,49 @@ public class ContainerSoulEnchanter extends Container
         }
 
         return itemstack;
+    }
+
+    public int getProgress() {
+        return this.data.get(0);
+    }
+
+    public boolean isInfusing() {
+        return this.getProgress() > 0;
+    }
+
+    public int getInfuseProgressScaled(int pixels) {
+        int i = this.getProgress();
+        int j = TileEntitySoulEnchanter.getOperationTime();
+
+        return j != 0 && i != 0 ? i * pixels / j : 0;
+    }
+
+    private final class SlotSoulInfuser extends SlotItemHandler
+    {
+        private final ModItemStackHandler inventory;
+        private final int index;
+
+        public SlotSoulInfuser(ModItemStackHandler inventoryIn, int index, int xPosition, int yPosition) {
+            super(inventoryIn, index, xPosition, yPosition);
+            this.inventory = inventoryIn;
+            this.index = index;
+        }
+
+        @Override
+        public boolean canTakeStack(PlayerEntity playerIn) {
+            return !this.inventory.extractItemSuper(this.index, 1, true).isEmpty();
+        }
+
+        @Nonnull
+        @Override
+        public ItemStack decrStackSize(int amount) {
+            return this.inventory.extractItemSuper(this.index, amount, false);
+        }
+
+        @Override
+        public boolean isItemValid(ItemStack stack) {
+            return false;
+        }
     }
 
     private final class SlotInput extends SlotItemHandler
