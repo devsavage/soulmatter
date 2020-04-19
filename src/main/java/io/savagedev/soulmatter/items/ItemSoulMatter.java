@@ -1,7 +1,7 @@
-package io.savagedev.soulmatter.util;
+package io.savagedev.soulmatter.items;
 
 /*
- * ModNames.java
+ * ItemSoulMatter.java
  * Copyright (C) 2020 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,21 +23,20 @@ package io.savagedev.soulmatter.util;
  * THE SOFTWARE.
  */
 
-public class ModNames
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Rarity;
+
+import java.util.function.Function;
+
+public class ItemSoulMatter extends BaseItem
 {
-    public static class Items
-    {
-        public static final String RAW_SOUL_MATTER = "raw_soul_matter";
-        public static final String SOUL_MATTER = "soul_matter";
+    public ItemSoulMatter(Function<Properties, Properties> properties) {
+        super(properties);
     }
 
-    public static class Blocks
-    {
-        public static final String SOUL_ENCHANTER = "soul_enchanter";
-    }
-
-    public static class Containers
-    {
-        public static final String SOUL_ENCHANTER = "container.soulmatter.soul_enchanter";
+    @Override
+    public Rarity getRarity(ItemStack stack) {
+        return Rarity.UNCOMMON;
     }
 }

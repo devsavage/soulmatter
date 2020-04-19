@@ -1,1 +1,8 @@
-{}
+{
+  "itemGroup.soulmatter": "Soul Matter",
+
+  "item.soulmatter.raw_soul_matter": "Raw Soul Matter",
+  "item.soulmatter.soul_matter": "Soul Matter",
+
+  "container.soulmatter.soul_enchanter": "Soul Enchanter"
+}

@@ -23,12 +23,20 @@ package io.savagedev.soulmatter;
  * THE SOFTWARE.
  */
 
+import io.savagedev.soulmatter.handlers.MobDropsHandler;
+import io.savagedev.soulmatter.init.ModBlocks;
+import io.savagedev.soulmatter.init.ModContainers;
 import io.savagedev.soulmatter.init.ModItems;
+import io.savagedev.soulmatter.init.ModTileEntities;
 import io.savagedev.soulmatter.util.ModReference;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod(ModReference.MOD_ID)
@@ -45,6 +53,20 @@ public class SoulMatter
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         modEventBus.register(this);
+        modEventBus.register(new ModBlocks());
         modEventBus.register(new ModItems());
+        modEventBus.register(new ModTileEntities());
+        modEventBus.register(new ModContainers());
+    }
+
+    @SubscribeEvent
+    public void onClientSetup(FMLClientSetupEvent event) {
+        ModContainers.onClientSetup();
+    }
+
+    @SubscribeEvent
+    public void onCommonSetup(FMLCommonSetupEvent event) {
+        MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new MobDropsHandler());
     }
 }
