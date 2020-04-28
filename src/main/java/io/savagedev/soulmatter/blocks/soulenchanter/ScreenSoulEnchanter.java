@@ -53,7 +53,7 @@ public class ScreenSoulEnchanter extends ContainerScreen<ContainerSoulEnchanter>
         String title = this.getTitle().getFormattedText();
 
         this.font.drawString(title, (float) (this.xSize / 2 - this.font.getStringWidth(title) / 2), 6.0F, 4210752);
-        this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float)(this.ySize - 96 + 2), 4210752);
+        this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), this.xSize - 58, this.ySize - 96 + 2, 4210752);
     }
 
     @Override
@@ -67,6 +67,9 @@ public class ScreenSoulEnchanter extends ContainerScreen<ContainerSoulEnchanter>
 
         ContainerSoulEnchanter containerSoulEnchanter = this.getContainer();
 
+        int bufferScale = container.getFuelLeftScaled(39);
+        this.blit(xStart + 10, yStart + 57 - bufferScale + 1, 0, 206 - bufferScale, 12, bufferScale);
+
         if(containerSoulEnchanter.isInfusing()) {
             int progressScaled = container.getInfuseProgressScaled(24);
             this.blit(xStart + 74, yStart + 35, 176, 0, progressScaled + 1, 16);
@@ -76,5 +79,11 @@ public class ScreenSoulEnchanter extends ContainerScreen<ContainerSoulEnchanter>
     @Override
     protected void renderHoveredToolTip(int mouseX, int mouseY) {
         super.renderHoveredToolTip(mouseX, mouseY);
+
+        ContainerSoulEnchanter container = this.getContainer();
+
+        if (mouseX > this.guiLeft + 10 && mouseX < this.guiLeft + 23 && mouseY > this.guiTop + 19 && mouseY < this.guiTop + 60) {
+            this.renderTooltip(container.getFuelStored() + " / " + container.getFuelCapacity(), mouseX, mouseY);
+        }
     }
 }

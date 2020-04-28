@@ -24,13 +24,13 @@ package io.savagedev.soulmatter.handlers;
  */
 
 import io.savagedev.soulmatter.init.ModItems;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.monster.EndermanEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -50,16 +50,41 @@ public class MobDropsHandler
         double rand  = Math.random();
 
         if(event.getSource().getTrueSource() instanceof PlayerEntity) {
-            if(entity instanceof MonsterEntity) {
-                if(entity instanceof EndermanEntity) {
-                    if(rand < 0.3D) {
-                        drops.add(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ModItems.RAW_SOUL_MATTER.get(), 2)));
-                        return;
-                    }
-                }
+            PlayerEntity livingEntity = (PlayerEntity) event.getSource().getTrueSource();
+            if(livingEntity.getHeldItem(Hand.MAIN_HAND).getItem() == ModItems.SOUL_STEALER.get()) {
+                if(entity instanceof MonsterEntity) {
+                    ItemStack soulStealer = livingEntity.getHeldItem(Hand.MAIN_HAND).getStack();
+                    // We only give souls stolen when we drop soul matter. This makes it 1:1; 1 raw soul matter to 1 soul stolen
+                    if(entity instanceof EndermanEntity) {
+                        if(rand < 0.3D) {
+                            if(soulStealer.getTag() == null || !soulStealer.getTag().contains("SoulsTaken")) {
+                                soulStealer.getOrCreateTag().putInt("SoulsTaken", 1);
+                            }
 
-                if(rand < 0.15D) {
-                    drops.add(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ModItems.RAW_SOUL_MATTER.get(), 1)));
+                            int count = soulStealer.getTag().getInt("SoulsTaken");
+                            if(count >= 0)
+                                soulStealer.getTag().putInt("SoulsTaken", count + 1);
+                            else
+                                soulStealer.getTag().putInt("SoulsTaken", 0);
+
+                            drops.add(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ModItems.RAW_SOUL_MATTER.get(), 2)));
+                            return;
+                        }
+                    }
+
+                    if(rand < 0.15D) {
+                        if(soulStealer.getTag() == null || !soulStealer.getTag().contains("SoulsTaken")) {
+                            soulStealer.getOrCreateTag().putInt("SoulsTaken", 1);
+                        }
+
+                        int count = soulStealer.getTag().getInt("SoulsTaken");
+                        if(count >= 0)
+                            soulStealer.getTag().putInt("SoulsTaken", count + 1);
+                        else
+                            soulStealer.getTag().putInt("SoulsTaken", 0);
+
+                        drops.add(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ModItems.RAW_SOUL_MATTER.get(), 1)));
+                    }
                 }
             }
         }

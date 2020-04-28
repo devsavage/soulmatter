@@ -24,9 +24,11 @@ package io.savagedev.soulmatter.blocks.soulenchanter;
  */
 
 import com.google.common.collect.Lists;
+import io.savagedev.soulmatter.SoulMatter;
 import io.savagedev.soulmatter.helpers.ModItemStackHandler;
 import io.savagedev.soulmatter.init.ModItems;
 import io.savagedev.soulmatter.init.ModTileEntities;
+import io.savagedev.soulmatter.util.LogHelper;
 import io.savagedev.soulmatter.util.ModNames;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -47,7 +49,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -56,12 +61,15 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class TileEntitySoulEnchanter extends TileEntity implements INamedContainerProvider, ITickableTileEntity
 {
     private final ModItemStackHandler inventory = new ModItemStackHandler(3);
     private int progress;
-    protected static int operationTime = 5;
+    private int totalFuelStored;
+    protected static int fuelCapacity = 14000;
+    public static int operationTime = 5;
 
     private final IIntArray data = new IIntArray()
     {
@@ -70,6 +78,8 @@ public class TileEntitySoulEnchanter extends TileEntity implements INamedContain
             switch (index) {
                 case 0:
                     return TileEntitySoulEnchanter.this.getProgress();
+                case 1:
+                    return TileEntitySoulEnchanter.this.getFuelStored();
                 default:
                     return 0;
             }
@@ -80,7 +90,7 @@ public class TileEntitySoulEnchanter extends TileEntity implements INamedContain
 
         @Override
         public int size() {
-            return 1;
+            return 2;
         }
     };
 
@@ -97,15 +107,41 @@ public class TileEntitySoulEnchanter extends TileEntity implements INamedContain
         if (world == null || world.isRemote())
             return;
 
+        if(!this.inventory.getStackInSlot(0).isEmpty()) {
+            ItemStack soulStealer = this.inventory.getStackInSlot(0).getStack();
+
+            if(soulStealer.getTag().contains("SoulsTaken")) {
+                final int count = soulStealer.getTag().getInt("SoulsTaken");
+
+                if(!isFuelFull()) {
+                    for(int i = 0; i < count; i++) {
+                        this.totalFuelStored += 1;
+                    }
+
+                    if(count > 0)
+                        soulStealer.getTag().putInt("SoulsTaken", count - 1);
+                    else
+                        soulStealer.getTag().putInt("SoulsTaken", 0);
+                }
+
+                dirty = true;
+            }
+        }
+
         if(canInfuse()) {
-            if(getSurroundingMonsters().size() >= 4) {
-                killSurroundingMonsters();
+            this.progress++;
+            int fuelAfterComplete = this.totalFuelStored - this.getOperationCost();
+            this.totalFuelStored--;
 
-                this.progress++;
+            if(this.progress >= getOperationTime()) {
+                infuse();
+                this.progress = 0;
 
-                if(this.progress >= this.getOperationTime()) {
-                    infuse();
-                    this.progress = 0;
+
+                if(this.getFuelStored() <= 0) {
+                    this.setFuelStored(0);
+                } else {
+                    this.totalFuelStored = fuelAfterComplete;
                 }
             }
 
@@ -126,12 +162,14 @@ public class TileEntitySoulEnchanter extends TileEntity implements INamedContain
     public void read(CompoundNBT compound) {
         super.read(compound);
         this.progress = compound.getInt("Progress");
+        this.totalFuelStored = compound.getInt("FuelStored");
         ItemStackHelper.loadAllItems(compound, this.getInventory().getStacks());
     }
 
     @Override
     public CompoundNBT write(CompoundNBT compound) {
         compound.putInt("Progress", this.getProgress());
+        compound.putInt("FuelStored", this.getFuelStored());
         ItemStackHelper.saveAllItems(compound, this.getInventory().getStacks());
 
         return super.write(compound);
@@ -158,31 +196,19 @@ public class TileEntitySoulEnchanter extends TileEntity implements INamedContain
         return player.getDistanceSq(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= 64;
     }
 
-    // TODO: Check for soul infuser here
     private boolean canInfuse() {
-        if(!this.inventory.getStackInSlot(1).isEmpty() && this.inventory.getStackInSlot(1).getItem() == ModItems.RAW_SOUL_MATTER.get()) {
-            return true;
+        if(this.getFuelStored() >= getOperationCost()) {
+            return !this.inventory.getStackInSlot(1).isEmpty() &&
+                    this.inventory.getStackInSlot(1).getItem() == ModItems.RAW_SOUL_MATTER.get() &&
+                    !this.inventory.getStackInSlot(0).isEmpty() &&
+                    this.inventory.getStackInSlot(0).getItem() == ModItems.SOUL_STEALER.get();
         }
 
         return false;
     }
 
-    private List<MonsterEntity> getSurroundingMonsters() {
-        BlockPos tileBlock = new BlockPos(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
-        AxisAlignedBB axisAlignedBB = new AxisAlignedBB(tileBlock);
-
-        return this.getWorld().getEntitiesWithinAABB(MonsterEntity.class, axisAlignedBB.grow(6, 0, 6));
-    }
-
-    private void killSurroundingMonsters() {
-        List<MonsterEntity> mobs = this.getSurroundingMonsters();
-
-        for(MonsterEntity monster : mobs) {
-            monster.attackEntityFrom(DamageSource.GENERIC, 200);
-        }
-    }
-
     private void infuse() {
+        ItemStack soulStealerStack = this.inventory.getStackInSlot(0).getStack();
         ItemStack outputStack = new ItemStack(ModItems.SOUL_MATTER.get());
 
         this.inventory.extractItemSuper(1, 1, false);
@@ -198,7 +224,27 @@ public class TileEntitySoulEnchanter extends TileEntity implements INamedContain
         return this.progress;
     }
 
-    protected static int getOperationTime() {
-        return operationTime;
+    public static int getOperationTime() {
+        return 200;
+    }
+
+    public static int getOperationCost() {
+        return 100;
+    }
+
+    private int getFuelStored() {
+        return this.totalFuelStored;
+    }
+
+    private void setFuelStored(int i) {
+        this.totalFuelStored = i;
+    }
+
+    private boolean isFuelFull() {
+        return this.getFuelStored() >= getFuelCapacity();
+    }
+
+    protected static int getFuelCapacity() {
+        return fuelCapacity;
     }
 }

@@ -23,6 +23,7 @@ package io.savagedev.soulmatter.blocks.soulenchanter;
  * THE SOFTWARE.
  */
 
+import io.savagedev.soulmatter.util.LogHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;

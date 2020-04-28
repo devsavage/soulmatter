@@ -35,6 +35,8 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -49,7 +51,7 @@ public class ContainerSoulEnchanter extends Container
     private final IIntArray data;
 
     public ContainerSoulEnchanter(@Nullable ContainerType<?> type, int id, PlayerInventory playerInventory) {
-        this(type, id, playerInventory, p -> false, (new TileEntitySoulEnchanter()).getInventory(), new IntArray(1));
+        this(type, id, playerInventory, p -> false, (new TileEntitySoulEnchanter()).getInventory(), new IntArray(2));
     }
 
     private ContainerSoulEnchanter(@Nullable ContainerType<?> type, int id, PlayerInventory playerInventory, Function<PlayerEntity, Boolean> isUsableByPlayer, ModItemStackHandler inv, IIntArray data) {
@@ -59,7 +61,7 @@ public class ContainerSoulEnchanter extends Container
         this.inventory = inv;
         this.data = data;
 
-        this.addSlot(new SlotSoulInfuser(inv, 0, 8, 62));
+        this.addSlot(new SlotSoulStealer(inv, 0, 8, 62));
         this.addSlot(new SlotInput(inv, 1, 49, 35));
         this.addSlot(new SlotOutput(inv, 2, 111, 35));
 
@@ -89,7 +91,6 @@ public class ContainerSoulEnchanter extends Container
         return this.isUsableByPlayer.apply(playerIn);
     }
 
-    // TODO: Test shift after job complete
     @Override
     public ItemStack transferStackInSlot(PlayerEntity playerIn, int slotIndex) {
         ItemStack itemstack = ItemStack.EMPTY;
@@ -122,8 +123,16 @@ public class ContainerSoulEnchanter extends Container
         return this.data.get(0);
     }
 
+    public int getFuelStored() {
+        return this.data.get(1);
+    }
+
     public boolean isInfusing() {
         return this.getProgress() > 0;
+    }
+
+    protected int getFuelCapacity() {
+        return TileEntitySoulEnchanter.getFuelCapacity();
     }
 
     public int getInfuseProgressScaled(int pixels) {
@@ -133,12 +142,21 @@ public class ContainerSoulEnchanter extends Container
         return j != 0 && i != 0 ? i * pixels / j : 0;
     }
 
-    private final class SlotSoulInfuser extends SlotItemHandler
+    @OnlyIn(Dist.CLIENT)
+    public int getFuelLeftScaled(int scale) {
+        double stored = this.getFuelStored();
+        double max = this.getFuelCapacity();
+        double value = ((stored /max) * scale);
+
+        return (int)value;
+    }
+
+    private final class SlotSoulStealer extends SlotItemHandler
     {
         private final ModItemStackHandler inventory;
         private final int index;
 
-        public SlotSoulInfuser(ModItemStackHandler inventoryIn, int index, int xPosition, int yPosition) {
+        public SlotSoulStealer(ModItemStackHandler inventoryIn, int index, int xPosition, int yPosition) {
             super(inventoryIn, index, xPosition, yPosition);
             this.inventory = inventoryIn;
             this.index = index;
@@ -157,7 +175,7 @@ public class ContainerSoulEnchanter extends Container
 
         @Override
         public boolean isItemValid(ItemStack stack) {
-            return false;
+            return stack.getItem() == ModItems.SOUL_STEALER.get();
         }
     }
 

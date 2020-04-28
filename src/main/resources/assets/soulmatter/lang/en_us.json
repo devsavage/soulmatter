@@ -3,6 +3,9 @@
 
   "item.soulmatter.raw_soul_matter": "Raw Soul Matter",
   "item.soulmatter.soul_matter": "Soul Matter",
+  "item.soulmatter.soul_stealer": "Soul Stealer",
+
+  "block.soulmatter.soul_enchanter": "Soul Enchanter",
 
   "container.soulmatter.soul_enchanter": "Soul Enchanter"
 }

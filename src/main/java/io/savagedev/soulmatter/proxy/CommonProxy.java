@@ -1,7 +1,7 @@
-package io.savagedev.soulmatter.util;
+package io.savagedev.soulmatter.proxy;
 
 /*
- * ModNames.java
+ * CommonProxy.java
  * Copyright (C) 2020 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,22 +23,24 @@ package io.savagedev.soulmatter.util;
  * THE SOFTWARE.
  */
 
-public class ModNames
+import io.savagedev.soulmatter.helpers.ModFakePlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.server.ServerWorld;
+
+import java.lang.ref.WeakReference;
+
+public class CommonProxy
 {
-    public static class Items
-    {
-        public static final String RAW_SOUL_MATTER = "raw_soul_matter";
-        public static final String SOUL_MATTER = "soul_matter";
-        public static final String SOUL_STEALER = "soul_stealer";
+    public final WeakReference<PlayerEntity> getDummyPlayer(ServerWorld world) {
+        return ModFakePlayer.getInstance(world);
     }
 
-    public static class Blocks
-    {
-        public static final String SOUL_ENCHANTER = "soul_enchanter";
+    public final WeakReference<PlayerEntity> getDummyPlayer(ServerWorld world, double x, double y, double z) {
+        return ModFakePlayer.getInstance(world, x, y, z);
     }
 
-    public static class Containers
-    {
-        public static final String SOUL_ENCHANTER = "container.soulmatter.soul_enchanter";
+    public final WeakReference<PlayerEntity> getDummyPlayer(ServerWorld world, BlockPos pos) {
+        return getDummyPlayer(world, pos.getX(), pos.getY(), pos.getZ());
     }
 }

@@ -23,11 +23,14 @@ package io.savagedev.soulmatter;
  * THE SOFTWARE.
  */
 
+import com.mojang.authlib.GameProfile;
 import io.savagedev.soulmatter.handlers.MobDropsHandler;
 import io.savagedev.soulmatter.init.ModBlocks;
 import io.savagedev.soulmatter.init.ModContainers;
 import io.savagedev.soulmatter.init.ModItems;
 import io.savagedev.soulmatter.init.ModTileEntities;
+import io.savagedev.soulmatter.proxy.CommonProxy;
+import io.savagedev.soulmatter.util.LogHelper;
 import io.savagedev.soulmatter.util.ModReference;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -39,9 +42,15 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import java.util.UUID;
+
 @Mod(ModReference.MOD_ID)
 public class SoulMatter
 {
+    public static CommonProxy proxy = new CommonProxy();
+
+    public static GameProfile gameProfile = new GameProfile(UUID.nameUUIDFromBytes("soulmatter.common".getBytes()), LogHelper.TAG);
+
     public static ItemGroup modGroup = new ItemGroup(ModReference.MOD_ID) {
         @Override
         public ItemStack createIcon() {

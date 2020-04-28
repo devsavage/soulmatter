@@ -25,6 +25,7 @@ package io.savagedev.soulmatter.init;
 
 import io.savagedev.soulmatter.SoulMatter;
 import io.savagedev.soulmatter.items.BaseItem;
+import io.savagedev.soulmatter.items.ItemSoulStealer;
 import io.savagedev.soulmatter.util.ModNames;
 import io.savagedev.soulmatter.util.ModReference;
 import net.minecraft.item.Item;
@@ -46,6 +47,7 @@ public class ModItems
 
     public static final RegistryObject<BaseItem> RAW_SOUL_MATTER = register(ModNames.Items.RAW_SOUL_MATTER);
     public static final RegistryObject<BaseItem> SOUL_MATTER = register(ModNames.Items.SOUL_MATTER);
+    public static final RegistryObject<BaseItem> SOUL_STEALER = register(ModNames.Items.SOUL_STEALER, () -> new ItemSoulStealer(p -> p.maxStackSize(1).group(SoulMatter.modGroup)));
 
     @SubscribeEvent
     public void onRegisterItems(RegistryEvent.Register<Item> event) {
