@@ -1,7 +1,7 @@
-package io.savagedev.soulmatter.util;
+package io.savagedev.soulmatter.items.soultool;
 
 /*
- * ModNames.java
+ * ItemSoulMatterSword.java
  * Copyright (C) 2020 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,27 +23,18 @@ package io.savagedev.soulmatter.util;
  * THE SOFTWARE.
  */
 
-public class ModNames
+import com.google.common.collect.Sets;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+
+import java.util.Set;
+import java.util.function.Function;
+
+public class ItemSoulMatterSword extends BaseSoulTool
 {
-    public static class Items
-    {
-        public static final String RAW_SOUL_MATTER = "raw_soul_matter";
-        public static final String SOUL_MATTER = "soul_matter";
-        public static final String SOUL_STEALER = "soul_stealer";
-        public static final String SOUL_MATTER_SWORD = "soul_matter_sword";
-        public static final String SOUL_MATTER_PICKAXE = "soul_matter_pickaxe";
-        public static final String SOUL_MATTER_AXE = "soul_matter_axe";
-        public static final String SOUL_MATTER_SHOVEL = "soul_matter_shovel";
-        public static final String SOUL_MATTER_HOE = "soul_matter_hoe";
-    }
+    private static final Set<Block> EFFECTIVE_ON = Sets.newHashSet(Blocks.COBWEB);
 
-    public static class Blocks
-    {
-        public static final String SOUL_ENCHANTER = "soul_enchanter";
-    }
-
-    public static class Containers
-    {
-        public static final String SOUL_ENCHANTER = "container.soulmatter.soul_enchanter";
+    public ItemSoulMatterSword(Function<Properties, Properties> properties) {
+        super("sword", 8, EFFECTIVE_ON, properties);
     }
 }

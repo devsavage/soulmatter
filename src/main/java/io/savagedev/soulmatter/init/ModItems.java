@@ -26,10 +26,12 @@ package io.savagedev.soulmatter.init;
 import io.savagedev.soulmatter.SoulMatter;
 import io.savagedev.soulmatter.items.BaseItem;
 import io.savagedev.soulmatter.items.ItemSoulStealer;
+import io.savagedev.soulmatter.items.soultool.*;
 import io.savagedev.soulmatter.util.ModNames;
 import io.savagedev.soulmatter.util.ModReference;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
@@ -48,6 +50,12 @@ public class ModItems
     public static final RegistryObject<BaseItem> RAW_SOUL_MATTER = register(ModNames.Items.RAW_SOUL_MATTER);
     public static final RegistryObject<BaseItem> SOUL_MATTER = register(ModNames.Items.SOUL_MATTER);
     public static final RegistryObject<BaseItem> SOUL_STEALER = register(ModNames.Items.SOUL_STEALER, () -> new ItemSoulStealer(p -> p.maxStackSize(1).group(SoulMatter.modGroup)));
+
+    public static final RegistryObject<BaseSoulTool> SOUL_MATTER_SWORD = register(ModNames.Items.SOUL_MATTER_SWORD, () -> new ItemSoulMatterSword(p -> p.group(SoulMatter.modGroup)));
+    public static final RegistryObject<BaseSoulTool> SOUL_MATTER_PICKAXE = register(ModNames.Items.SOUL_MATTER_PICKAXE, () -> new ItemSoulMatterPickaxe(p -> p.group(SoulMatter.modGroup).addToolType(ToolType.PICKAXE, ModToolTier.SOUL_MATTER.getHarvestLevel())));
+    public static final RegistryObject<BaseSoulTool> SOUL_MATTER_AXE = register(ModNames.Items.SOUL_MATTER_AXE, () -> new ItemSoulMatterAxe(p -> p.group(SoulMatter.modGroup).addToolType(ToolType.AXE, ModToolTier.SOUL_MATTER.getHarvestLevel())));
+    public static final RegistryObject<BaseSoulTool> SOUL_MATTER_SHOVEL = register(ModNames.Items.SOUL_MATTER_SHOVEL, () -> new ItemSoulMatterShovel(p -> p.group(SoulMatter.modGroup).addToolType(ToolType.SHOVEL, ModToolTier.SOUL_MATTER.getHarvestLevel())));
+    public static final RegistryObject<BaseSoulTool> SOUL_MATTER_HOE = register(ModNames.Items.SOUL_MATTER_HOE, () -> new ItemSoulMatterHoe(p -> p.group(SoulMatter.modGroup)));
 
     @SubscribeEvent
     public void onRegisterItems(RegistryEvent.Register<Item> event) {
