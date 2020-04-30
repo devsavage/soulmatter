@@ -1,7 +1,7 @@
-package io.savagedev.soulmatter.blocks.soulenchanter;
+package io.savagedev.soulmatter.blocks.soulpresser;
 
 /*
- * BlockSoulEnchanter.java
+ * BlockSoulPresser.java
  * Copyright (C) 2020 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,7 +23,7 @@ package io.savagedev.soulmatter.blocks.soulenchanter;
  * THE SOFTWARE.
  */
 
-import io.savagedev.soulmatter.util.LogHelper;
+import io.savagedev.soulmatter.blocks.soulenchanter.TileEntitySoulEnchanter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
@@ -45,31 +45,20 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockSoulEnchanter extends Block
+public class BlockSoulPresser extends Block
 {
     private static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
 
-    public BlockSoulEnchanter() {
+    public BlockSoulPresser() {
         super(Properties.create(Material.IRON).sound(SoundType.ANVIL).hardnessAndResistance(4.0F));
         this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.NORTH));
-    }
-
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TileEntitySoulEnchanter();
     }
 
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         if(!worldIn.isRemote()) {
             TileEntity tileEntity = worldIn.getTileEntity(pos);
-            if(tileEntity instanceof TileEntitySoulEnchanter) {
+            if(tileEntity instanceof TileEntitySoulPresser) {
                 player.openContainer((INamedContainerProvider) tileEntity);
             }
         }
@@ -81,13 +70,24 @@ public class BlockSoulEnchanter extends Block
     public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if(state.getBlock() != newState.getBlock()) {
             TileEntity tileEntity = worldIn.getTileEntity(pos);
-            if(tileEntity instanceof TileEntitySoulEnchanter) {
-                TileEntitySoulEnchanter tileEntitySoulEnchanter = (TileEntitySoulEnchanter) tileEntity;
-                InventoryHelper.dropItems(worldIn, pos, tileEntitySoulEnchanter.getInventory().getStacks());
+            if(tileEntity instanceof TileEntitySoulPresser) {
+                TileEntitySoulPresser tileEntitySoulPresser = (TileEntitySoulPresser) tileEntity;
+                InventoryHelper.dropItems(worldIn, pos, tileEntitySoulPresser.getInventory().getStacks());
             }
 
             super.onReplaced(state, worldIn, pos, newState, isMoving);
         }
+    }
+
+    @Override
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+        return new TileEntitySoulPresser();
     }
 
     @Nullable

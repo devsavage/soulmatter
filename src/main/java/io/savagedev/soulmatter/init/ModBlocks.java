@@ -25,6 +25,7 @@ package io.savagedev.soulmatter.init;
 
 import io.savagedev.soulmatter.SoulMatter;
 import io.savagedev.soulmatter.blocks.soulenchanter.BlockSoulEnchanter;
+import io.savagedev.soulmatter.blocks.soulpresser.BlockSoulPresser;
 import io.savagedev.soulmatter.util.ModReference;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
@@ -46,6 +47,7 @@ public class ModBlocks
     public static final List<Supplier<? extends Block>> ENTRIES = new ArrayList<>();
 
     public static final RegistryObject<BlockSoulEnchanter> SOUL_ENCHANTER = register("soul_enchanter", BlockSoulEnchanter::new);
+    public static final RegistryObject<BlockSoulPresser> SOUL_PRESSER = register("soul_presser", BlockSoulPresser::new);
 
     @SubscribeEvent
     public void onRegisterBlocks(RegistryEvent.Register<Block> event) {

@@ -26,9 +26,11 @@ package io.savagedev.soulmatter.init;
 import io.savagedev.soulmatter.SoulMatter;
 import io.savagedev.soulmatter.items.BaseItem;
 import io.savagedev.soulmatter.items.ItemSoulStealer;
-import io.savagedev.soulmatter.items.soultool.*;
+import io.savagedev.soulmatter.items.soul.armor.ItemSoulArmor;
+import io.savagedev.soulmatter.items.soul.tools.*;
 import io.savagedev.soulmatter.util.ModNames;
 import io.savagedev.soulmatter.util.ModReference;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ToolType;
@@ -57,6 +59,10 @@ public class ModItems
     public static final RegistryObject<BaseSoulTool> SOUL_MATTER_SHOVEL = register(ModNames.Items.SOUL_MATTER_SHOVEL, () -> new ItemSoulMatterShovel(p -> p.group(SoulMatter.modGroup).addToolType(ToolType.SHOVEL, ModToolTier.SOUL_MATTER.getHarvestLevel())));
     public static final RegistryObject<BaseSoulTool> SOUL_MATTER_HOE = register(ModNames.Items.SOUL_MATTER_HOE, () -> new ItemSoulMatterHoe(p -> p.group(SoulMatter.modGroup)));
 
+    public static final RegistryObject<ItemSoulArmor> SOUL_MATTER_HELMET = register(ModNames.Items.SOUL_MATTER_HELMET, () -> new ItemSoulArmor(EquipmentSlotType.HEAD, p -> p.group(SoulMatter.modGroup)));
+    public static final RegistryObject<ItemSoulArmor> SOUL_MATTER_CHESTPLATE = register(ModNames.Items.SOUL_MATTER_CHESTPLATE, () -> new ItemSoulArmor(EquipmentSlotType.CHEST, p -> p.group(SoulMatter.modGroup)));
+    public static final RegistryObject<ItemSoulArmor> SOUL_MATTER_LEGGINGS = register(ModNames.Items.SOUL_MATTER_LEGGINGS, () -> new ItemSoulArmor(EquipmentSlotType.LEGS, p -> p.group(SoulMatter.modGroup)));
+    public static final RegistryObject<ItemSoulArmor> SOUL_MATTER_BOOTS = register(ModNames.Items.SOUL_MATTER_BOOTS, () -> new ItemSoulArmor(EquipmentSlotType.FEET, p -> p.group(SoulMatter.modGroup)));
     @SubscribeEvent
     public void onRegisterItems(RegistryEvent.Register<Item> event) {
         IForgeRegistry<Item> registry = event.getRegistry();

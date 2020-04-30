@@ -27,4 +27,5 @@ public class ModReference
 {
     public static final String MOD_ID = "soulmatter";
     public static final String MOD_NAME = "SoulMatter";
+    public static final String MOD_DOMAIN = MOD_ID + ":";
 }

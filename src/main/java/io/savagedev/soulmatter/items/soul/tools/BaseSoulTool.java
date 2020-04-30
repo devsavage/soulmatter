@@ -1,7 +1,7 @@
-package io.savagedev.soulmatter.items.soultool;
+package io.savagedev.soulmatter.items.soul.tools;
 
 /*
- * ItemSoulMatterShovel.java
+ * BaseSoulTool.java
  * Copyright (C) 2020 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,17 +23,21 @@ package io.savagedev.soulmatter.items.soultool;
  * THE SOFTWARE.
  */
 
-import com.google.common.collect.Sets;
+import io.savagedev.soulmatter.init.ModToolTier;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import net.minecraft.item.ToolItem;
 
 import java.util.Set;
 import java.util.function.Function;
 
-public class ItemSoulMatterShovel extends BaseSoulTool
+public class BaseSoulTool extends ToolItem
 {
-    private static final Set<Block> EFFECTIVE_ON = Sets.newHashSet(Blocks.CLAY, Blocks.DIRT, Blocks.COARSE_DIRT, Blocks.PODZOL, Blocks.FARMLAND, Blocks.GRASS_BLOCK, Blocks.GRAVEL, Blocks.MYCELIUM, Blocks.SAND, Blocks.RED_SAND, Blocks.SNOW_BLOCK, Blocks.SNOW, Blocks.SOUL_SAND, Blocks.GRASS_PATH, Blocks.WHITE_CONCRETE_POWDER, Blocks.ORANGE_CONCRETE_POWDER, Blocks.MAGENTA_CONCRETE_POWDER, Blocks.LIGHT_BLUE_CONCRETE_POWDER, Blocks.YELLOW_CONCRETE_POWDER, Blocks.LIME_CONCRETE_POWDER, Blocks.PINK_CONCRETE_POWDER, Blocks.GRAY_CONCRETE_POWDER, Blocks.LIGHT_GRAY_CONCRETE_POWDER, Blocks.CYAN_CONCRETE_POWDER, Blocks.PURPLE_CONCRETE_POWDER, Blocks.BLUE_CONCRETE_POWDER, Blocks.BROWN_CONCRETE_POWDER, Blocks.GREEN_CONCRETE_POWDER, Blocks.RED_CONCRETE_POWDER, Blocks.BLACK_CONCRETE_POWDER);
-    public ItemSoulMatterShovel(Function<Properties, Properties> properties) {
-        super("shovel", 1, EFFECTIVE_ON, properties);
+    private final String toolName;
+    private Set<Block> effectiveBlocks;
+
+    public BaseSoulTool(String toolName, float attackDamageIn, Set<Block> effectiveBlocksIn, Function<Properties, Properties> properties) {
+        super(attackDamageIn, 1, ModToolTier.SOUL_MATTER, effectiveBlocksIn, properties.apply(new Properties()));
+        this.toolName = toolName;
+        this.effectiveBlocks = effectiveBlocksIn;
     }
 }

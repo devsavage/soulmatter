@@ -1,4 +1,4 @@
-package io.savagedev.soulmatter.items.soultool;
+package io.savagedev.soulmatter.items.soul.tools;
 
 /*
  * ItemSoulMatterPickaxe.java
@@ -24,7 +24,6 @@ package io.savagedev.soulmatter.items.soultool;
  */
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 

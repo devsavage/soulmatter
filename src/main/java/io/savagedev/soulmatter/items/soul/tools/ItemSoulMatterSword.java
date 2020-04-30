@@ -1,4 +1,4 @@
-package io.savagedev.soulmatter.items.soultool;
+package io.savagedev.soulmatter.items.soul.tools;
 
 /*
  * ItemSoulMatterSword.java

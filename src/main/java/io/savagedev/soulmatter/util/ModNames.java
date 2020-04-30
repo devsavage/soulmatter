@@ -35,15 +35,21 @@ public class ModNames
         public static final String SOUL_MATTER_AXE = "soul_matter_axe";
         public static final String SOUL_MATTER_SHOVEL = "soul_matter_shovel";
         public static final String SOUL_MATTER_HOE = "soul_matter_hoe";
+        public static final String SOUL_MATTER_HELMET = "soul_matter_helmet";
+        public static final String SOUL_MATTER_CHESTPLATE = "soul_matter_chestplate";
+        public static final String SOUL_MATTER_LEGGINGS = "soul_matter_leggings";
+        public static final String SOUL_MATTER_BOOTS = "soul_matter_boots";
     }
 
     public static class Blocks
     {
         public static final String SOUL_ENCHANTER = "soul_enchanter";
+        public static final String SOUL_PRESSER = "soul_smelter";
     }
 
     public static class Containers
     {
         public static final String SOUL_ENCHANTER = "container.soulmatter.soul_enchanter";
+        public static final String SOUL_PRESSER = "container.soulmatter.soul_presser";
     }
 }
