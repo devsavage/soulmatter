@@ -39,6 +39,7 @@ public class ModNames
         public static final String SOUL_MATTER_CHESTPLATE = "soul_matter_chestplate";
         public static final String SOUL_MATTER_LEGGINGS = "soul_matter_leggings";
         public static final String SOUL_MATTER_BOOTS = "soul_matter_boots";
+        public static final String SOUL_MATTER_HAMMER = "soul_matter_hammer";
     }
 
     public static class Blocks

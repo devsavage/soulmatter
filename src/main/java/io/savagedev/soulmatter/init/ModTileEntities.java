@@ -46,7 +46,7 @@ public class ModTileEntities
     private static final List<Supplier<TileEntityType<?>>> ENTRIES = new ArrayList<>();
 
     public static final RegistryObject<TileEntityType<TileEntitySoulEnchanter>> SOUL_ENCHANTER = register(ModNames.Blocks.SOUL_ENCHANTER, TileEntitySoulEnchanter::new, () -> new Block[] { ModBlocks.SOUL_ENCHANTER.get() });
-    public static final RegistryObject<TileEntityType<TileEntitySoulEnchanter>> SOUL_PRESSER = register(ModNames.Blocks.SOUL_PRESSER, TileEntitySoulPresser::new, () -> new Block[] { ModBlocks.SOUL_PRESSER.get() });
+    public static final RegistryObject<TileEntityType<TileEntitySoulPresser>> SOUL_PRESSER = register(ModNames.Blocks.SOUL_PRESSER, TileEntitySoulPresser::new, () -> new Block[] { ModBlocks.SOUL_PRESSER.get() });
 
     @SubscribeEvent
     public void onRegisterTypes(RegistryEvent.Register<TileEntityType<?>> event) {

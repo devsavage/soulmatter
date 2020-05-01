@@ -58,7 +58,7 @@ public class ContainerSoulPresser extends Container
         this.isUsableByPlayer = isUsableByPlayer;
         this.inventory = inv;
 
-        this.addSlot(new SlotSoulMatter(inv, 1, 80, 34));
+        this.addSlot(new SlotSoulMatter(inv, 0, 80, 34));
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
@@ -89,10 +89,10 @@ public class ContainerSoulPresser extends Container
             itemstack = itemstack1.copy();
 
             if (slotIndex <  1) {
-                if (!this.mergeItemStack(itemstack1, 1, this.inventorySlots.size(), true)) {
+                if (!this.mergeItemStack(itemstack1, 0, this.inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+            } else if (!this.mergeItemStack(itemstack1, 0, 0, false)) {
                 return ItemStack.EMPTY;
             }
 

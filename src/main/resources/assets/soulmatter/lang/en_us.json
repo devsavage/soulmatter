@@ -5,8 +5,19 @@
   "item.soulmatter.soul_matter": "Soul Matter",
   "item.soulmatter.soul_stealer": "Soul Stealer",
   "item.soulmatter.soul_matter_sword": "Soul Matter Sword",
+  "item.soulmatter.soul_matter_pickaxe": "Soul Matter Pickaxe",
+  "item.soulmatter.soul_matter_axe": "Soul Matter Axe",
+  "item.soulmatter.soul_matter_hoe": "Soul Matter Hoe",
+  "item.soulmatter.soul_matter_hammer": "Soul Matter Hammer",
+  "item.soulmatter.soul_matter_shovel": "Soul Matter Shovel",
+  "item.soulmatter.soul_matter_helmet": "Soul Matter Helmet",
+  "item.soulmatter.soul_matter_chestplate": "Soul Matter Chestplate",
+  "item.soulmatter.soul_matter_leggings": "Soul Matter Leggings",
+  "item.soulmatter.soul_matter_boots": "Soul Matter Boots",
 
   "block.soulmatter.soul_enchanter": "Soul Enchanter",
+  "block.soulmatter.soul_presser": "Soul Presser",
 
-  "container.soulmatter.soul_enchanter": "Soul Enchanter"
+  "container.soulmatter.soul_enchanter": "Soul Enchanter",
+  "container.soulmatter.soul_presser": "Soul Presser"
 }

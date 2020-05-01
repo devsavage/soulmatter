@@ -58,6 +58,7 @@ public class ModItems
     public static final RegistryObject<BaseSoulTool> SOUL_MATTER_AXE = register(ModNames.Items.SOUL_MATTER_AXE, () -> new ItemSoulMatterAxe(p -> p.group(SoulMatter.modGroup).addToolType(ToolType.AXE, ModToolTier.SOUL_MATTER.getHarvestLevel())));
     public static final RegistryObject<BaseSoulTool> SOUL_MATTER_SHOVEL = register(ModNames.Items.SOUL_MATTER_SHOVEL, () -> new ItemSoulMatterShovel(p -> p.group(SoulMatter.modGroup).addToolType(ToolType.SHOVEL, ModToolTier.SOUL_MATTER.getHarvestLevel())));
     public static final RegistryObject<BaseSoulTool> SOUL_MATTER_HOE = register(ModNames.Items.SOUL_MATTER_HOE, () -> new ItemSoulMatterHoe(p -> p.group(SoulMatter.modGroup)));
+    public static final RegistryObject<BaseSoulTool> SOUL_MATTER_HAMMER = register(ModNames.Items.SOUL_MATTER_HAMMER, () -> new ItemSoulMatterHammer(p -> p.group(SoulMatter.modGroup)));
 
     public static final RegistryObject<ItemSoulArmor> SOUL_MATTER_HELMET = register(ModNames.Items.SOUL_MATTER_HELMET, () -> new ItemSoulArmor(EquipmentSlotType.HEAD, p -> p.group(SoulMatter.modGroup)));
     public static final RegistryObject<ItemSoulArmor> SOUL_MATTER_CHESTPLATE = register(ModNames.Items.SOUL_MATTER_CHESTPLATE, () -> new ItemSoulArmor(EquipmentSlotType.CHEST, p -> p.group(SoulMatter.modGroup)));

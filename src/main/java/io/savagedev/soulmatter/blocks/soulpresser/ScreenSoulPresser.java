@@ -43,12 +43,18 @@ public class ScreenSoulPresser extends ContainerScreen<ContainerSoulPresser>
     }
 
     @Override
+    public void render(int mouseX, int mouseY, float ticks) {
+        this.renderBackground();
+        super.render(mouseX, mouseY, ticks);
+        this.renderHoveredToolTip(mouseX, mouseY);
+    }
+
+    @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         String title = this.getTitle().getFormattedText();
 
         this.font.drawString(title, (float) (this.xSize / 2 - this.font.getStringWidth(title) / 2), 6.0F, 4210752);
-        this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), this.xSize - 58, this.ySize - 96 + 2, 4210752);
-    }
+        this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float)(this.ySize - 96 + 2), 4210752);    }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {

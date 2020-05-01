@@ -24,6 +24,7 @@ package io.savagedev.soulmatter;
  */
 
 import com.mojang.authlib.GameProfile;
+import io.savagedev.soulmatter.handlers.MobDeathEvent;
 import io.savagedev.soulmatter.handlers.MobDropsHandler;
 import io.savagedev.soulmatter.init.ModBlocks;
 import io.savagedev.soulmatter.init.ModContainers;
@@ -77,5 +78,6 @@ public class SoulMatter
     public void onCommonSetup(FMLCommonSetupEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new MobDropsHandler());
+        MinecraftForge.EVENT_BUS.register(new MobDeathEvent());
     }
 }

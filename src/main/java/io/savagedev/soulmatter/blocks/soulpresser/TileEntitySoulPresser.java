@@ -25,15 +25,21 @@ package io.savagedev.soulmatter.blocks.soulpresser;
 
 import io.savagedev.soulmatter.blocks.soulenchanter.ContainerSoulEnchanter;
 import io.savagedev.soulmatter.helpers.ModItemStackHandler;
+import io.savagedev.soulmatter.init.ModItems;
 import io.savagedev.soulmatter.init.ModTileEntities;
+import io.savagedev.soulmatter.util.LogHelper;
 import io.savagedev.soulmatter.util.ModNames;
 import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -41,17 +47,23 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
 
-public class TileEntitySoulPresser extends TileEntity implements INamedContainerProvider, ITickable
+public class TileEntitySoulPresser extends TileEntity implements INamedContainerProvider, ITickableTileEntity
 {
     private final ModItemStackHandler inventory = new ModItemStackHandler(1);
 
+    public boolean activated;
+
     public TileEntitySoulPresser() {
         super(ModTileEntities.SOUL_PRESSER.get());
+        this.activated = false;
     }
 
     @Override
     public void tick() {
-
+        if(getActiveStatus()) {
+            tryPress();
+            setActiveStatus(false);
+        }
     }
 
     @Override
@@ -87,5 +99,21 @@ public class TileEntitySoulPresser extends TileEntity implements INamedContainer
 
     public ModItemStackHandler getInventory() {
         return inventory;
+    }
+
+    public boolean getActiveStatus() {
+        return this.activated;
+    }
+
+    public void setActiveStatus(boolean active) {
+        this.activated = active;
+    }
+
+    public void tryPress() {
+        if(!inventory.getStackInSlot(0).isEmpty() && inventory.getStackInSlot(0).getItem() == ModItems.SOUL_MATTER.get()) {
+            ItemStack soulStack = new ItemStack(Items.EMERALD.getItem(), 1);
+            this.inventory.extractItemSuper(0, 1, false);
+            InventoryHelper.spawnItemStack(this.getWorld(), this.getPos().getX(), this.getPos().getY() + 1, this.getPos().getZ(), soulStack);
+        }
     }
 }

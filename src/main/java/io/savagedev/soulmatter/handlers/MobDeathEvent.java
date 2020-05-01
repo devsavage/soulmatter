@@ -1,7 +1,7 @@
 package io.savagedev.soulmatter.handlers;
 
 /*
- * MobDropsHandler.java
+ * MobDeathEvent.java
  * Copyright (C) 2020 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,44 +24,31 @@ package io.savagedev.soulmatter.handlers;
  */
 
 import io.savagedev.soulmatter.init.ModItems;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.monster.EndermanEntity;
+import io.savagedev.soulmatter.util.LogHelper;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.Collection;
-import java.util.Random;
-
-public class MobDropsHandler
+public class MobDeathEvent
 {
     @SubscribeEvent
-    public void onLivingDrops(LivingDropsEvent event) {
-        LivingEntity entity = event.getEntityLiving();
-        World world = entity.getEntityWorld();
-        BlockPos pos = entity.getPosition();
-        Collection<ItemEntity> drops = event.getDrops();
-        double rand  = Math.random();
-
+    public void onLivingDeath(LivingDeathEvent event) {
         if(event.getSource().getTrueSource() instanceof PlayerEntity) {
             PlayerEntity livingEntity = (PlayerEntity) event.getSource().getTrueSource();
-            if(livingEntity.getHeldItem(Hand.MAIN_HAND).getItem() == ModItems.SOUL_STEALER.get()) {
-                if(entity instanceof MonsterEntity) {
-                    if(entity instanceof EndermanEntity) {
-                        if(rand < 0.3D) {
-                            drops.add(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ModItems.RAW_SOUL_MATTER.get(), 2)));
-                            return;
-                        }
-                    }
-
-                    if(rand < 0.15D) {
-                        drops.add(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ModItems.RAW_SOUL_MATTER.get(), 1)));
+            if(event.getEntityLiving() instanceof MonsterEntity) {
+                if(livingEntity.getHeldItem(Hand.MAIN_HAND).getItem() == ModItems.SOUL_STEALER.get()) {
+                    ItemStack soulStealer = livingEntity.getHeldItem(Hand.MAIN_HAND).getStack();
+                    if(soulStealer.getTag() == null || !soulStealer.getTag().contains("SoulsTaken")) {
+                        soulStealer.getOrCreateTag().putInt("SoulsTaken", 1);
+                    } else {
+                        int count = soulStealer.getTag().getInt("SoulsTaken");
+                        if(count >= 0)
+                            soulStealer.getTag().putInt("SoulsTaken", count + 1);
+                        else
+                            soulStealer.getTag().putInt("SoulsTaken", 0);
                     }
                 }
             }
