@@ -111,7 +111,7 @@ public class TileEntitySoulPresser extends TileEntity implements INamedContainer
 
     public void tryPress() {
         if(!inventory.getStackInSlot(0).isEmpty() && inventory.getStackInSlot(0).getItem() == ModItems.SOUL_MATTER.get()) {
-            ItemStack soulStack = new ItemStack(Items.EMERALD.getItem(), 1);
+            ItemStack soulStack = new ItemStack(ModItems.SOUL_MATTER_COMPACT.get(), 1);
             this.inventory.extractItemSuper(0, 1, false);
             InventoryHelper.spawnItemStack(this.getWorld(), this.getPos().getX(), this.getPos().getY() + 1, this.getPos().getZ(), soulStack);
         }

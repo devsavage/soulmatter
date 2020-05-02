@@ -33,6 +33,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
@@ -44,6 +46,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class BlockSoulPresser extends Block
 {
@@ -56,14 +59,22 @@ public class BlockSoulPresser extends Block
 
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if(!worldIn.isRemote()) {
-            TileEntity tileEntity = worldIn.getTileEntity(pos);
-            if(tileEntity instanceof TileEntitySoulPresser) {
-                player.openContainer((INamedContainerProvider) tileEntity);
+            if(!worldIn.isRemote()) {
+                TileEntity tileEntity = worldIn.getTileEntity(pos);
+                if(tileEntity instanceof TileEntitySoulPresser) {
+                    if(player.isSneaking() && player.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
+                        double rand  = Math.random();
+                        if(rand < 0.18D) {
+                            player.attackEntityFrom(DamageSource.GENERIC, 0.75F);
+                            ((TileEntitySoulPresser) tileEntity).setActiveStatus(true);
+                        }
+                    } else {
+                        player.openContainer((INamedContainerProvider) tileEntity);
+                    }
+                }
             }
-        }
 
-        return ActionResultType.SUCCESS;
+            return ActionResultType.SUCCESS;
     }
 
     @Override

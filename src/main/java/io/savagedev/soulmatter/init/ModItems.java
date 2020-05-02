@@ -25,6 +25,7 @@ package io.savagedev.soulmatter.init;
 
 import io.savagedev.soulmatter.SoulMatter;
 import io.savagedev.soulmatter.items.BaseItem;
+import io.savagedev.soulmatter.items.ItemSoulMatterCompact;
 import io.savagedev.soulmatter.items.ItemSoulStealer;
 import io.savagedev.soulmatter.items.soul.armor.ItemSoulArmor;
 import io.savagedev.soulmatter.items.soul.tools.*;
@@ -52,6 +53,7 @@ public class ModItems
     public static final RegistryObject<BaseItem> RAW_SOUL_MATTER = register(ModNames.Items.RAW_SOUL_MATTER);
     public static final RegistryObject<BaseItem> SOUL_MATTER = register(ModNames.Items.SOUL_MATTER);
     public static final RegistryObject<BaseItem> SOUL_STEALER = register(ModNames.Items.SOUL_STEALER, () -> new ItemSoulStealer(p -> p.maxStackSize(1).group(SoulMatter.modGroup)));
+    public static final RegistryObject<BaseItem> SOUL_MATTER_COMPACT = register(ModNames.Items.SOUL_MATTER_COMPACT, () -> new ItemSoulMatterCompact(p -> p.group(SoulMatter.modGroup)));
 
     public static final RegistryObject<BaseSoulTool> SOUL_MATTER_SWORD = register(ModNames.Items.SOUL_MATTER_SWORD, () -> new ItemSoulMatterSword(p -> p.group(SoulMatter.modGroup)));
     public static final RegistryObject<BaseSoulTool> SOUL_MATTER_PICKAXE = register(ModNames.Items.SOUL_MATTER_PICKAXE, () -> new ItemSoulMatterPickaxe(p -> p.group(SoulMatter.modGroup).addToolType(ToolType.PICKAXE, ModToolTier.SOUL_MATTER.getHarvestLevel())));
