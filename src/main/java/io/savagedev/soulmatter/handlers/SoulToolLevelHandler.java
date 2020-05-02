@@ -23,6 +23,7 @@ package io.savagedev.soulmatter.handlers;
  * THE SOFTWARE.
  */
 
+import io.savagedev.soulmatter.init.ModConfiguration;
 import io.savagedev.soulmatter.util.NBTHelper;
 import net.minecraft.item.ItemStack;
 
@@ -31,7 +32,7 @@ public class SoulToolLevelHandler
     public static final String SOUL_TOOL_TAG = "SoulTool";
     public static final String SOUL_TOOL_TAG_XP = "SoulToolXP";
     public static final String SOUL_TOOL_TAG_LEVEL = "SoulToolLevel";
-    public static final int SOUL_TOOL_MAX_LEVEL = 4; //TODO: Make this value configurable
+    public static final int SOUL_TOOL_MAX_LEVEL = ModConfiguration.MAX_SOUL_TOOL_LEVEL.get();
 
     public static int getToolLevel(ItemStack soulTool) {
         return NBTHelper.getInt(soulTool, SOUL_TOOL_TAG_LEVEL);

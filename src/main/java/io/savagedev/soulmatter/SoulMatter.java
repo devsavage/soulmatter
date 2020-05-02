@@ -23,13 +23,12 @@ package io.savagedev.soulmatter;
  * THE SOFTWARE.
  */
 
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.electronwill.nightconfig.core.io.WritingMode;
 import com.mojang.authlib.GameProfile;
 import io.savagedev.soulmatter.handlers.MobDeathEvent;
 import io.savagedev.soulmatter.handlers.MobDropsHandler;
-import io.savagedev.soulmatter.init.ModBlocks;
-import io.savagedev.soulmatter.init.ModContainers;
-import io.savagedev.soulmatter.init.ModItems;
-import io.savagedev.soulmatter.init.ModTileEntities;
+import io.savagedev.soulmatter.init.*;
 import io.savagedev.soulmatter.proxy.CommonProxy;
 import io.savagedev.soulmatter.util.LogHelper;
 import io.savagedev.soulmatter.util.ModReference;
@@ -38,11 +37,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
 
+import java.nio.file.Path;
 import java.util.UUID;
 
 @Mod(ModReference.MOD_ID)
@@ -67,6 +70,16 @@ public class SoulMatter
         modEventBus.register(new ModItems());
         modEventBus.register(new ModTileEntities());
         modEventBus.register(new ModContainers());
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ModConfiguration.CLIENT);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ModConfiguration.COMMON);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ModConfiguration.SERVER);
+
+        Path configPath = FMLPaths.CONFIGDIR.get().resolve("soulmatter-common.toml");
+        CommentedFileConfig configData = CommentedFileConfig.builder(configPath).sync().autosave().writingMode(WritingMode.REPLACE).build();
+
+        configData.load();
+        ModConfiguration.COMMON.setConfig(configData);
     }
 
     @SubscribeEvent
