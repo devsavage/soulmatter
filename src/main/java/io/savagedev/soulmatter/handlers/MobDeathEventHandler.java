@@ -1,7 +1,7 @@
 package io.savagedev.soulmatter.handlers;
 
 /*
- * MobDeathEvent.java
+ * MobDeathEventHandler.java
  * Copyright (C) 2020 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -33,7 +33,7 @@ import net.minecraft.util.Hand;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class MobDeathEvent
+public class MobDeathEventHandler
 {
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {

@@ -23,10 +23,31 @@ package io.savagedev.soulmatter.items.soul.tools;
  * THE SOFTWARE.
  */
 
+import com.google.common.collect.ImmutableSet;
+import io.savagedev.soulmatter.handlers.SoulToolLevelHandler;
+import io.savagedev.soulmatter.init.ModItems;
 import io.savagedev.soulmatter.init.ModToolTier;
+import io.savagedev.soulmatter.util.LogHelper;
+import io.savagedev.soulmatter.util.NBTHelper;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -39,5 +60,73 @@ public class BaseSoulTool extends ToolItem
         super(attackDamageIn, 1, ModToolTier.SOUL_MATTER, effectiveBlocksIn, properties.apply(new Properties()));
         this.toolName = toolName;
         this.effectiveBlocks = effectiveBlocksIn;
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        if(!NBTHelper.hasTag(stack, SoulToolLevelHandler.SOUL_TOOL_TAG) && !worldIn.isRemote) {
+            NBTHelper.setString(stack, SoulToolLevelHandler.SOUL_TOOL_TAG, stack.getDisplayName().getFormattedText());
+            SoulToolLevelHandler.addLevelTag(stack);
+        } else {
+            if(stack.getDamage() == stack.getMaxDamage() - 1) {
+                stack.setDamage(0);
+            }
+        }
+    }
+
+    @Override
+    public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        if(SoulToolLevelHandler.hasLevelTags(stack) && !SoulToolLevelHandler.isMaxToolLevel(stack)) {
+            if (stack.getItem() == ModItems.SOUL_MATTER_SWORD.get()) {
+                if (attacker instanceof PlayerEntity) {
+                    SoulToolLevelHandler.addXp(stack, (PlayerEntity) attacker, MathHelper.nextInt(new Random(), 2, 8));
+                }
+            }
+
+            stack.damageItem(1, attacker, (event) -> {
+                event.sendBreakAnimation(attacker.getActiveHand());
+            });
+        } else {
+            stack.damageItem(0, attacker, (event) -> {
+                event.sendBreakAnimation(attacker.getActiveHand());
+            });
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+        return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+        return super.getIsRepairable(toRepair, repair);
+    }
+
+    @Override
+    public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable PlayerEntity player, @Nullable BlockState blockState) {
+        return super.getHarvestLevel(stack, tool, player, blockState);
+    }
+
+    @Override
+    public boolean canHarvestBlock(BlockState blockIn) {
+        return super.canHarvestBlock(blockIn);
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        if(SoulToolLevelHandler.hasLevelTags(stack) && !SoulToolLevelHandler.isMaxToolLevel(stack)) {
+            tooltip.add(new StringTextComponent("Level: " + TextFormatting.AQUA + SoulToolLevelHandler.getToolLevel(stack)));
+            tooltip.add(new StringTextComponent("XP: " + TextFormatting.GREEN + SoulToolLevelHandler.getToolXp(stack)));
+        } else if(SoulToolLevelHandler.hasLevelTags(stack) && SoulToolLevelHandler.isMaxToolLevel(stack)) {
+            tooltip.add(new StringTextComponent("Level: " + TextFormatting.AQUA + SoulToolLevelHandler.getToolLevel(stack) + " (Max Level)"));
+        }
+    }
+
+    @Override
+    public Set<ToolType> getToolTypes(ItemStack stack) {
+        return ImmutableSet.of(ToolType.get(toolName));
     }
 }

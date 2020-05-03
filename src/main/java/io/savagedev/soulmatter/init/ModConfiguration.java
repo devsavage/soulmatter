@@ -47,7 +47,7 @@ public class ModConfiguration
         MAX_SOUL_TOOL_LEVEL = common
                 .comment("This number handles the Soul Matter Tool max tool level. When the tool reaches this number, it will have max abilities.")
                 .translation("configGui.soulmatter.max_soul_tool_level")
-                .defineInRange("maxSoulToolLevel", 2, 2, 8);
+                .defineInRange("maxSoulToolLevel", 3, 2, 8);
 
         common.pop();
 

@@ -39,7 +39,6 @@ public class NBTHelper
         return itemStack.hasTag() && itemStack.getTag().contains(keyName);
     }
 
-
     public static int getInt(ItemStack itemStack, String keyName) {
         initNBTTagCompound(itemStack);
 
@@ -54,5 +53,37 @@ public class NBTHelper
         initNBTTagCompound(itemStack);
 
         itemStack.getTag().putInt(keyName, keyValue);
+    }
+
+    public static String getString(ItemStack itemStack, String keyName) {
+        initNBTTagCompound(itemStack);
+
+        if (!itemStack.getTag().contains(keyName)) {
+            setString(itemStack, keyName, "");
+        }
+
+        return itemStack.getTag().getString(keyName);
+    }
+
+    public static void setString(ItemStack itemStack, String keyName, String keyValue) {
+        initNBTTagCompound(itemStack);
+
+        itemStack.getTag().putString(keyName, keyValue);
+    }
+
+    public static long getLong(ItemStack itemStack, String keyName) {
+        initNBTTagCompound(itemStack);
+
+        if (!itemStack.getTag().contains(keyName)) {
+            setLong(itemStack, keyName, 0L);
+        }
+
+        return itemStack.getTag().getLong(keyName);
+    }
+
+    public static void setLong(ItemStack itemStack, String keyName, long keyValue) {
+        initNBTTagCompound(itemStack);
+
+        itemStack.getTag().putLong(keyName, keyValue);
     }
 }
