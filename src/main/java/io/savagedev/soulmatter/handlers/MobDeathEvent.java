@@ -25,6 +25,7 @@ package io.savagedev.soulmatter.handlers;
 
 import io.savagedev.soulmatter.init.ModItems;
 import io.savagedev.soulmatter.util.LogHelper;
+import io.savagedev.soulmatter.util.NBTHelper;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -41,14 +42,14 @@ public class MobDeathEvent
             if(event.getEntityLiving() instanceof MonsterEntity) {
                 if(livingEntity.getHeldItem(Hand.MAIN_HAND).getItem() == ModItems.SOUL_STEALER.get()) {
                     ItemStack soulStealer = livingEntity.getHeldItem(Hand.MAIN_HAND).getStack();
-                    if(soulStealer.getTag() == null || !soulStealer.getTag().contains("SoulsTaken")) {
-                        soulStealer.getOrCreateTag().putInt("SoulsTaken", 1);
+                    if(!NBTHelper.hasTag(soulStealer, "SoulsTaken")) {
+                        NBTHelper.setInt(soulStealer, "SoulsTaken", 1);
                     } else {
-                        int count = soulStealer.getTag().getInt("SoulsTaken");
+                        int count = NBTHelper.getInt(soulStealer, "SoulsTaken");
                         if(count >= 0)
-                            soulStealer.getTag().putInt("SoulsTaken", count + 1);
+                            NBTHelper.setInt(soulStealer, "SoulsTaken", count + 1);
                         else
-                            soulStealer.getTag().putInt("SoulsTaken", 0);
+                            NBTHelper.setInt(soulStealer, "SoulsTaken", 0);
                     }
                 }
             }

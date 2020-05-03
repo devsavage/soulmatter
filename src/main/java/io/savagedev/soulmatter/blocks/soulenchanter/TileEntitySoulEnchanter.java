@@ -30,6 +30,7 @@ import io.savagedev.soulmatter.init.ModItems;
 import io.savagedev.soulmatter.init.ModTileEntities;
 import io.savagedev.soulmatter.util.LogHelper;
 import io.savagedev.soulmatter.util.ModNames;
+import io.savagedev.soulmatter.util.NBTHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.monster.MonsterEntity;
@@ -110,8 +111,8 @@ public class TileEntitySoulEnchanter extends TileEntity implements INamedContain
         if(!this.inventory.getStackInSlot(0).isEmpty()) {
             ItemStack soulStealer = this.inventory.getStackInSlot(0).getStack();
 
-            if(soulStealer.getTag().contains("SoulsTaken")) {
-                final int count = soulStealer.getTag().getInt("SoulsTaken");
+            if(NBTHelper.hasTag(soulStealer, "SoulsTaken")) {
+                final int count = NBTHelper.getInt(soulStealer, "SoulsTaken");
 
                 if(!isFuelFull()) {
                     for(int i = 0; i < count; i++) {
@@ -119,9 +120,9 @@ public class TileEntitySoulEnchanter extends TileEntity implements INamedContain
                     }
 
                     if(count > 0)
-                        soulStealer.getTag().putInt("SoulsTaken", count - 1);
+                        NBTHelper.setInt(soulStealer, "SoulsTaken", count - 1);
                     else
-                        soulStealer.getTag().putInt("SoulsTaken", 0);
+                        NBTHelper.setInt(soulStealer, "SoulsTaken", 0);
                 }
 
                 dirty = true;
