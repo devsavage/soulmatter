@@ -1,0 +1,19 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "XXX",
+    "XEX",
+    "XXX"
+  ],
+  "key": {
+    "X": {
+      "item": "soulmatter:raw_soul_matter"
+    },
+    "E": {
+      "item": "minecraft:nether_star"
+    }
+  },
+  "result": {
+    "item": "soulmatter:soul_enchanter"
+  }
+}

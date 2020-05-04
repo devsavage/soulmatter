@@ -1,0 +1,19 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "XXX",
+    "XEX",
+    "XXX"
+  ],
+  "key": {
+    "X": {
+      "item": "soulmatter:soul_matter"
+    },
+    "E": {
+      "item": "minecraft:stonecutter"
+    }
+  },
+  "result": {
+    "item": "soulmatter:soul_presser"
+  }
+}

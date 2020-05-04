@@ -41,12 +41,13 @@ public class ModNames
         public static final String SOUL_MATTER_BOOTS = "soul_matter_boots";
         public static final String SOUL_MATTER_HAMMER = "soul_matter_hammer";
         public static final String SOUL_MATTER_COMPACT = "soul_matter_compact";
+        public static final String EMERALD_ROD = "emerald_rod";
     }
 
     public static class Blocks
     {
         public static final String SOUL_ENCHANTER = "soul_enchanter";
-        public static final String SOUL_PRESSER = "soul_smelter";
+        public static final String SOUL_PRESSER = "soul_presser";
     }
 
     public static class Containers

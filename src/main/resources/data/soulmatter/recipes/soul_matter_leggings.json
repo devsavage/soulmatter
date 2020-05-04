@@ -1,0 +1,16 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "XXX",
+    "X X",
+    "X X"
+  ],
+  "key": {
+    "X": {
+      "item": "soulmatter:soul_matter_compact"
+    }
+  },
+  "result": {
+    "item": "soulmatter:soul_matter_leggings"
+  }
+}

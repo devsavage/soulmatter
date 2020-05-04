@@ -1,0 +1,19 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "XXX",
+    "XEX",
+    " E "
+  ],
+  "key": {
+    "X": {
+      "item": "soulmatter:soul_matter_compact"
+    },
+    "E": {
+      "item": "soulmatter:emerald_rod"
+    }
+  },
+  "result": {
+    "item": "soulmatter:soul_matter_hammer"
+  }
+}
