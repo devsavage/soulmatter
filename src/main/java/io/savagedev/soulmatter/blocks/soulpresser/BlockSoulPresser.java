@@ -53,7 +53,7 @@ public class BlockSoulPresser extends Block
     private static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
 
     public BlockSoulPresser() {
-        super(Properties.create(Material.IRON).sound(SoundType.ANVIL).hardnessAndResistance(4.0F));
+        super(Properties.create(Material.IRON).sound(SoundType.ANVIL).hardnessAndResistance(2.0F));
         this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.NORTH));
     }
 

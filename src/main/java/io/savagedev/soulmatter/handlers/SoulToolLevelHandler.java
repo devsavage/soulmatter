@@ -137,8 +137,8 @@ public class SoulToolLevelHandler
             else {
                 player.sendMessage(new StringTextComponent("Your " +
                         TextFormatting.DARK_AQUA + soulTool.getDisplayName().getFormattedText() +
-                        TextFormatting.RESET + " has been leveled up to level" + TextFormatting.AQUA + level + TextFormatting.RESET + "!"));
-                player.world.playSound(player, player.getPosition(), SoundEvents.ENTITY_WITCH_HURT, SoundCategory.HOSTILE, 0.9F, 1.0F);
+                        TextFormatting.RESET + " has been leveled up to level " + TextFormatting.AQUA + level + TextFormatting.RESET + "!"));
+                player.playSound(SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.AMBIENT, 1.0F, 1.0F);
             }
         }
     }
@@ -155,6 +155,6 @@ public class SoulToolLevelHandler
         player.sendMessage(new StringTextComponent(TextFormatting.GOLD + "You have reached the max level for your " + TextFormatting.AQUA +
                 tool.getDisplayName().getFormattedText() + TextFormatting.GOLD + "!"));
         // Sound not working ?
-        player.getEntityWorld().playSound(player, player.getPosition(), SoundEvents.ENTITY_WITHER_DEATH, SoundCategory.HOSTILE, 0.9F, 1.0F);
+        player.playSound(SoundEvents.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, SoundCategory.AMBIENT, 1.0F, 1.0F);
     }
 }
