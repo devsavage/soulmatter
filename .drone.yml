@@ -1,0 +1,9 @@
+kind: pipeline
+type: kubernetes
+name: default
+
+steps:
+- name: build
+  image: gradle:jdk10
+  commands:
+  - gradlew build
