@@ -5,7 +5,7 @@
 		"up": "soulmatter:block/soul_enchanter_top",
 		"down": "soulmatter:block/soul_enchanter",
 		"north": "soulmatter:block/soul_enchanter_front",
-		"south": "soulmatter:block/soul_enchanter",
+		"south": "soulmatter:block/soul_enchanter_back",
 		"east": "soulmatter:block/soul_enchanter_right",
 		"west": "soulmatter:block/soul_enchanter_left"
 	}
