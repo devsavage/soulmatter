@@ -1,6 +1,12 @@
 {
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "soulmatter:block/soul_enchanter"
-  }
+	"parent": "block/cube",
+	"textures": {
+		"particle": "soulmatter:block/soul_enchanter",
+		"up": "soulmatter:block/soul_enchanter_top",
+		"down": "soulmatter:block/soul_enchanter",
+		"north": "soulmatter:block/soul_enchanter_front",
+		"south": "soulmatter:block/soul_enchanter",
+		"east": "soulmatter:block/soul_enchanter_right",
+		"west": "soulmatter:block/soul_enchanter_left"
+	}
 }
