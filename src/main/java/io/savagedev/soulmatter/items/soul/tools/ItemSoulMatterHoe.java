@@ -58,37 +58,61 @@ public class ItemSoulMatterHoe extends BaseSoulTool
 
     @Override
     public ActionResultType onItemUse(ItemUseContext context) {
-        World world = context.getWorld();
-        BlockPos blockpos = context.getPos();
-        int hook = ForgeEventFactory.onHoeUse(context);
-        if (hook != 0) return hook > 0 ? ActionResultType.SUCCESS : ActionResultType.FAIL;
-        if (context.getFace() != Direction.DOWN && world.isAirBlock(blockpos.up())) {
-            BlockState blockstate = HOE_LOOKUP.get(world.getBlockState(blockpos).getBlock());
-            if (blockstate != null) {
-                PlayerEntity playerentity = context.getPlayer();
-                world.playSound(playerentity, blockpos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                if (!world.isRemote) {
-                    world.setBlockState(blockpos, blockstate, 11);
-                    if (playerentity != null) {
-                        if(SoulToolLevelHandler.hasLevelTags(context.getItem()) && !SoulToolLevelHandler.isMaxToolLevel(context.getItem())) {
-                                SoulToolLevelHandler.addXp(context.getItem(), playerentity, MathHelper.nextInt(new Random(), 2, 8));
+        if(!context.getPlayer().canPlayerEdit(context.getPos(), context.getFace(), context.getItem())) {
+            return ActionResultType.FAIL;
+        } else {
+            if(context.getPlayer().isSneaking() && SoulToolLevelHandler.hasLevelTags(context.getItem()) && SoulToolLevelHandler.isMaxToolLevel(context.getItem())) {
+                for(int posX = context.getPos().getX() - 1; posX <= context.getPos().getX() + 1; ++posX) {
+                    for(int posZ = context.getPos().getZ() - 1; posZ <= context.getPos().getZ() + 1; ++posZ) {
+                        BlockPos targetPos = new BlockPos(posX, context.getPos().getY(), posZ);
+                        BlockState targetBlock = context.getWorld().getBlockState(targetPos);
 
-                            context.getItem().damageItem(1, playerentity, (hand) -> {
-                                hand.sendBreakAnimation(context.getHand());
-                            });
-                        } else {
-                            context.getItem().damageItem(0, playerentity, (hand) -> {
-                                hand.sendBreakAnimation(context.getHand());
-                            });
+                        if(context.getFace() != Direction.DOWN && context.getWorld().isAirBlock(targetPos.up()) && targetBlock.getBlock() == Blocks.GRASS_BLOCK || targetBlock.getBlock() == Blocks.DIRT) {
+                            if(!context.getWorld().isRemote()) {
+                                context.getWorld().setBlockState(targetPos, Blocks.FARMLAND.getDefaultState());
+                            }
                         }
-
                     }
+
+                    context.getWorld().playSound(context.getPlayer(), context.getPos(), SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
 
                 return ActionResultType.SUCCESS;
             }
-        }
 
-        return ActionResultType.PASS;
+            World world = context.getWorld();
+            BlockPos blockpos = context.getPos();
+            int hook = ForgeEventFactory.onHoeUse(context);
+            if (hook != 0)
+                return hook > 0 ? ActionResultType.SUCCESS : ActionResultType.FAIL;
+            if (context.getFace() != Direction.DOWN && world.isAirBlock(blockpos.up())) {
+                BlockState blockstate = HOE_LOOKUP.get(world.getBlockState(blockpos).getBlock());
+                if (blockstate != null) {
+                    PlayerEntity playerentity = context.getPlayer();
+                    world.playSound(playerentity, blockpos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    if (!world.isRemote) {
+                        world.setBlockState(blockpos, blockstate, 11);
+                        if (playerentity != null) {
+                            if(SoulToolLevelHandler.hasLevelTags(context.getItem()) && !SoulToolLevelHandler.isMaxToolLevel(context.getItem())) {
+                                SoulToolLevelHandler.addXp(context.getItem(), playerentity, MathHelper.nextInt(new Random(), 2, 8));
+
+                                context.getItem().damageItem(1, playerentity, (hand) -> {
+                                    hand.sendBreakAnimation(context.getHand());
+                                });
+                            } else {
+                                context.getItem().damageItem(0, playerentity, (hand) -> {
+                                    hand.sendBreakAnimation(context.getHand());
+                                });
+                            }
+
+                        }
+                    }
+
+                    return ActionResultType.SUCCESS;
+                }
+            }
+
+            return ActionResultType.PASS;
+        }
     }
 }

@@ -23,16 +23,21 @@ package io.savagedev.soulmatter.handlers;
  * THE SOFTWARE.
  */
 
+import com.google.common.collect.ImmutableList;
 import io.savagedev.soulmatter.init.ModConfiguration;
 import io.savagedev.soulmatter.init.ModItems;
 import io.savagedev.soulmatter.util.NBTHelper;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.*;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 
 public class SoulToolLevelHandler
 {
