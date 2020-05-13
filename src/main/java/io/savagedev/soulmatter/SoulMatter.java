@@ -26,12 +26,15 @@ package io.savagedev.soulmatter;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
 import com.mojang.authlib.GameProfile;
+import com.mojang.brigadier.CommandDispatcher;
+import io.savagedev.soulmatter.commands.ModCommandSMTool;
 import io.savagedev.soulmatter.handlers.MobDeathEventHandler;
 import io.savagedev.soulmatter.handlers.MobDropsHandler;
 import io.savagedev.soulmatter.init.*;
 import io.savagedev.soulmatter.proxy.CommonProxy;
 import io.savagedev.soulmatter.util.LogHelper;
 import io.savagedev.soulmatter.util.ModReference;
+import net.minecraft.command.CommandSource;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -42,6 +45,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 
@@ -80,6 +85,13 @@ public class SoulMatter
 
         configData.load();
         ModConfiguration.COMMON.setConfig(configData);
+    }
+
+    @SubscribeEvent
+    public void onServerStartingEvent(FMLServerStartingEvent event) {
+        CommandDispatcher<CommandSource> commandDispatcher = event.getCommandDispatcher();
+
+        ModCommandSMTool.register(commandDispatcher);
     }
 
     @SubscribeEvent

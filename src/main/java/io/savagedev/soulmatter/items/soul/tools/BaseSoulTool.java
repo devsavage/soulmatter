@@ -60,7 +60,7 @@ public class BaseSoulTool extends ToolItem
     private Set<Block> effectiveBlocks;
 
     public BaseSoulTool(String toolName, float attackDamageIn, Set<Block> effectiveBlocksIn, Function<Properties, Properties> properties) {
-        super(attackDamageIn, 1, ModToolTier.SOUL_MATTER, effectiveBlocksIn, properties.apply(new Properties()));
+        super(attackDamageIn, 2, ModToolTier.SOUL_MATTER, effectiveBlocksIn, properties.apply(new Properties()));
         this.toolName = toolName;
         this.effectiveBlocks = effectiveBlocksIn;
     }

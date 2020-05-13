@@ -159,7 +159,14 @@ public class SoulToolLevelHandler
     public static void triggerMaxLevel(ItemStack tool, PlayerEntity player) {
         player.sendMessage(new StringTextComponent(TextFormatting.GOLD + "You have reached the max level for your " + TextFormatting.AQUA +
                 tool.getDisplayName().getFormattedText() + TextFormatting.GOLD + "!"));
-        // Sound not working ?
         player.playSound(SoundEvents.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, SoundCategory.AMBIENT, 1.0F, 1.0F);
+    }
+
+    public static void setMaxLevelCreative(ItemStack soulTool, PlayerEntity playerEntity) {
+        if(!hasToolLevel(soulTool))
+            return;
+
+        NBTHelper.setInt(soulTool, SOUL_TOOL_TAG_LEVEL, SOUL_TOOL_MAX_LEVEL);
+        triggerMaxLevel(soulTool, playerEntity);
     }
 }

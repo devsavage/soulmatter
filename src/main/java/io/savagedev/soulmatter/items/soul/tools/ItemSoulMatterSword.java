@@ -35,6 +35,6 @@ public class ItemSoulMatterSword extends BaseSoulTool
     private static final Set<Block> EFFECTIVE_ON = Sets.newHashSet(Blocks.COBWEB);
 
     public ItemSoulMatterSword(Function<Properties, Properties> properties) {
-        super("sword", 8, EFFECTIVE_ON, properties);
+        super("sword", 9, EFFECTIVE_ON, properties);
     }
 }
