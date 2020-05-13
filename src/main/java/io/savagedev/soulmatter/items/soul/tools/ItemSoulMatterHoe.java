@@ -26,6 +26,8 @@ package io.savagedev.soulmatter.items.soul.tools;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import io.savagedev.soulmatter.handlers.SoulToolLevelHandler;
+import io.savagedev.soulmatter.init.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -36,10 +38,12 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -66,9 +70,18 @@ public class ItemSoulMatterHoe extends BaseSoulTool
                 if (!world.isRemote) {
                     world.setBlockState(blockpos, blockstate, 11);
                     if (playerentity != null) {
-                        context.getItem().damageItem(1, playerentity, (hand) -> {
-                            hand.sendBreakAnimation(context.getHand());
-                        });
+                        if(SoulToolLevelHandler.hasLevelTags(context.getItem()) && !SoulToolLevelHandler.isMaxToolLevel(context.getItem())) {
+                                SoulToolLevelHandler.addXp(context.getItem(), playerentity, MathHelper.nextInt(new Random(), 2, 8));
+
+                            context.getItem().damageItem(1, playerentity, (hand) -> {
+                                hand.sendBreakAnimation(context.getHand());
+                            });
+                        } else {
+                            context.getItem().damageItem(0, playerentity, (hand) -> {
+                                hand.sendBreakAnimation(context.getHand());
+                            });
+                        }
+
                     }
                 }
 

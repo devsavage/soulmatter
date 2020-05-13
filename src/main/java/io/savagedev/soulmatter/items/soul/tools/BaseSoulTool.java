@@ -38,6 +38,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTier;
 import net.minecraft.item.ToolItem;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -138,21 +139,25 @@ public class BaseSoulTool extends ToolItem
 
     @Override
     public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable PlayerEntity player, @Nullable BlockState blockState) {
-        if(SoulToolLevelHandler.hasLevelTags(stack)) {
-            return getTier().getHarvestLevel() * SoulToolLevelHandler.getToolLevel(stack);
-        } else {
+        if(canHarvestBlock(blockState) && SoulToolLevelHandler.hasLevelTags(stack)) {
+            if(SoulToolLevelHandler.isMaxToolLevel(stack)) {
+                return getTier().getHarvestLevel() * SoulToolLevelHandler.getToolLevel(stack);
+            }
+
             return getTier().getHarvestLevel();
         }
+
+        return -1;
     }
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
         if(canHarvestBlock(state) && SoulToolLevelHandler.hasLevelTags(stack)) {
             if(SoulToolLevelHandler.isMaxToolLevel(stack)) {
-                return getTier().getEfficiency() * SoulToolLevelHandler.getToolLevel(stack);
-            } else {
-                return getTier().getEfficiency();
+                return this.effectiveBlocks.contains(state.getBlock()) ? getTier().getEfficiency() * SoulToolLevelHandler.getToolLevel(stack) : getTier().getEfficiency();
             }
+
+            return this.effectiveBlocks.contains(state.getBlock()) ? getTier().getEfficiency() : 1.0F;
         }
 
         return 1.0F;
@@ -168,17 +173,35 @@ public class BaseSoulTool extends ToolItem
                         blockState.getMaterial() == Material.ANVIL;
             case "axe":
                 return effectiveBlocks.contains(blockState.getBlock()) ||
-                        blockState.getMaterial() != Material.WOOD &&
-                                blockState.getMaterial() != Material.PLANTS &&
-                                blockState.getMaterial() != Material.TALL_PLANTS &&
-                                blockState.getMaterial() != Material.BAMBOO;
+                        blockState.getMaterial() == Material.WOOD &&
+                                blockState.getMaterial() == Material.PLANTS &&
+                                blockState.getMaterial() == Material.TALL_PLANTS &&
+                                blockState.getMaterial() == Material.BAMBOO;
             case "sword":
                 return effectiveBlocks.contains(blockState.getBlock()) || blockState.getBlock() == Blocks.COBWEB;
             case "hammer":
                 return effectiveBlocks.contains(blockState.getBlock()) ||
-                        blockState.getBlock() == Blocks.OBSIDIAN ? this.getTier().getHarvestLevel() == 3 : (blockState.getBlock() != Blocks.DIAMOND_BLOCK && blockState.getBlock() != Blocks.DIAMOND_ORE ? (blockState.getBlock() != Blocks.EMERALD_ORE && blockState.getBlock() != Blocks.EMERALD_BLOCK ? (blockState.getBlock() != Blocks.GOLD_BLOCK && blockState.getBlock() != Blocks.GOLD_ORE ? (blockState.getBlock() != Blocks.IRON_BLOCK && blockState.getBlock() != Blocks.IRON_DOOR ? (blockState.getBlock() != Blocks.LAPIS_BLOCK && blockState.getBlock() != Blocks.LAPIS_ORE ? (blockState.getBlock() != Blocks.REDSTONE_ORE && blockState.getBlock() != Blocks.REDSTONE_ORE ? (blockState.getMaterial() == Material.ROCK ? true : (blockState.getMaterial() == Material.IRON ? true : blockState.getMaterial() == Material.ANVIL)) : this.getTier().getHarvestLevel() >= 2) : this.getTier().getHarvestLevel() >= 1) : this.getTier().getHarvestLevel() >= 1) : this.getTier().getHarvestLevel() >= 2) : this.getTier().getHarvestLevel() >= 2) : this.getTier().getHarvestLevel() >= 2);
+                        blockState.getBlock() == Blocks.OBSIDIAN ?
+                        this.getTier().getHarvestLevel() == 3 :
+                        (blockState.getBlock() != Blocks.DIAMOND_BLOCK && blockState.getBlock() != Blocks.DIAMOND_ORE ?
+                                (blockState.getBlock() != Blocks.EMERALD_ORE && blockState.getBlock() != Blocks.EMERALD_BLOCK ?
+                                        (blockState.getBlock() != Blocks.GOLD_BLOCK && blockState.getBlock() != Blocks.GOLD_ORE ?
+                                                (blockState.getBlock() != Blocks.IRON_BLOCK && blockState.getBlock() != Blocks.IRON_DOOR ?
+                                                        (blockState.getBlock() != Blocks.LAPIS_BLOCK && blockState.getBlock() != Blocks.LAPIS_ORE ?
+                                                                (blockState.getBlock() != Blocks.REDSTONE_ORE && blockState.getBlock() != Blocks.REDSTONE_ORE ?
+                                                                        (blockState.getMaterial() == Material.ROCK || (blockState.getMaterial() == Material.IRON || blockState.getMaterial() == Material.ANVIL)) :
+                                                                        this.getTier().getHarvestLevel() >= 2) :
+                                                                this.getTier().getHarvestLevel() >= 1) :
+                                                        this.getTier().getHarvestLevel() >= 1) :
+                                                this.getTier().getHarvestLevel() >= 2) :
+                                        this.getTier().getHarvestLevel() >= 2) :
+                                this.getTier().getHarvestLevel() >= 2);
             case "shovel":
-                return effectiveBlocks.contains(blockState.getBlock()) || blockState.getMaterial() == Material.EARTH || blockState.getMaterial() == Material.ORGANIC || blockState.getMaterial() == Material.SAND || blockState.getMaterial() == Material.SNOW || blockState.getMaterial() == Material.SNOW_BLOCK;
+                return effectiveBlocks.contains(blockState.getBlock()) ||
+                        blockState.getMaterial() == Material.EARTH ||
+                        blockState.getMaterial() == Material.ORGANIC ||
+                        blockState.getMaterial() == Material.SAND ||
+                        blockState.getMaterial() == Material.SNOW;
             default:
                 return super.canHarvestBlock(blockState);
         }
