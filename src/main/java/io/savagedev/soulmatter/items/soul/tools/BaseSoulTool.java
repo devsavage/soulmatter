@@ -79,7 +79,7 @@ public class BaseSoulTool extends ToolItem
 
     @Override
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if(SoulToolLevelHandler.hasLevelTags(stack) && !SoulToolLevelHandler.isMaxToolLevel(stack)) {
+        if(!SoulToolLevelHandler.isMaxToolLevel(stack)) {
             if (stack.getItem() == ModItems.SOUL_MATTER_SWORD.get()) {
                 if (attacker instanceof PlayerEntity) {
                     SoulToolLevelHandler.addXp(stack, (PlayerEntity) attacker, MathHelper.nextInt(new Random(), 2, 8));
@@ -117,7 +117,7 @@ public class BaseSoulTool extends ToolItem
                     });
                 }
             } else {
-                if(SoulToolLevelHandler.hasLevelTags(stack) && !SoulToolLevelHandler.isMaxToolLevel(stack)) {
+                if(!SoulToolLevelHandler.isMaxToolLevel(stack)) {
                     stack.damageItem(1, entityLiving, (event) -> {
                         event.sendBreakAnimation(entityLiving.getActiveHand());
                     });
@@ -139,7 +139,7 @@ public class BaseSoulTool extends ToolItem
 
     @Override
     public int getHarvestLevel(ItemStack stack, ToolType tool, @Nullable PlayerEntity player, @Nullable BlockState blockState) {
-        if(canHarvestBlock(blockState) && SoulToolLevelHandler.hasLevelTags(stack)) {
+        if(canHarvestBlock(blockState)) {
             if(SoulToolLevelHandler.isMaxToolLevel(stack)) {
                 return getTier().getHarvestLevel() * SoulToolLevelHandler.getToolLevel(stack);
             }
@@ -152,7 +152,7 @@ public class BaseSoulTool extends ToolItem
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        if(canHarvestBlock(state) && SoulToolLevelHandler.hasLevelTags(stack)) {
+        if(canHarvestBlock(state)) {
             if(SoulToolLevelHandler.isMaxToolLevel(stack)) {
                 return this.effectiveBlocks.contains(state.getBlock()) ? getTier().getEfficiency() * SoulToolLevelHandler.getToolLevel(stack) : getTier().getEfficiency();
             }
@@ -167,6 +167,7 @@ public class BaseSoulTool extends ToolItem
     public boolean canHarvestBlock(BlockState blockState) {
         switch (toolName) {
             case "pickaxe":
+            case "hammer":
                 return effectiveBlocks.contains(blockState.getBlock()) ||
                         blockState.getMaterial() == Material.ROCK ||
                         blockState.getMaterial() == Material.IRON ||
@@ -179,23 +180,6 @@ public class BaseSoulTool extends ToolItem
                                 blockState.getMaterial() == Material.BAMBOO;
             case "sword":
                 return effectiveBlocks.contains(blockState.getBlock()) || blockState.getBlock() == Blocks.COBWEB;
-            case "hammer":
-                return effectiveBlocks.contains(blockState.getBlock()) ||
-                        blockState.getBlock() == Blocks.OBSIDIAN ?
-                        this.getTier().getHarvestLevel() == 3 :
-                        (blockState.getBlock() != Blocks.DIAMOND_BLOCK && blockState.getBlock() != Blocks.DIAMOND_ORE ?
-                                (blockState.getBlock() != Blocks.EMERALD_ORE && blockState.getBlock() != Blocks.EMERALD_BLOCK ?
-                                        (blockState.getBlock() != Blocks.GOLD_BLOCK && blockState.getBlock() != Blocks.GOLD_ORE ?
-                                                (blockState.getBlock() != Blocks.IRON_BLOCK && blockState.getBlock() != Blocks.IRON_DOOR ?
-                                                        (blockState.getBlock() != Blocks.LAPIS_BLOCK && blockState.getBlock() != Blocks.LAPIS_ORE ?
-                                                                (blockState.getBlock() != Blocks.REDSTONE_ORE && blockState.getBlock() != Blocks.REDSTONE_ORE ?
-                                                                        (blockState.getMaterial() == Material.ROCK || (blockState.getMaterial() == Material.IRON || blockState.getMaterial() == Material.ANVIL)) :
-                                                                        this.getTier().getHarvestLevel() >= 2) :
-                                                                this.getTier().getHarvestLevel() >= 1) :
-                                                        this.getTier().getHarvestLevel() >= 1) :
-                                                this.getTier().getHarvestLevel() >= 2) :
-                                        this.getTier().getHarvestLevel() >= 2) :
-                                this.getTier().getHarvestLevel() >= 2);
             case "shovel":
                 return effectiveBlocks.contains(blockState.getBlock()) ||
                         blockState.getMaterial() == Material.EARTH ||
@@ -209,10 +193,10 @@ public class BaseSoulTool extends ToolItem
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        if(SoulToolLevelHandler.hasLevelTags(stack) && !SoulToolLevelHandler.isMaxToolLevel(stack)) {
+        if(!SoulToolLevelHandler.isMaxToolLevel(stack)) {
             tooltip.add(new StringTextComponent("Level: " + TextFormatting.AQUA + SoulToolLevelHandler.getToolLevel(stack)));
             tooltip.add(new StringTextComponent("XP: " + TextFormatting.GREEN + SoulToolLevelHandler.getToolXp(stack)));
-        } else if(SoulToolLevelHandler.hasLevelTags(stack) && SoulToolLevelHandler.isMaxToolLevel(stack)) {
+        } else {
             tooltip.add(new StringTextComponent("Level: " + TextFormatting.AQUA + SoulToolLevelHandler.getToolLevel(stack) + " (Max Level)"));
         }
     }

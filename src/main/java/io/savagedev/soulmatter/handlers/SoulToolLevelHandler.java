@@ -72,6 +72,9 @@ public class SoulToolLevelHandler
     }
 
     public static boolean isMaxToolLevel(ItemStack soulTool) {
+        if(!hasLevelTags(soulTool))
+            return false;
+
         return getToolLevel(soulTool) >= SOUL_TOOL_MAX_LEVEL;
     }
 
