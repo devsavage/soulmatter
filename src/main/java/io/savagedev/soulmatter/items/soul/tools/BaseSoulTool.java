@@ -25,6 +25,7 @@ package io.savagedev.soulmatter.items.soul.tools;
 
 import com.google.common.collect.ImmutableSet;
 import io.savagedev.soulmatter.handlers.SoulToolLevelHandler;
+import io.savagedev.soulmatter.init.ModConfiguration;
 import io.savagedev.soulmatter.init.ModItems;
 import io.savagedev.soulmatter.init.ModToolTier;
 import io.savagedev.soulmatter.util.LogHelper;
@@ -90,9 +91,15 @@ public class BaseSoulTool extends ToolItem
                 event.sendBreakAnimation(attacker.getActiveHand());
             });
         } else {
-            stack.damageItem(0, attacker, (event) -> {
-                event.sendBreakAnimation(attacker.getActiveHand());
-            });
+            if(ModConfiguration.SHOULD_DAMAGE_MAX_TOOL.get()) {
+                stack.damageItem(1, attacker, (event) -> {
+                    event.sendBreakAnimation(attacker.getActiveHand());
+                });
+            } else {
+                stack.damageItem(0, attacker, (event) -> {
+                    event.sendBreakAnimation(attacker.getActiveHand());
+                });
+            }
         }
 
         return true;
@@ -112,9 +119,15 @@ public class BaseSoulTool extends ToolItem
                         event.sendBreakAnimation(entityLiving.getActiveHand());
                     });
                 } else {
-                    stack.damageItem(0, entityLiving, (event) -> {
-                        event.sendBreakAnimation(entityLiving.getActiveHand());
-                    });
+                    if(ModConfiguration.SHOULD_DAMAGE_MAX_TOOL.get()) {
+                        stack.damageItem(1, entityLiving, (event) -> {
+                            event.sendBreakAnimation(entityLiving.getActiveHand());
+                        });
+                    } else {
+                        stack.damageItem(0, entityLiving, (event) -> {
+                            event.sendBreakAnimation(entityLiving.getActiveHand());
+                        });
+                    }
                 }
             } else {
                 if(!SoulToolLevelHandler.isMaxToolLevel(stack)) {
@@ -122,9 +135,15 @@ public class BaseSoulTool extends ToolItem
                         event.sendBreakAnimation(entityLiving.getActiveHand());
                     });
                 } else {
-                    stack.damageItem(0, entityLiving, (event) -> {
-                        event.sendBreakAnimation(entityLiving.getActiveHand());
-                    });
+                    if(ModConfiguration.SHOULD_DAMAGE_MAX_TOOL.get()) {
+                        stack.damageItem(1, entityLiving, (event) -> {
+                            event.sendBreakAnimation(entityLiving.getActiveHand());
+                        });
+                    } else {
+                        stack.damageItem(0, entityLiving, (event) -> {
+                            event.sendBreakAnimation(entityLiving.getActiveHand());
+                        });
+                    }
                 }
             }
         }

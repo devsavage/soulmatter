@@ -38,6 +38,7 @@ public class ModConfiguration
     }
 
     public static final ForgeConfigSpec.IntValue MAX_SOUL_TOOL_LEVEL;
+    public static final ForgeConfigSpec.BooleanValue SHOULD_DAMAGE_MAX_TOOL;
 
     static {
         final ForgeConfigSpec.Builder common = new ForgeConfigSpec.Builder();
@@ -48,6 +49,9 @@ public class ModConfiguration
                 .comment("This number handles the Soul Matter Tool max tool level. When the tool reaches this number, it will have max abilities.")
                 .translation("configGui.soulmatter.max_soul_tool_level")
                 .defineInRange("maxSoulToolLevel", 3, 2, 8);
+        SHOULD_DAMAGE_MAX_TOOL = common.comment("Damage Soul Matter Tools that have reached max level")
+                .translation("configGui.soulmatter.should_damage_max_tool_level")
+                .define("shouldDamageMaxTool", false);
 
         common.pop();
 

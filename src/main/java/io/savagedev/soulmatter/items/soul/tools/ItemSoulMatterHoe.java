@@ -27,6 +27,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.savagedev.soulmatter.handlers.SoulToolLevelHandler;
+import io.savagedev.soulmatter.init.ModConfiguration;
 import io.savagedev.soulmatter.init.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -93,16 +94,22 @@ public class ItemSoulMatterHoe extends BaseSoulTool
                     if (!world.isRemote) {
                         world.setBlockState(blockpos, blockstate, 11);
                         if (playerentity != null) {
-                            if(SoulToolLevelHandler.hasLevelTags(context.getItem()) && !SoulToolLevelHandler.isMaxToolLevel(context.getItem())) {
+                            if(!SoulToolLevelHandler.isMaxToolLevel(context.getItem())) {
                                 SoulToolLevelHandler.addXp(context.getItem(), playerentity, MathHelper.nextInt(new Random(), 2, 8));
 
                                 context.getItem().damageItem(1, playerentity, (hand) -> {
                                     hand.sendBreakAnimation(context.getHand());
                                 });
                             } else {
-                                context.getItem().damageItem(0, playerentity, (hand) -> {
-                                    hand.sendBreakAnimation(context.getHand());
-                                });
+                                if(ModConfiguration.SHOULD_DAMAGE_MAX_TOOL.get()) {
+                                    context.getItem().damageItem(1, context.getPlayer(), (event) -> {
+                                        event.sendBreakAnimation(context.getPlayer().getActiveHand());
+                                    });
+                                } else {
+                                    context.getItem().damageItem(0, context.getPlayer(), (event) -> {
+                                        event.sendBreakAnimation(context.getPlayer().getActiveHand());
+                                    });
+                                }
                             }
 
                         }
