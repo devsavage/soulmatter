@@ -62,7 +62,7 @@ public class ItemSoulMatterHoe extends BaseSoulTool
         if(!context.getPlayer().canPlayerEdit(context.getPos(), context.getFace(), context.getItem())) {
             return ActionResultType.FAIL;
         } else {
-            if(context.getPlayer().isSneaking() && SoulToolLevelHandler.hasLevelTags(context.getItem()) && SoulToolLevelHandler.isMaxToolLevel(context.getItem())) {
+            if(context.getPlayer().isSneaking() && SoulToolLevelHandler.isMaxToolLevel(context.getItem())) {
                 for(int posX = context.getPos().getX() - 1; posX <= context.getPos().getX() + 1; ++posX) {
                     for(int posZ = context.getPos().getZ() - 1; posZ <= context.getPos().getZ() + 1; ++posZ) {
                         BlockPos targetPos = new BlockPos(posX, context.getPos().getY(), posZ);

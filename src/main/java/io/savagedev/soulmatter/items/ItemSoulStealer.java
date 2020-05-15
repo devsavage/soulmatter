@@ -52,8 +52,6 @@ public class ItemSoulStealer extends BaseItem
 
     @Override
     public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
-        ItemStack soulStealerStack = playerIn.getHeldItem(hand);
-
         if(target instanceof MonsterEntity) {
             World world = playerIn.getEntityWorld();
 
