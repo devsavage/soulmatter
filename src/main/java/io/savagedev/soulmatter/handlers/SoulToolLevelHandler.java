@@ -30,6 +30,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
@@ -138,8 +139,8 @@ public class SoulToolLevelHandler
                 triggerMaxLevel(soulTool, player);
             else {
                 player.sendMessage(new StringTextComponent("Your " +
-                        TextFormatting.DARK_AQUA + soulTool.getDisplayName().getFormattedText() +
-                        TextFormatting.RESET + " has been leveled up to level " + TextFormatting.AQUA + level + TextFormatting.RESET + "!"));
+                        TextFormatting.DARK_AQUA + soulTool.getDisplayName().getString() +
+                        TextFormatting.RESET + " has been leveled up to level " + TextFormatting.AQUA + level + TextFormatting.RESET + "!"), Util.DUMMY_UUID);
                 player.playSound(SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.AMBIENT, 1.0F, 1.0F);
             }
         }
@@ -155,7 +156,7 @@ public class SoulToolLevelHandler
 
     public static void triggerMaxLevel(ItemStack tool, PlayerEntity player) {
         player.sendMessage(new StringTextComponent(TextFormatting.GOLD + "You have reached the max level for your " + TextFormatting.AQUA +
-                tool.getDisplayName().getFormattedText() + TextFormatting.GOLD + "!"));
+                tool.getDisplayName().getString() + TextFormatting.GOLD + "!"), Util.DUMMY_UUID);
         player.playSound(SoundEvents.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, SoundCategory.AMBIENT, 1.0F, 1.0F);
     }
 

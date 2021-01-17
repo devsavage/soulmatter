@@ -23,6 +23,7 @@ package io.savagedev.soulmatter.blocks.soulpresser;
  * THE SOFTWARE.
  */
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import io.savagedev.soulmatter.blocks.soulenchanter.ContainerSoulEnchanter;
 import io.savagedev.soulmatter.util.ModReference;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -43,31 +44,31 @@ public class ScreenSoulPresser extends ContainerScreen<ContainerSoulPresser>
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float ticks) {
-        this.renderBackground();
-        super.render(mouseX, mouseY, ticks);
-        this.renderHoveredToolTip(mouseX, mouseY);
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float ticks) {
+        this.renderBackground(matrixStack);
+        super.render(matrixStack, mouseX, mouseY, ticks);
+        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        String title = this.getTitle().getFormattedText();
+    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
+        String title = this.getTitle().getString();
 
-        this.font.drawString(title, (float) (this.xSize / 2 - this.font.getStringWidth(title) / 2), 6.0F, 4210752);
-        this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float)(this.ySize - 96 + 2), 4210752);    }
+        this.font.drawString(matrixStack, title, (float) (this.xSize / 2 - this.font.getStringWidth(title) / 2), 6.0F, 4210752);
+        this.font.drawString(matrixStack, this.playerInventory.getDisplayName().getString(), 8.0F, (float)(this.ySize - 96 + 2), 4210752);    }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         this.getMinecraft().getTextureManager().bindTexture(background);
 
         int xStart = (this.width - this.xSize) / 2;
         int yStart = (this.height - this.ySize) / 2;
 
-        this.blit(xStart, yStart, 0, 0, this.xSize, this.ySize);
+        this.blit(matrixStack, xStart, yStart, 0, 0, this.xSize, this.ySize);
     }
 
     @Override
-    protected void renderHoveredToolTip(int mouseX, int mouseY) {
-        super.renderHoveredToolTip(mouseX, mouseY);
+    protected void renderHoveredTooltip(MatrixStack matrixStack, int x, int y) {
+        super.renderHoveredTooltip(matrixStack, x, y);
     }
 }

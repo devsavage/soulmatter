@@ -1,6 +1,7 @@
 modLoader="javafml"
-loaderVersion="[31,)"
+loaderVersion="[35,)"
 issueTrackerURL="https://github.com/devsavage/soulmatter/issues"
+license="MIT"
 
 [[mods]]
     modId="soulmatter"
@@ -14,18 +15,18 @@ issueTrackerURL="https://github.com/devsavage/soulmatter/issues"
 [[dependencies.soulmatter]]
     modId="forge"
     mandatory=true
-    versionRange="[31.2,)"
+    versionRange="[35,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.soulmatter]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15.2]"
+    versionRange="[1.16.4,1.17]"
     ordering="NONE"
     side="BOTH"
 [[dependencies.soulmatter]]
     modId="savagecore"
     mandatory=true
-    versionRange="[1.15.2-0.0.0,]"
+    versionRange="[1.16.4-2.0.0,]"
     ordering="BEFORE"
     side="BOTH"

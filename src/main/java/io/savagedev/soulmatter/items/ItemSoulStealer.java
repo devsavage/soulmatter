@@ -23,25 +23,14 @@ package io.savagedev.soulmatter.items;
  * THE SOFTWARE.
  */
 
-import io.savagedev.soulmatter.util.LogHelper;
-import net.minecraft.client.particle.MobAppearanceParticle;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.LightningBoltEntity;
-import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.monster.ElderGuardianEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.UseAction;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 
-import java.util.Random;
 import java.util.function.Function;
 
 public class ItemSoulStealer extends BaseItem
@@ -51,7 +40,8 @@ public class ItemSoulStealer extends BaseItem
     }
 
     @Override
-    public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
+    public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
+
         if(target instanceof MonsterEntity) {
             World world = playerIn.getEntityWorld();
 
@@ -62,7 +52,7 @@ public class ItemSoulStealer extends BaseItem
 
             target.attackEntityFrom(DamageSource.causePlayerDamage(playerIn), dmg);
 
-            return true;
+            return ActionResultType.SUCCESS;
         }
 
         return super.itemInteractionForEntity(stack, playerIn, target, hand);

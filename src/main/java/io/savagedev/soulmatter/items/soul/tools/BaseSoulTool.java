@@ -67,7 +67,7 @@ public class BaseSoulTool extends ToolItem
     @Override
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         if(!NBTHelper.hasTag(stack, SoulToolLevelHandler.SOUL_TOOL_TAG) && !worldIn.isRemote) {
-            NBTHelper.setString(stack, SoulToolLevelHandler.SOUL_TOOL_TAG, stack.getDisplayName().getFormattedText());
+            NBTHelper.setString(stack, SoulToolLevelHandler.SOUL_TOOL_TAG, stack.getDisplayName().getString());
             SoulToolLevelHandler.addLevelTag(stack);
         } else {
             if(stack.getDamage() == stack.getMaxDamage() - 1) {

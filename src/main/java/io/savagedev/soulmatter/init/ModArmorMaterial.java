@@ -40,7 +40,7 @@ public enum ModArmorMaterial implements IArmorMaterial
 {
     SOUL_MATTER("soul_matter", 42, new int[]{4, 7, 10, 4}, 24, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 4.0F, () -> {
         return Ingredient.fromItems(ModItems.SOUL_MATTER.get());
-    });
+    }, 0.1F);
 
     private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
     private final String name;
@@ -49,9 +49,10 @@ public enum ModArmorMaterial implements IArmorMaterial
     private final int enchantability;
     private final SoundEvent soundEvent;
     private final float toughness;
+    private final float knockBackResistance;
     private final LazyValue<Ingredient> repairMaterial;
 
-    private ModArmorMaterial(String nameIn, int maxDamageFactorIn, int[] damageReductionAmountsIn, int enchantabilityIn, SoundEvent equipSoundIn, float toughness, Supplier<Ingredient> repairMaterialSupplier) {
+    private ModArmorMaterial(String nameIn, int maxDamageFactorIn, int[] damageReductionAmountsIn, int enchantabilityIn, SoundEvent equipSoundIn, float toughness, Supplier<Ingredient> repairMaterialSupplier, float knockBackResistance) {
         this.name = nameIn;
         this.maxDamageFactor = maxDamageFactorIn;
         this.damageReductionAmountArray = damageReductionAmountsIn;
@@ -59,6 +60,7 @@ public enum ModArmorMaterial implements IArmorMaterial
         this.soundEvent = equipSoundIn;
         this.toughness = toughness;
         this.repairMaterial = new LazyValue<>(repairMaterialSupplier);
+        this.knockBackResistance = knockBackResistance;
     }
 
     @Override
@@ -95,5 +97,10 @@ public enum ModArmorMaterial implements IArmorMaterial
     @Override
     public float getToughness() {
         return this.toughness;
+    }
+
+    @Override
+    public float getKnockbackResistance() {
+        return this.knockBackResistance;
     }
 }

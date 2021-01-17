@@ -27,6 +27,7 @@ import io.savagedev.savagecore.item.BaseItemStackHandler;
 import io.savagedev.soulmatter.init.ModItems;
 import io.savagedev.soulmatter.init.ModTileEntities;
 import io.savagedev.soulmatter.util.ModNames;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.InventoryHelper;
@@ -74,9 +75,9 @@ public class TileEntitySoulPresser extends TileEntity implements INamedContainer
     }
 
     @Override
-    public void read(CompoundNBT compound) {
-        super.read(compound);
-        
+    public void read(BlockState state, CompoundNBT compound) {
+        super.read(state, compound);
+
         ItemStackHelper.loadAllItems(compound, this.getInventory().getStacks());
     }
 

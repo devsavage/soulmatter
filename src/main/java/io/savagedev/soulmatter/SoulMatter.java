@@ -30,6 +30,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import io.savagedev.savagecore.util.updater.Updater;
 import io.savagedev.savagecore.util.updater.UpdaterUtils;
 import io.savagedev.soulmatter.commands.ModCommandSMTool;
+import io.savagedev.soulmatter.commands.ModRegisterCommands;
 import io.savagedev.soulmatter.handlers.MobDeathEventHandler;
 import io.savagedev.soulmatter.handlers.MobDropsHandler;
 import io.savagedev.soulmatter.init.*;
@@ -42,6 +43,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -81,7 +83,6 @@ public class SoulMatter
     public SoulMatter() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        modEventBus.register(this);
         modEventBus.register(new ModBlocks());
         modEventBus.register(new ModItems());
         modEventBus.register(new ModTileEntities());
@@ -99,13 +100,13 @@ public class SoulMatter
 
         configData.load();
         ModConfiguration.COMMON.setConfig(configData);
+
+        MinecraftForge.EVENT_BUS.register(new ModRegisterCommands());
     }
 
     @SubscribeEvent
-    public void onServerStartingEvent(FMLServerStartingEvent event) {
-        CommandDispatcher<CommandSource> commandDispatcher = event.getCommandDispatcher();
-
-        ModCommandSMTool.register(commandDispatcher);
+    public void registerCommands(RegisterCommandsEvent event) {
+        ModCommandSMTool.register(event.getDispatcher());
     }
 
     @SubscribeEvent

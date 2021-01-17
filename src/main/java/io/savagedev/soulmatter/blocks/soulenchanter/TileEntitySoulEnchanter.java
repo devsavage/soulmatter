@@ -31,6 +31,7 @@ import io.savagedev.soulmatter.init.ModTileEntities;
 import io.savagedev.soulmatter.util.LogHelper;
 import io.savagedev.soulmatter.util.ModNames;
 import io.savagedev.savagecore.nbt.NBTHelper;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.monster.MonsterEntity;
@@ -50,13 +51,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -160,8 +154,8 @@ public class TileEntitySoulEnchanter extends TileEntity implements INamedContain
     }
 
     @Override
-    public void read(CompoundNBT compound) {
-        super.read(compound);
+    public void read(BlockState state, CompoundNBT compound) {
+        super.read(state, compound);
         this.progress = compound.getInt("Progress");
         this.totalFuelStored = compound.getInt("FuelStored");
         ItemStackHelper.loadAllItems(compound, this.getInventory().getStacks());
