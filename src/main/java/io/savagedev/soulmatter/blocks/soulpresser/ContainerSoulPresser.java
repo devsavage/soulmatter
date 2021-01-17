@@ -23,9 +23,9 @@ package io.savagedev.soulmatter.blocks.soulpresser;
  * THE SOFTWARE.
  */
 
+import io.savagedev.savagecore.item.BaseItemStackHandler;
 import io.savagedev.soulmatter.blocks.soulenchanter.ContainerSoulEnchanter;
 import io.savagedev.soulmatter.blocks.soulenchanter.TileEntitySoulEnchanter;
-import io.savagedev.soulmatter.helpers.ModItemStackHandler;
 import io.savagedev.soulmatter.init.ModContainers;
 import io.savagedev.soulmatter.init.ModItems;
 import net.minecraft.entity.player.PlayerEntity;
@@ -52,7 +52,7 @@ public class ContainerSoulPresser extends Container
         this(type, id, playerInventory, p -> false, (new TileEntitySoulEnchanter()).getInventory());
     }
 
-    private ContainerSoulPresser(@Nullable ContainerType<?> type, int id, PlayerInventory playerInventory, Function<PlayerEntity, Boolean> isUsableByPlayer, ModItemStackHandler inv) {
+    private ContainerSoulPresser(@Nullable ContainerType<?> type, int id, PlayerInventory playerInventory, Function<PlayerEntity, Boolean> isUsableByPlayer, BaseItemStackHandler inv) {
         super(type, id);
 
         this.isUsableByPlayer = isUsableByPlayer;
@@ -75,7 +75,7 @@ public class ContainerSoulPresser extends Container
         return new ContainerSoulPresser(ModContainers.SOUL_PRESSER.get(), windowId, playerInventory);
     }
 
-    public static ContainerSoulPresser create(int windowId, PlayerInventory playerInventory, Function<PlayerEntity, Boolean> isUsableByPlayer, ModItemStackHandler inventory) {
+    public static ContainerSoulPresser create(int windowId, PlayerInventory playerInventory, Function<PlayerEntity, Boolean> isUsableByPlayer, BaseItemStackHandler inventory) {
         return new ContainerSoulPresser(ModContainers.SOUL_PRESSER.get(), windowId, playerInventory, isUsableByPlayer, inventory);
     }
 
@@ -114,10 +114,10 @@ public class ContainerSoulPresser extends Container
 
     private final class SlotSoulMatter extends SlotItemHandler
     {
-        private final ModItemStackHandler inventory;
+        private final BaseItemStackHandler inventory;
         private final int index;
 
-        public SlotSoulMatter(ModItemStackHandler inventoryIn, int index, int xPosition, int yPosition) {
+        public SlotSoulMatter(BaseItemStackHandler inventoryIn, int index, int xPosition, int yPosition) {
             super(inventoryIn, index, xPosition, yPosition);
             this.inventory = inventoryIn;
             this.index = index;

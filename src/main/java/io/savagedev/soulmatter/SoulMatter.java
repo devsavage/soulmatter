@@ -27,6 +27,8 @@ import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
+import io.savagedev.savagecore.util.updater.Updater;
+import io.savagedev.savagecore.util.updater.UpdaterUtils;
 import io.savagedev.soulmatter.commands.ModCommandSMTool;
 import io.savagedev.soulmatter.handlers.MobDeathEventHandler;
 import io.savagedev.soulmatter.handlers.MobDropsHandler;
@@ -34,13 +36,18 @@ import io.savagedev.soulmatter.init.*;
 import io.savagedev.soulmatter.proxy.CommonProxy;
 import io.savagedev.soulmatter.util.LogHelper;
 import io.savagedev.soulmatter.util.ModReference;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandSource;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.VersionChecker;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -60,6 +67,10 @@ public class SoulMatter
 
     public static GameProfile gameProfile = new GameProfile(UUID.nameUUIDFromBytes("soulmatter.common".getBytes()), LogHelper.TAG);
 
+    public static ModContainer MOD_CONTAINER;
+
+    public Updater UPDATER;
+
     public static ItemGroup modGroup = new ItemGroup(ModReference.MOD_ID) {
         @Override
         public ItemStack createIcon() {
@@ -75,6 +86,9 @@ public class SoulMatter
         modEventBus.register(new ModItems());
         modEventBus.register(new ModTileEntities());
         modEventBus.register(new ModContainers());
+
+        MOD_CONTAINER = ModLoadingContext.get().getActiveContainer();
+        UPDATER = new Updater().setModId(ModReference.MOD_ID).setMinecraftVersion(Minecraft.getInstance().getVersion()).setCurrentVersion(MOD_CONTAINER.getModInfo().getVersion().toString());
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ModConfiguration.CLIENT);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ModConfiguration.COMMON);
@@ -104,5 +118,12 @@ public class SoulMatter
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new MobDropsHandler());
         MinecraftForge.EVENT_BUS.register(new MobDeathEventHandler());
+
+        UpdaterUtils.initializeUpdateCheck(UPDATER);
+    }
+
+    @SubscribeEvent
+    public void playerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
+        UpdaterUtils.sendUpdateMessageIfOutdated(ModReference.MOD_NAME, event, UPDATER);
     }
 }

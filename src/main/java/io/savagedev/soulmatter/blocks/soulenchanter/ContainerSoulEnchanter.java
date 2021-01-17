@@ -23,7 +23,7 @@ package io.savagedev.soulmatter.blocks.soulenchanter;
  * THE SOFTWARE.
  */
 
-import io.savagedev.soulmatter.helpers.ModItemStackHandler;
+import io.savagedev.savagecore.item.BaseItemStackHandler;
 import io.savagedev.soulmatter.init.ModContainers;
 import io.savagedev.soulmatter.init.ModItems;
 import net.minecraft.entity.player.PlayerEntity;
@@ -54,7 +54,7 @@ public class ContainerSoulEnchanter extends Container
         this(type, id, playerInventory, p -> false, (new TileEntitySoulEnchanter()).getInventory(), new IntArray(2));
     }
 
-    private ContainerSoulEnchanter(@Nullable ContainerType<?> type, int id, PlayerInventory playerInventory, Function<PlayerEntity, Boolean> isUsableByPlayer, ModItemStackHandler inv, IIntArray data) {
+    private ContainerSoulEnchanter(@Nullable ContainerType<?> type, int id, PlayerInventory playerInventory, Function<PlayerEntity, Boolean> isUsableByPlayer, BaseItemStackHandler inv, IIntArray data) {
         super(type, id);
 
         this.isUsableByPlayer = isUsableByPlayer;
@@ -82,7 +82,7 @@ public class ContainerSoulEnchanter extends Container
         return new ContainerSoulEnchanter(ModContainers.SOUL_ENCHANTER.get(), windowId, playerInventory);
     }
 
-    public static ContainerSoulEnchanter create(int windowId, PlayerInventory playerInventory, Function<PlayerEntity, Boolean> isUsableByPlayer, ModItemStackHandler inventory, IIntArray data) {
+    public static ContainerSoulEnchanter create(int windowId, PlayerInventory playerInventory, Function<PlayerEntity, Boolean> isUsableByPlayer, BaseItemStackHandler inventory, IIntArray data) {
         return new ContainerSoulEnchanter(ModContainers.SOUL_ENCHANTER.get(), windowId, playerInventory, isUsableByPlayer, inventory, data);
     }
 
@@ -153,10 +153,10 @@ public class ContainerSoulEnchanter extends Container
 
     private final class SlotSoulStealer extends SlotItemHandler
     {
-        private final ModItemStackHandler inventory;
+        private final BaseItemStackHandler inventory;
         private final int index;
 
-        public SlotSoulStealer(ModItemStackHandler inventoryIn, int index, int xPosition, int yPosition) {
+        public SlotSoulStealer(BaseItemStackHandler inventoryIn, int index, int xPosition, int yPosition) {
             super(inventoryIn, index, xPosition, yPosition);
             this.inventory = inventoryIn;
             this.index = index;
@@ -181,10 +181,10 @@ public class ContainerSoulEnchanter extends Container
 
     private final class SlotInput extends SlotItemHandler
     {
-        private final ModItemStackHandler inventory;
+        private final BaseItemStackHandler inventory;
         private final int index;
 
-        public SlotInput(ModItemStackHandler inventoryIn, int index, int xPosition, int yPosition) {
+        public SlotInput(BaseItemStackHandler inventoryIn, int index, int xPosition, int yPosition) {
             super(inventoryIn, index, xPosition, yPosition);
             this.inventory = inventoryIn;
             this.index = index;
@@ -209,10 +209,10 @@ public class ContainerSoulEnchanter extends Container
 
     private final class SlotOutput extends SlotItemHandler
     {
-        private final ModItemStackHandler inventory;
+        private final BaseItemStackHandler inventory;
         private final int index;
 
-        public SlotOutput(ModItemStackHandler inventoryIn, int index, int xPosition, int yPosition) {
+        public SlotOutput(BaseItemStackHandler inventoryIn, int index, int xPosition, int yPosition) {
             super(inventoryIn, index, xPosition, yPosition);
             this.inventory = inventoryIn;
             this.index = index;

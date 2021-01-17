@@ -23,13 +23,10 @@ package io.savagedev.soulmatter.blocks.soulpresser;
  * THE SOFTWARE.
  */
 
-import io.savagedev.soulmatter.blocks.soulenchanter.ContainerSoulEnchanter;
-import io.savagedev.soulmatter.helpers.ModItemStackHandler;
+import io.savagedev.savagecore.item.BaseItemStackHandler;
 import io.savagedev.soulmatter.init.ModItems;
 import io.savagedev.soulmatter.init.ModTileEntities;
-import io.savagedev.soulmatter.util.LogHelper;
 import io.savagedev.soulmatter.util.ModNames;
-import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.InventoryHelper;
@@ -37,7 +34,6 @@ import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -49,7 +45,7 @@ import javax.annotation.Nullable;
 
 public class TileEntitySoulPresser extends TileEntity implements INamedContainerProvider, ITickableTileEntity
 {
-    private final ModItemStackHandler inventory = new ModItemStackHandler(1);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(1);
 
     public boolean activated;
 
@@ -97,7 +93,7 @@ public class TileEntitySoulPresser extends TileEntity implements INamedContainer
         return player.getDistanceSq(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= 64;
     }
 
-    public ModItemStackHandler getInventory() {
+    public BaseItemStackHandler getInventory() {
         return inventory;
     }
 

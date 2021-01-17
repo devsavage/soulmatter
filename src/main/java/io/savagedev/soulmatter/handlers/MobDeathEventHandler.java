@@ -24,8 +24,7 @@ package io.savagedev.soulmatter.handlers;
  */
 
 import io.savagedev.soulmatter.init.ModItems;
-import io.savagedev.soulmatter.util.LogHelper;
-import io.savagedev.soulmatter.util.NBTHelper;
+import io.savagedev.savagecore.nbt.NBTHelper;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;

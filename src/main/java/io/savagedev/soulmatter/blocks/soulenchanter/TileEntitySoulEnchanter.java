@@ -24,13 +24,13 @@ package io.savagedev.soulmatter.blocks.soulenchanter;
  */
 
 import com.google.common.collect.Lists;
+import io.savagedev.savagecore.item.BaseItemStackHandler;
 import io.savagedev.soulmatter.SoulMatter;
-import io.savagedev.soulmatter.helpers.ModItemStackHandler;
 import io.savagedev.soulmatter.init.ModItems;
 import io.savagedev.soulmatter.init.ModTileEntities;
 import io.savagedev.soulmatter.util.LogHelper;
 import io.savagedev.soulmatter.util.ModNames;
-import io.savagedev.soulmatter.util.NBTHelper;
+import io.savagedev.savagecore.nbt.NBTHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.monster.MonsterEntity;
@@ -66,7 +66,7 @@ import java.util.Objects;
 
 public class TileEntitySoulEnchanter extends TileEntity implements INamedContainerProvider, ITickableTileEntity
 {
-    private final ModItemStackHandler inventory = new ModItemStackHandler(3);
+    private final BaseItemStackHandler inventory = new BaseItemStackHandler(3);
     private int progress;
     private int totalFuelStored;
     protected static int fuelCapacity = 14000;
@@ -187,7 +187,7 @@ public class TileEntitySoulEnchanter extends TileEntity implements INamedContain
         return ContainerSoulEnchanter.create(windowId, playerInv, this::isUsableByPlayer, this.inventory, this.data);
     }
 
-    public ModItemStackHandler getInventory() {
+    public BaseItemStackHandler getInventory() {
         return this.inventory;
     }
 

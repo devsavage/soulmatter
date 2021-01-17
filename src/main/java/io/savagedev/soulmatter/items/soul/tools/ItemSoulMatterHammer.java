@@ -25,10 +25,10 @@ package io.savagedev.soulmatter.items.soul.tools;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import io.savagedev.savagecore.item.ItemHelper;
 import io.savagedev.soulmatter.blocks.soulpresser.BlockSoulPresser;
 import io.savagedev.soulmatter.blocks.soulpresser.TileEntitySoulPresser;
 import io.savagedev.soulmatter.handlers.SoulToolLevelHandler;
-import io.savagedev.soulmatter.helpers.ToolHelper;
 import io.savagedev.soulmatter.util.LogHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -57,9 +57,9 @@ public class ItemSoulMatterHammer extends BaseSoulTool
 
     @Override
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, PlayerEntity player) {
-        if(SoulToolLevelHandler.isMaxToolLevel(itemstack) && ToolHelper.isToolHammerAndEffective(itemstack, player.world.getBlockState(pos))) {
+        if(SoulToolLevelHandler.isMaxToolLevel(itemstack) && ItemHelper.isToolEffective(itemstack, player.world.getBlockState(pos))) {
             for(BlockPos extraPos : (this).getAOEBlocks(itemstack, player.world, player, pos)) {
-                ToolHelper.destroyExtraAOEBlocks(itemstack, player.world, player, extraPos, pos);
+                ItemHelper.destroyExtraAOEBlocks(itemstack, player.world, player, extraPos, pos);
             }
         }
 
@@ -90,10 +90,10 @@ public class ItemSoulMatterHammer extends BaseSoulTool
     }
 
     public ImmutableList<BlockPos> getAOEBlocks(ItemStack tool, World world, PlayerEntity playerEntity, BlockPos origin) {
-        if(!ToolHelper.isToolHammerAndEffective(tool, world.getBlockState(origin))) {
+        if(!ItemHelper.isToolEffective(tool, world.getBlockState(origin))) {
             return ImmutableList.of();
         }
 
-        return ToolHelper.calcAOEBlocks(tool, world, playerEntity, origin, 3, 3, 1);
+        return ItemHelper.calcAOEBlocks(tool, world, playerEntity, origin, 3, 3, 1);
     }
 }

@@ -68,6 +68,7 @@ public class ModItems
     public static final RegistryObject<ItemSoulArmor> SOUL_MATTER_CHESTPLATE = register(ModNames.Items.SOUL_MATTER_CHESTPLATE, () -> new ItemSoulArmor(EquipmentSlotType.CHEST, p -> p.group(SoulMatter.modGroup)));
     public static final RegistryObject<ItemSoulArmor> SOUL_MATTER_LEGGINGS = register(ModNames.Items.SOUL_MATTER_LEGGINGS, () -> new ItemSoulArmor(EquipmentSlotType.LEGS, p -> p.group(SoulMatter.modGroup)));
     public static final RegistryObject<ItemSoulArmor> SOUL_MATTER_BOOTS = register(ModNames.Items.SOUL_MATTER_BOOTS, () -> new ItemSoulArmor(EquipmentSlotType.FEET, p -> p.group(SoulMatter.modGroup)));
+
     @SubscribeEvent
     public void onRegisterItems(RegistryEvent.Register<Item> event) {
         IForgeRegistry<Item> registry = event.getRegistry();
