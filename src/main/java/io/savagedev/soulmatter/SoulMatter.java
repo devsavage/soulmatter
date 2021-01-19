@@ -33,6 +33,7 @@ import io.savagedev.soulmatter.commands.ModCommandSMTool;
 import io.savagedev.soulmatter.commands.ModRegisterCommands;
 import io.savagedev.soulmatter.handlers.MobDeathEventHandler;
 import io.savagedev.soulmatter.handlers.MobDropsHandler;
+import io.savagedev.soulmatter.handlers.UpdateMessageHandler;
 import io.savagedev.soulmatter.init.*;
 import io.savagedev.soulmatter.proxy.CommonProxy;
 import io.savagedev.soulmatter.util.LogHelper;
@@ -83,6 +84,7 @@ public class SoulMatter
     public SoulMatter() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        modEventBus.register(this);
         modEventBus.register(new ModBlocks());
         modEventBus.register(new ModItems());
         modEventBus.register(new ModTileEntities());
@@ -105,11 +107,6 @@ public class SoulMatter
     }
 
     @SubscribeEvent
-    public void registerCommands(RegisterCommandsEvent event) {
-        ModCommandSMTool.register(event.getDispatcher());
-    }
-
-    @SubscribeEvent
     public void onClientSetup(FMLClientSetupEvent event) {
         ModContainers.onClientSetup();
     }
@@ -117,14 +114,10 @@ public class SoulMatter
     @SubscribeEvent
     public void onCommonSetup(FMLCommonSetupEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new UpdateMessageHandler(UPDATER));
         MinecraftForge.EVENT_BUS.register(new MobDropsHandler());
         MinecraftForge.EVENT_BUS.register(new MobDeathEventHandler());
 
         UpdaterUtils.initializeUpdateCheck(UPDATER);
-    }
-
-    @SubscribeEvent
-    public void playerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
-        UpdaterUtils.sendUpdateMessageIfOutdated(ModReference.MOD_NAME, event, UPDATER);
     }
 }

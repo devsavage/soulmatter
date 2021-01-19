@@ -163,11 +163,12 @@ public class TileEntitySoulEnchanter extends TileEntity implements INamedContain
 
     @Override
     public CompoundNBT write(CompoundNBT compound) {
+        compound = super.write(compound);
         compound.putInt("Progress", this.getProgress());
         compound.putInt("FuelStored", this.getFuelStored());
         ItemStackHelper.saveAllItems(compound, this.getInventory().getStacks());
 
-        return super.write(compound);
+        return compound;
     }
 
     @Override
