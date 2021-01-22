@@ -8,7 +8,7 @@ license="MIT"
     version="${file.jarVersion}"
     displayName="SoulMatter"
     updateJSONURL="https://api.savagedev.io/mc-mods/soulmatter/versions?forge=true"
-    displayURL="https://mc.savagedev.io/minecraft-mods/soulmatter/"
+    displayURL="https://nlcc.savagedev.io/minecraft-mods/soulmatter/"
     authors="savagedev"
     description='''
     '''
