@@ -1,8 +1,8 @@
-package io.savagedev.soulmatter.items;
+package io.savagedev.soulmatter.items.tool.soul;
 
 /*
- * ItemEmeraldRod.java
- * Copyright (C) 2020 Savage - github.com/devsavage
+ * SoulMatterSwordItem.java
+ * Copyright (C) 2014 - 2021 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,11 +23,18 @@ package io.savagedev.soulmatter.items;
  * THE SOFTWARE.
  */
 
-import java.util.function.Function;
+import com.google.common.collect.Sets;
+import io.savagedev.soulmatter.SoulMatter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
-public class ItemEmeraldRod extends BaseItem
+import java.util.Set;
+
+public class SoulMatterSwordItem extends SMToolItem
 {
-    public ItemEmeraldRod(Function<Properties, Properties> properties) {
-        super(properties);
+    private static final Set<Block> EFFECTIVE_ON = Sets.newHashSet(Blocks.COBWEB);
+
+    public SoulMatterSwordItem() {
+        super("sword", 9, EFFECTIVE_ON, properties -> properties.tab(SoulMatter.creativeModeTab));
     }
 }

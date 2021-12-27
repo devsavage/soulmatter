@@ -1,8 +1,8 @@
 package io.savagedev.soulmatter.items;
 
 /*
- * ItemSoulMatterCompact.java
- * Copyright (C) 2020 Savage - github.com/devsavage
+ * SoulMatterItem.java
+ * Copyright (C) 2014 - 2021 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,19 +23,14 @@ package io.savagedev.soulmatter.items;
  * THE SOFTWARE.
  */
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Rarity;
+import io.savagedev.soulmatter.SoulMatter;
+import net.minecraft.world.item.Rarity;
 
 import java.util.function.Function;
 
-public class ItemSoulMatterCompact extends BaseItem
+public class SoulMatterItem extends SMItem
 {
-    public ItemSoulMatterCompact(Function<Properties, Properties> properties) {
-        super(properties);
-    }
-
-    @Override
-    public Rarity getRarity(ItemStack stack) {
-        return Rarity.RARE;
+    public SoulMatterItem() {
+        super(properties -> properties.tab(SoulMatter.creativeModeTab).rarity(Rarity.UNCOMMON));
     }
 }

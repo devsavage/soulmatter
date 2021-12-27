@@ -1,8 +1,8 @@
-package io.savagedev.soulmatter.handlers;
+package io.savagedev.soulmatter.items;
 
 /*
- * UpdateMessageHandler.java
- * Copyright (C) 2021 Savage - github.com/devsavage
+ * EmeraldRodItem.java
+ * Copyright (C) 2014 - 2021 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,22 +23,11 @@ package io.savagedev.soulmatter.handlers;
  * THE SOFTWARE.
  */
 
-import io.savagedev.savagecore.util.updater.Updater;
-import io.savagedev.savagecore.util.updater.UpdaterUtils;
-import io.savagedev.soulmatter.util.ModReference;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import io.savagedev.soulmatter.SoulMatter;
 
-public class UpdateMessageHandler
+public class EmeraldRodItem extends SMItem
 {
-    public Updater updater;
-
-    public UpdateMessageHandler(Updater instance) {
-        this.updater = instance;
-    }
-
-    @SubscribeEvent
-    public void playerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
-        UpdaterUtils.sendUpdateMessageIfOutdated(ModReference.MOD_NAME, event, this.updater);
+    public EmeraldRodItem() {
+        super(properties -> properties.tab(SoulMatter.creativeModeTab));
     }
 }

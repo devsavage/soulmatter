@@ -1,8 +1,8 @@
-package io.savagedev.soulmatter.items.soul.armor;
+package io.savagedev.soulmatter.items.armor.soul;
 
 /*
- * ItemSoulArmor.java
- * Copyright (C) 2020 Savage - github.com/devsavage
+ * SMArmorItem.java
+ * Copyright (C) 2014 - 2021 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,27 +26,24 @@ package io.savagedev.soulmatter.items.soul.armor;
 import io.savagedev.soulmatter.init.ModArmorMaterial;
 import io.savagedev.soulmatter.init.ModItems;
 import io.savagedev.soulmatter.util.ModReference;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.function.Function;
 
-public class ItemSoulArmor extends ArmorItem
+public class SMArmorItem extends ArmorItem
 {
-    public ItemSoulArmor(EquipmentSlotType slot, Function<Properties, Properties> properties) {
+    public SMArmorItem(EquipmentSlot slot, Function<Properties, Properties> properties) {
         super(ModArmorMaterial.SOUL_MATTER, slot, properties.apply(new Properties()));
     }
 
     @Nullable
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
+    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
         if(this == ModItems.SOUL_MATTER_HELMET.get() || this == ModItems.SOUL_MATTER_CHESTPLATE.get() || this == ModItems.SOUL_MATTER_BOOTS.get()) {
             return ModReference.MOD_DOMAIN + "textures/models/armor/soul_matter_layer_1.png";
         } else if(this == ModItems.SOUL_MATTER_LEGGINGS.get()) {

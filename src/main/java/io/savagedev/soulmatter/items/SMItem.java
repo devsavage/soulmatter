@@ -1,8 +1,8 @@
 package io.savagedev.soulmatter.items;
 
 /*
- * BaseItem.java
- * Copyright (C) 2020 Savage - github.com/devsavage
+ * SMItem.java
+ * Copyright (C) 2014 - 2021 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,13 +23,14 @@ package io.savagedev.soulmatter.items;
  * THE SOFTWARE.
  */
 
-import net.minecraft.item.Item;
+import io.savagedev.soulmatter.SoulMatter;
+import net.minecraft.world.item.Item;
 
 import java.util.function.Function;
 
-public class BaseItem extends Item
+public class SMItem extends Item
 {
-    public BaseItem(Function<Properties, Properties> properties) {
+    public SMItem(Function<Properties, Properties> properties) {
         super(properties.apply(new Properties()));
     }
 }

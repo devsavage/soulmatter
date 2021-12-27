@@ -1,8 +1,8 @@
 package io.savagedev.soulmatter.init;
 
 /*
- * ModConfiguration.java
- * Copyright (C) 2020 Savage - github.com/devsavage
+ * ModConfig.java
+ * Copyright (C) 2014 - 2021 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@ package io.savagedev.soulmatter.init;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
-public class ModConfiguration
+public class ModConfig
 {
     public static final ForgeConfigSpec CLIENT;
     public static final ForgeConfigSpec COMMON;

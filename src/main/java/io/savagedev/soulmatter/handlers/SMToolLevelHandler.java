@@ -1,8 +1,8 @@
 package io.savagedev.soulmatter.handlers;
 
 /*
- * SoulToolLevelHandler.java
- * Copyright (C) 2020 Savage - github.com/devsavage
+ * SMToolLevelHandler.java
+ * Copyright (C) 2014 - 2021 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,23 +23,23 @@ package io.savagedev.soulmatter.handlers;
  * THE SOFTWARE.
  */
 
-import io.savagedev.soulmatter.init.ModConfiguration;
-import io.savagedev.soulmatter.init.ModItems;
 import io.savagedev.savagecore.nbt.NBTHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import io.savagedev.soulmatter.init.ModConfig;
+import io.savagedev.soulmatter.init.ModItems;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
-public class SoulToolLevelHandler
+public class SMToolLevelHandler
 {
     public static final String SOUL_TOOL_TAG = "SoulTool";
     public static final String SOUL_TOOL_TAG_XP = "SoulToolXP";
     public static final String SOUL_TOOL_TAG_LEVEL = "SoulToolLevel";
-    public static final int SOUL_TOOL_MAX_LEVEL = ModConfiguration.MAX_SOUL_TOOL_LEVEL.get();
+    public static final int SOUL_TOOL_MAX_LEVEL = ModConfig.MAX_SOUL_TOOL_LEVEL.get();
 
     public static int getToolLevel(ItemStack soulTool) {
         return NBTHelper.getInt(soulTool, SOUL_TOOL_TAG_LEVEL);
@@ -98,7 +98,7 @@ public class SoulToolLevelHandler
         return Math.round(baseXp);
     }
 
-    public static void addXp(ItemStack soulTool, PlayerEntity player, long xPToAdd) {
+    public static void addXp(ItemStack soulTool, Player player, long xPToAdd) {
         if(player.isCreative())
             return;
 
@@ -107,16 +107,16 @@ public class SoulToolLevelHandler
 
         if(!hasToolLevel(soulTool) || !hasXp(soulTool))
             return;
-        
-        Long newToolXp = -1L;
-        
+
+        long newToolXp = -1L;
+
         if(hasXp(soulTool))
             newToolXp = getToolXp(soulTool) + xPToAdd;
-        
+
         updateToolXp(soulTool, player, newToolXp);
     }
 
-    public static void updateToolXp(ItemStack soulTool, PlayerEntity player, Long newToolXp) {
+    public static void updateToolXp(ItemStack soulTool, Player player, Long newToolXp) {
         if(!hasToolLevel(soulTool))
             return;
 
@@ -132,21 +132,21 @@ public class SoulToolLevelHandler
             }
         }
 
-        if((levelUpTool) && !player.world.isRemote) {
+        if((levelUpTool) && !player.level.isClientSide) {
             int level = getToolLevel(soulTool);
 
             if(isMaxToolLevel(soulTool))
                 triggerMaxLevel(soulTool, player);
             else {
-                player.sendMessage(new StringTextComponent("Your " +
-                        TextFormatting.DARK_AQUA + soulTool.getDisplayName().getString() +
-                        TextFormatting.RESET + " has been leveled up to level " + TextFormatting.AQUA + level + TextFormatting.RESET + "!"), Util.DUMMY_UUID);
-                player.playSound(SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.AMBIENT, 1.0F, 1.0F);
+                player.sendMessage(new TextComponent("Your " +
+                        ChatFormatting.DARK_AQUA + soulTool.getDisplayName().getString() +
+                        ChatFormatting.RESET + " has been leveled up to level " + ChatFormatting.AQUA + level + ChatFormatting.RESET + "!"), Util.NIL_UUID);
+                player.playNotifySound(SoundEvents.FIREWORK_ROCKET_BLAST, SoundSource.AMBIENT, 1.0F, 1.0F);
             }
         }
     }
 
-    public static void increaseToolLevel(ItemStack soulTool, PlayerEntity playerEntity) {
+    public static void increaseToolLevel(ItemStack soulTool, Player playerEntity) {
         int level = NBTHelper.getInt(soulTool, SOUL_TOOL_TAG_LEVEL);
         level++;
 
@@ -154,13 +154,13 @@ public class SoulToolLevelHandler
         NBTHelper.setLong(soulTool, SOUL_TOOL_TAG_XP, 0L);
     }
 
-    public static void triggerMaxLevel(ItemStack tool, PlayerEntity player) {
-        player.sendMessage(new StringTextComponent(TextFormatting.GOLD + "You have reached the max level for your " + TextFormatting.AQUA +
-                tool.getDisplayName().getString() + TextFormatting.GOLD + "!"), Util.DUMMY_UUID);
-        player.playSound(SoundEvents.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, SoundCategory.AMBIENT, 1.0F, 1.0F);
+    public static void triggerMaxLevel(ItemStack tool, Player player) {
+        player.sendMessage(new TextComponent(ChatFormatting.GOLD + "You have reached the max level for your " + ChatFormatting.AQUA +
+                tool.getDisplayName().getString() + ChatFormatting.GOLD + "!"), Util.NIL_UUID);
+        player.playNotifySound(SoundEvents.FIREWORK_ROCKET_LARGE_BLAST, SoundSource.AMBIENT, 1.0F, 1.0F);
     }
 
-    public static void setMaxLevelCreative(ItemStack soulTool, PlayerEntity playerEntity) {
+    public static void setMaxLevelCreative(ItemStack soulTool, Player playerEntity) {
         if(!hasToolLevel(soulTool))
             return;
 

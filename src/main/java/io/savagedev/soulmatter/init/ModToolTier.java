@@ -2,7 +2,7 @@ package io.savagedev.soulmatter.init;
 
 /*
  * ModToolTier.java
- * Copyright (C) 2020 Savage - github.com/devsavage
+ * Copyright (C) 2014 - 2021 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,16 +23,16 @@ package io.savagedev.soulmatter.init;
  * THE SOFTWARE.
  */
 
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.LazyValue;
+import net.minecraft.util.LazyLoadedValue;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.function.Supplier;
 
-public enum ModToolTier implements IItemTier
+public enum ModToolTier implements Tier
 {
     SOUL_MATTER(4, 4096, 9.0F, 4.0F, 24, () -> {
-        return Ingredient.fromItems(ModItems.SOUL_MATTER.get());
+        return Ingredient.of(ModItems.SOUL_MATTER.get());
     });
 
     private final int harvestLevel;
@@ -40,7 +40,7 @@ public enum ModToolTier implements IItemTier
     private final float efficiency;
     private final float attackDamage;
     private final int enchantability;
-    private final LazyValue<Ingredient> repairMaterial;
+    private final LazyLoadedValue<Ingredient> repairIngredient;
 
     ModToolTier(int harvestLevel, int maxUses, float efficiency, float attackDamage, int enchantability, Supplier<Ingredient> repairMaterial) {
         this.harvestLevel = harvestLevel;
@@ -48,36 +48,36 @@ public enum ModToolTier implements IItemTier
         this.efficiency = efficiency;
         this.attackDamage = attackDamage;
         this.enchantability = enchantability;
-        this.repairMaterial = new LazyValue<>(repairMaterial);
+        this.repairIngredient = new LazyLoadedValue<>(repairMaterial);
     }
 
     @Override
-    public int getMaxUses() {
+    public int getUses() {
         return this.maxUses;
     }
 
     @Override
-    public float getEfficiency() {
+    public float getSpeed() {
         return this.efficiency;
     }
 
     @Override
-    public float getAttackDamage() {
+    public float getAttackDamageBonus() {
         return this.attackDamage;
     }
 
     @Override
-    public int getHarvestLevel() {
+    public int getLevel() {
         return this.harvestLevel;
     }
 
     @Override
-    public int getEnchantability() {
+    public int getEnchantmentValue() {
         return this.enchantability;
     }
 
     @Override
-    public Ingredient getRepairMaterial() {
-        return this.repairMaterial.getValue();
+    public Ingredient getRepairIngredient() {
+        return this.repairIngredient.get();
     }
 }

@@ -2,7 +2,7 @@ package io.savagedev.soulmatter.util;
 
 /*
  * ModNames.java
- * Copyright (C) 2020 Savage - github.com/devsavage
+ * Copyright (C) 2014 - 2021 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -50,9 +50,9 @@ public class ModNames
         public static final String SOUL_PRESSER = "soul_presser";
     }
 
-    public static class Containers
+    public static class Menus
     {
-        public static final String SOUL_ENCHANTER = "container.soulmatter.soul_enchanter";
-        public static final String SOUL_PRESSER = "container.soulmatter.soul_presser";
+        public static final String SOUL_ENCHANTER = "menu.soulmatter.soul_enchanter";
+        public static final String SOUL_PRESSER = "menu.soulmatter.soul_presser";
     }
 }

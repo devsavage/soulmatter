@@ -2,7 +2,7 @@ package io.savagedev.soulmatter.init;
 
 /*
  * ModArmorMaterial.java
- * Copyright (C) 2020 Savage - github.com/devsavage
+ * Copyright (C) 2014 - 2021 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,23 +23,21 @@ package io.savagedev.soulmatter.init;
  * THE SOFTWARE.
  */
 
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.LazyValue;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.LazyLoadedValue;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.function.Supplier;
 
-public enum ModArmorMaterial implements IArmorMaterial
+public enum ModArmorMaterial implements ArmorMaterial
 {
-    SOUL_MATTER("soul_matter", 42, new int[]{4, 7, 10, 4}, 24, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 4.0F, () -> {
-        return Ingredient.fromItems(ModItems.SOUL_MATTER.get());
+    SOUL_MATTER("soul_matter", 42, new int[]{4, 7, 10, 4}, 24, SoundEvents.ARMOR_EQUIP_DIAMOND, 4.0F, () -> {
+        return Ingredient.of(ModItems.SOUL_MATTER.get());
     }, 0.1F);
 
     private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
@@ -50,7 +48,7 @@ public enum ModArmorMaterial implements IArmorMaterial
     private final SoundEvent soundEvent;
     private final float toughness;
     private final float knockBackResistance;
-    private final LazyValue<Ingredient> repairMaterial;
+    private final LazyLoadedValue<Ingredient> repairMaterial;
 
     private ModArmorMaterial(String nameIn, int maxDamageFactorIn, int[] damageReductionAmountsIn, int enchantabilityIn, SoundEvent equipSoundIn, float toughness, Supplier<Ingredient> repairMaterialSupplier, float knockBackResistance) {
         this.name = nameIn;
@@ -59,33 +57,33 @@ public enum ModArmorMaterial implements IArmorMaterial
         this.enchantability = enchantabilityIn;
         this.soundEvent = equipSoundIn;
         this.toughness = toughness;
-        this.repairMaterial = new LazyValue<>(repairMaterialSupplier);
+        this.repairMaterial = new LazyLoadedValue<>(repairMaterialSupplier);
         this.knockBackResistance = knockBackResistance;
     }
 
     @Override
-    public int getDurability(EquipmentSlotType slotIn) {
+    public int getDurabilityForSlot(EquipmentSlot slotIn) {
         return MAX_DAMAGE_ARRAY[slotIn.getIndex()] * this.maxDamageFactor;
     }
 
     @Override
-    public int getDamageReductionAmount(EquipmentSlotType slotIn) {
+    public int getDefenseForSlot(EquipmentSlot slotIn) {
         return this.damageReductionAmountArray[slotIn.getIndex()];
     }
 
     @Override
-    public int getEnchantability() {
+    public int getEnchantmentValue() {
         return this.enchantability;
     }
 
     @Override
-    public SoundEvent getSoundEvent() {
+    public SoundEvent getEquipSound() {
         return this.soundEvent;
     }
 
     @Override
-    public Ingredient getRepairMaterial() {
-        return this.repairMaterial.getValue();
+    public Ingredient getRepairIngredient() {
+        return this.repairMaterial.get();
     }
 
     @OnlyIn(Dist.CLIENT)

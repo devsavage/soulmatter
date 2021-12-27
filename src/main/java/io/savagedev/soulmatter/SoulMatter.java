@@ -2,7 +2,7 @@ package io.savagedev.soulmatter;
 
 /*
  * SoulMatter.java
- * Copyright (C) 2020 Savage - github.com/devsavage
+ * Copyright (C) 2014 - 2021 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,99 +25,46 @@ package io.savagedev.soulmatter;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
-import com.mojang.authlib.GameProfile;
-import com.mojang.brigadier.CommandDispatcher;
-import io.savagedev.savagecore.util.updater.Updater;
-import io.savagedev.savagecore.util.updater.UpdaterUtils;
-import io.savagedev.soulmatter.commands.ModCommandSMTool;
-import io.savagedev.soulmatter.commands.ModRegisterCommands;
-import io.savagedev.soulmatter.handlers.MobDeathEventHandler;
-import io.savagedev.soulmatter.handlers.MobDropsHandler;
-import io.savagedev.soulmatter.handlers.UpdateMessageHandler;
-import io.savagedev.soulmatter.init.*;
-import io.savagedev.soulmatter.proxy.CommonProxy;
-import io.savagedev.soulmatter.util.LogHelper;
+import io.savagedev.soulmatter.init.ModBlocks;
+import io.savagedev.soulmatter.init.ModConfig;
+import io.savagedev.soulmatter.init.ModItems;
 import io.savagedev.soulmatter.util.ModReference;
-import net.minecraft.client.Minecraft;
-import net.minecraft.command.CommandSource;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.VersionChecker;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.nio.file.Path;
-import java.util.UUID;
 
 @Mod(ModReference.MOD_ID)
 public class SoulMatter
 {
-    public static CommonProxy proxy = new CommonProxy();
-
-    public static GameProfile gameProfile = new GameProfile(UUID.nameUUIDFromBytes("soulmatter.common".getBytes()), LogHelper.TAG);
-
-    public static ModContainer MOD_CONTAINER;
-
-    public Updater UPDATER;
-
-    public static ItemGroup modGroup = new ItemGroup(ModReference.MOD_ID) {
-        @Override
-        public ItemStack createIcon() {
-            return new ItemStack(ModItems.SOUL_MATTER.get());
-        }
-    };
-
     public SoulMatter() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        modEventBus.register(this);
         modEventBus.register(new ModBlocks());
         modEventBus.register(new ModItems());
-        modEventBus.register(new ModTileEntities());
-        modEventBus.register(new ModContainers());
 
-        MOD_CONTAINER = ModLoadingContext.get().getActiveContainer();
-        UPDATER = new Updater().setModId(ModReference.MOD_ID).setMinecraftVersion(Minecraft.getInstance().getVersion()).setCurrentVersion(MOD_CONTAINER.getModInfo().getVersion().toString());
-
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ModConfiguration.CLIENT);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ModConfiguration.COMMON);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ModConfiguration.SERVER);
+        ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.CLIENT, ModConfig.CLIENT);
+        ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, ModConfig.COMMON);
+        ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.SERVER, ModConfig.SERVER);
 
         Path configPath = FMLPaths.CONFIGDIR.get().resolve("soulmatter-common.toml");
         CommentedFileConfig configData = CommentedFileConfig.builder(configPath).sync().autosave().writingMode(WritingMode.REPLACE).build();
 
         configData.load();
-        ModConfiguration.COMMON.setConfig(configData);
-
-        MinecraftForge.EVENT_BUS.register(new ModRegisterCommands());
+        ModConfig.COMMON.setConfig(configData);
     }
 
-    @SubscribeEvent
-    public void onClientSetup(FMLClientSetupEvent event) {
-        ModContainers.onClientSetup();
-    }
-
-    @SubscribeEvent
-    public void onCommonSetup(FMLCommonSetupEvent event) {
-        MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(new UpdateMessageHandler(UPDATER));
-        MinecraftForge.EVENT_BUS.register(new MobDropsHandler());
-        MinecraftForge.EVENT_BUS.register(new MobDeathEventHandler());
-
-        UpdaterUtils.initializeUpdateCheck(UPDATER);
-    }
+    public static CreativeModeTab creativeModeTab = new CreativeModeTab(ModReference.MOD_ID) {
+        @Override
+        public ItemStack makeIcon() {
+            return new ItemStack(ModItems.SOUL_MATTER.get());
+        }
+    };
 }

@@ -1,8 +1,8 @@
-package io.savagedev.soulmatter.items.soul.tools;
+package io.savagedev.soulmatter.items;
 
 /*
- * ItemSoulMatterSword.java
- * Copyright (C) 2020 Savage - github.com/devsavage
+ * RawSoulMatterItem.java
+ * Copyright (C) 2014 - 2021 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,18 +23,14 @@ package io.savagedev.soulmatter.items.soul.tools;
  * THE SOFTWARE.
  */
 
-import com.google.common.collect.Sets;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import io.savagedev.soulmatter.SoulMatter;
+import net.minecraft.world.item.Rarity;
 
-import java.util.Set;
 import java.util.function.Function;
 
-public class ItemSoulMatterSword extends BaseSoulTool
+public class RawSoulMatterItem extends SMItem
 {
-    private static final Set<Block> EFFECTIVE_ON = Sets.newHashSet(Blocks.COBWEB);
-
-    public ItemSoulMatterSword(Function<Properties, Properties> properties) {
-        super("sword", 9, EFFECTIVE_ON, properties);
+    public RawSoulMatterItem() {
+        super(properties -> properties.tab(SoulMatter.creativeModeTab).stacksTo(1));
     }
 }

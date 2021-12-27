@@ -1,38 +1,35 @@
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
-        jcenter()
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
-
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
+
+apply plugin: 'idea'
 apply plugin: 'maven-publish'
 
-repositories {
-    mavenLocal()
-}
-
-version = '1.16.4-2.0.0.1'
+version = '1.17.1-3.0.0.0'
 group = 'io.savagedev.soulmatter'
 archivesBaseName = 'SoulMatter'
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
-
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
 minecraft {
-    mappings channel: 'snapshot', version: '20201028-1.16.3'
+    mappings channel: 'official', version: '1.17.1'
 
     runs {
         client {
             workingDirectory project.file('run')
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            property 'forge.logging.markers', 'REGISTRIES'
+
             property 'forge.logging.console.level', 'debug'
+
             mods {
                 soulmatter {
                     source sourceSets.main
@@ -42,8 +39,27 @@ minecraft {
 
         server {
             workingDirectory project.file('run')
+
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
             property 'forge.logging.console.level', 'debug'
+
+            mods {
+                soulmatter {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            property 'forge.logging.console.level', 'debug'
+
+            args '--mod', 'soulmatter', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+
             mods {
                 soulmatter {
                     source sourceSets.main
@@ -53,16 +69,11 @@ minecraft {
     }
 }
 
-dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.4-35.1.37'
+repositories {}
 
-    if (findProject(':savagecore') != null) {
-        compile project(':savagecore')
-    } else {
-        compile fg.deobf (project.dependencies.create("io.savagedev.savagecore:savagecore:${savagecore_version}") {
-            transitive = false
-        })
-    }
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.17.1-37.1.1'
+    compileOnly files("./lib/SavageCore-1.17.1-3.0.0.0-deobf.jar")
 }
 
 jar {
@@ -70,14 +81,16 @@ jar {
         attributes([
             "Specification-Title": "soulmatter",
             "Specification-Vendor": "savagedev",
-            "Specification-Version": "1",
+            "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
+            "Implementation-Version": project.jar.archiveVersion,
             "Implementation-Vendor" :"savagedev",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }
+
+jar.finalizedBy('reobfJar')
 
 publishing {
     publications {
@@ -89,5 +102,11 @@ publishing {
         maven {
             url "file:///${project.projectDir}/mcmodsrepo"
         }
+    }
+}
+
+idea {
+    module {
+        inheritOutputDirs = true
     }
 }
