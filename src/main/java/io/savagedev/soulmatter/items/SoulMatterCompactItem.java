@@ -31,6 +31,6 @@ import java.util.function.Function;
 public class SoulMatterCompactItem extends SMItem
 {
     public SoulMatterCompactItem() {
-        super(properties -> properties.tab(SoulMatter.creativeModeTab).rarity(Rarity.RARE));
+        super(properties -> properties.tab(SoulMatter.creativeModeTab).rarity(Rarity.RARE).stacksTo(16));
     }
 }

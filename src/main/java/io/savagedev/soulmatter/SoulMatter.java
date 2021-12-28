@@ -25,17 +25,17 @@ package io.savagedev.soulmatter;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
-import io.savagedev.soulmatter.init.ModBlocks;
-import io.savagedev.soulmatter.init.ModConfig;
-import io.savagedev.soulmatter.init.ModItems;
+import io.savagedev.soulmatter.init.*;
 import io.savagedev.soulmatter.util.ModReference;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 
@@ -47,8 +47,11 @@ public class SoulMatter
     public SoulMatter() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        modEventBus.register(this);
         modEventBus.register(new ModBlocks());
         modEventBus.register(new ModItems());
+        modEventBus.register(new ModBlockEntities());
+        modEventBus.register(new ModMenus());
 
         ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.CLIENT, ModConfig.CLIENT);
         ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, ModConfig.COMMON);
@@ -59,6 +62,11 @@ public class SoulMatter
 
         configData.load();
         ModConfig.COMMON.setConfig(configData);
+    }
+
+    @SubscribeEvent
+    public void onClientSetup(FMLClientSetupEvent event) {
+        ModMenus.onClientSetup();
     }
 
     public static CreativeModeTab creativeModeTab = new CreativeModeTab(ModReference.MOD_ID) {

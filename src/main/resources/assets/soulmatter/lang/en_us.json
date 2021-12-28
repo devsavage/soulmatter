@@ -20,8 +20,8 @@
   "block.soulmatter.soul_enchanter": "Soul Enchanter",
   "block.soulmatter.soul_presser": "Soul Presser",
 
-  "container.soulmatter.soul_enchanter": "Soul Enchanter",
-  "container.soulmatter.soul_presser": "Soul Presser",
+  "menu.soulmatter.soul_enchanter": "Soul Enchanter",
+  "menu.soulmatter.soul_presser": "Soul Presser",
 
   "command.soulmatter.smtool.maxlevel.fail": "You must be in creative mode to perform this action!",
   "command.soulmatter.smtool.maxlevel.pass": "Your tool is already at the max level!",
