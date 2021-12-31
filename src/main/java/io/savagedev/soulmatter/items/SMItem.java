@@ -23,13 +23,15 @@ package io.savagedev.soulmatter.items;
  * THE SOFTWARE.
  */
 
-import io.savagedev.soulmatter.SoulMatter;
 import net.minecraft.world.item.Item;
 
+import java.util.Random;
 import java.util.function.Function;
 
 public class SMItem extends Item
 {
+    public Random random = new Random();
+
     public SMItem(Function<Properties, Properties> properties) {
         super(properties.apply(new Properties()));
     }

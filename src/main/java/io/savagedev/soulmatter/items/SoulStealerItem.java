@@ -23,14 +23,69 @@ package io.savagedev.soulmatter.items;
  * THE SOFTWARE.
  */
 
+import io.savagedev.savagecore.nbt.NBTHelper;
 import io.savagedev.soulmatter.SoulMatter;
+import io.savagedev.soulmatter.handlers.SMToolLevelHandler;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.function.Function;
 
 public class SoulStealerItem extends SMItem
 {
     public SoulStealerItem() {
         super(properties -> properties.tab(SoulMatter.creativeModeTab).stacksTo(1));
+    }
+
+    @Override
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.BOW;
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack) {
+        return 18000;
+    }
+
+    @Override
+    public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
+        if(target instanceof Monster) {
+            Level world = player.level;
+
+            if(world.isClientSide) {
+                world.addParticle(ParticleTypes.DAMAGE_INDICATOR, target.getX(), target.getEyeY() + 0.3D, target.getZ(), 0, 0, 0);
+            }
+
+            int damage = random.nextInt(10);
+
+            target.hurt(DamageSource.playerAttack(player), damage);
+
+            return InteractionResult.SUCCESS;
+        }
+
+        return super.interactLivingEntity(stack, player, target, hand);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag) {
+        if(NBTHelper.hasTag(stack, "SoulsTaken")) {
+            tooltip.add(new TextComponent("Souls Taken: " + ChatFormatting.DARK_RED + NBTHelper.getInt(stack, "SoulsTaken")));
+        }
     }
 }

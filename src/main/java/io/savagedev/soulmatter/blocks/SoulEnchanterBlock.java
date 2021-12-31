@@ -23,6 +23,7 @@ package io.savagedev.soulmatter.blocks;
  * THE SOFTWARE.
  */
 
+import io.savagedev.soulmatter.init.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -128,7 +129,12 @@ public class SoulEnchanterBlock extends BaseEntityBlock
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_153212_, BlockState p_153213_, BlockEntityType<T> p_153214_) {
-        return super.getTicker(p_153212_, p_153213_, p_153214_);
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState blockState, BlockEntityType<T> blockEntityType) {
+        return createFurnaceTicker(world, blockEntityType, ModBlockEntities.SOUL_ENCHANTER.get());
+    }
+
+    @Nullable
+    protected static <T extends BlockEntity> BlockEntityTicker<T> createFurnaceTicker(Level world, BlockEntityType<T> blockEntityType, BlockEntityType<? extends SoulEnchanterBlockEntity> soulEnchanterEntity) {
+        return world.isClientSide ? null : createTickerHelper(blockEntityType, soulEnchanterEntity, SoulEnchanterBlockEntity::serverTick);
     }
 }

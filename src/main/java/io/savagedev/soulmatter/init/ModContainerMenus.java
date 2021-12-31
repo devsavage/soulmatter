@@ -1,7 +1,7 @@
 package io.savagedev.soulmatter.init;
 
 /*
- * ModMenus.java
+ * ModContainerMenus.java
  * Copyright (C) 2014 - 2021 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,10 +23,9 @@ package io.savagedev.soulmatter.init;
  * THE SOFTWARE.
  */
 
-import io.savagedev.soulmatter.blocks.SoulEnchanterBlockEntity;
-import io.savagedev.soulmatter.blocks.SoulEnchanterMenu;
+import io.savagedev.soulmatter.blocks.SoulEnchanterContainerMenu;
 import io.savagedev.soulmatter.blocks.SoulEnchanterScreen;
-import io.savagedev.soulmatter.helpers.BaseContainerMenu;
+import io.savagedev.soulmatter.base.BaseContainerMenu;
 import io.savagedev.soulmatter.util.ModNames;
 import io.savagedev.soulmatter.util.ModReference;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -51,11 +50,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class ModMenus
+public class ModContainerMenus
 {
     public static final List<Supplier<MenuType<?>>> ENTRIES = new ArrayList<>();
 
-    public static final RegistryObject<MenuType<SoulEnchanterMenu>> SOUL_ENCHANTER = registerBlock(ModNames.Blocks.SOUL_ENCHANTER, ModBlockEntities.SOUL_ENCHANTER, SoulEnchanterMenu::create);
+    public static final RegistryObject<MenuType<SoulEnchanterContainerMenu>> SOUL_ENCHANTER = registerBlock(ModNames.Blocks.SOUL_ENCHANTER, ModBlockEntities.SOUL_ENCHANTER, SoulEnchanterContainerMenu::create);
 
     @SubscribeEvent
     public void onRegisterMenuTypes(RegistryEvent.Register<MenuType<?>> event) {

@@ -1,7 +1,7 @@
 package io.savagedev.soulmatter.blocks;
 
 /*
- * SoulEnchanterMenu.java
+ * SoulEnchanterContainerMenu.java
  * Copyright (C) 2014 - 2021 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,38 +24,38 @@ package io.savagedev.soulmatter.blocks;
  */
 
 import io.savagedev.savagecore.item.BaseItemStackHandler;
-import io.savagedev.soulmatter.helpers.BaseContainerMenu;
+import io.savagedev.soulmatter.base.BaseContainerMenu;
+import io.savagedev.soulmatter.init.ModContainerMenus;
 import io.savagedev.soulmatter.init.ModItems;
-import io.savagedev.soulmatter.init.ModMenus;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
 
-public class SoulEnchanterMenu extends BaseContainerMenu
+public class SoulEnchanterContainerMenu extends BaseContainerMenu
 {
     private SoulEnchanterBlockEntity soulEnchanter;
     private final BaseItemStackHandler inventory;
     private final ContainerData containerData;
 
-    public static SoulEnchanterMenu create(SoulEnchanterBlockEntity soulEnchanter, Inventory playerInv, int windowId) {
-        return new SoulEnchanterMenu(windowId, soulEnchanter).init(playerInv);
+    public static SoulEnchanterContainerMenu create(SoulEnchanterBlockEntity soulEnchanter, Inventory playerInv, int windowId) {
+        return new SoulEnchanterContainerMenu(windowId, soulEnchanter).init(playerInv);
     }
 
-    protected SoulEnchanterMenu(int windowId, SoulEnchanterBlockEntity soulEnchanter) {
-        super(ModMenus.SOUL_ENCHANTER.get(), windowId);
+    protected SoulEnchanterContainerMenu(int windowId, SoulEnchanterBlockEntity soulEnchanter) {
+        super(ModContainerMenus.SOUL_ENCHANTER.get(), windowId);
 
         this.soulEnchanter = soulEnchanter;
         this.inventory = soulEnchanter.getInventory();
         this.containerData = soulEnchanter.getContainerData();
+
+        this.addDataSlots(this.containerData);
     }
 
     public int getProgress() {

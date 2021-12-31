@@ -1,4 +1,4 @@
-package io.savagedev.soulmatter.helpers;
+package io.savagedev.soulmatter.base;
 
 /*
  * Parts of this file were taken from (https://github.com/TerraFirmaCraft/TerraFirmaCraft). See license below.

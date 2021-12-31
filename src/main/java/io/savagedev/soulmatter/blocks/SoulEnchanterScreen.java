@@ -25,8 +25,8 @@ package io.savagedev.soulmatter.blocks;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import io.savagedev.savagecore.util.logger.LogHelper;
 import io.savagedev.soulmatter.util.ModReference;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -34,12 +34,12 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterMenu>
+public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterContainerMenu>
 {
     private static final ResourceLocation background = new ResourceLocation(ModReference.MOD_ID, "textures/gui/gui_soul_enchanter.png");
     private final Inventory inventory;
 
-    public SoulEnchanterScreen(SoulEnchanterMenu screenContainer, Inventory inventory, Component titleIn) {
+    public SoulEnchanterScreen(SoulEnchanterContainerMenu screenContainer, Inventory inventory, Component titleIn) {
         super(screenContainer, inventory, titleIn);
 
         this.inventory = inventory;
@@ -65,7 +65,7 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterMe
 
         blit(matrixStack, leftPos, topPos, 0, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
 
-        SoulEnchanterMenu soulEnchanterMenu = this.getMenu();
+        SoulEnchanterContainerMenu soulEnchanterMenu = this.getMenu();
 
         int bufferScale = soulEnchanterMenu.getFuelLeftScaled(39);
 
@@ -89,7 +89,7 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterMe
     protected void renderTooltip(PoseStack matrixStack, int mouseX, int mouseY) {
         super.renderTooltip(matrixStack, mouseX, mouseY);
 
-        SoulEnchanterMenu soulEnchanterMenu = this.getMenu();
+        SoulEnchanterContainerMenu soulEnchanterMenu = this.getMenu();
 
         if(mouseX > this.getGuiLeft() + 10 && mouseX < this.getGuiLeft() + 23 && mouseY > this.getGuiTop() + 19 && mouseY < this.getGuiTop() + 60) {
             this.renderTooltip(matrixStack, new TextComponent(soulEnchanterMenu.getFuelStored() + " / " + soulEnchanterMenu.getFuelCapacity()), mouseX, mouseY);

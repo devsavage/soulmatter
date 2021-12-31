@@ -24,25 +24,23 @@ package io.savagedev.soulmatter.blocks;
  */
 
 import io.savagedev.savagecore.item.BaseItemStackHandler;
+import io.savagedev.savagecore.nbt.NBTHelper;
 import io.savagedev.soulmatter.init.ModBlockEntities;
+import io.savagedev.soulmatter.init.ModItems;
 import io.savagedev.soulmatter.util.ModNames;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-
-import javax.annotation.Nullable;
 
 public class SoulEnchanterBlockEntity extends BaseContainerBlockEntity
 {
@@ -66,7 +64,16 @@ public class SoulEnchanterBlockEntity extends BaseContainerBlockEntity
         }
 
         @Override
-        public void set(int index, int value) {}
+        public void set(int index, int value) {
+            switch (index) {
+                case 0:
+                    SoulEnchanterBlockEntity.this.progress = value;
+                    break;
+                case 1:
+                    SoulEnchanterBlockEntity.this.totalFuelStored = value;
+                    break;
+            }
+        }
 
         @Override
         public int getCount() {
@@ -92,7 +99,7 @@ public class SoulEnchanterBlockEntity extends BaseContainerBlockEntity
     }
 
     public static int getOperationCost() {
-        return 100;
+        return getOperationTime();
     }
 
     private int getFuelStored() {
@@ -100,6 +107,10 @@ public class SoulEnchanterBlockEntity extends BaseContainerBlockEntity
     }
 
     private void setFuelStored(int i) {
+        if(this.getFuelStored() >= getFuelCapacity()) {
+            this.totalFuelStored = getFuelCapacity();
+        }
+
         this.totalFuelStored = i;
     }
 
@@ -113,6 +124,91 @@ public class SoulEnchanterBlockEntity extends BaseContainerBlockEntity
 
     public BaseItemStackHandler getInventory() {
         return this.inventory;
+    }
+
+    private boolean canInfuse() {
+        if(this.getFuelStored() >= getOperationCost()) {
+            return !this.getInventory().getStackInSlot(1).isEmpty() &&
+                    this.getInventory().getStackInSlot(1).getItem() == ModItems.RAW_SOUL_MATTER.get() &&
+                    !this.getInventory().getStackInSlot(0).isEmpty() &&
+                    this.getInventory().getStackInSlot(0).getItem() == ModItems.SOUL_STEALER.get();
+        }
+
+        return false;
+    }
+
+    private void infuse() {
+        ItemStack outputStack = new ItemStack(ModItems.SOUL_MATTER.get());
+
+        this.getInventory().extractItemSuper(1, 1, false);
+
+        if(this.getInventory().getStackInSlot(2).isEmpty()) {
+            this.getInventory().setStackInSlot(2, outputStack.copy());
+        } else {
+            this.getInventory().getStackInSlot(2).grow(outputStack.getCount());
+        }
+    }
+
+    public static void serverTick(Level world, BlockPos blockPos, BlockState blockState, SoulEnchanterBlockEntity soulEnchanterBlock) {
+        boolean dirty = false;
+
+        if(world.isClientSide) {
+            return;
+        }
+
+        if(!soulEnchanterBlock.getInventory().getStackInSlot(0).isEmpty()) {
+            ItemStack soulStealer = soulEnchanterBlock.getInventory().getStackInSlot(0);
+            if(NBTHelper.hasTag(soulStealer, "SoulsTaken")) {
+                final int count = NBTHelper.getInt(soulStealer, "SoulsTaken");
+
+                if(!soulEnchanterBlock.isFuelFull()) {
+//                    for(int i = 0; i < 1000; i++) {
+//                        soulEnchanterBlock.totalFuelStored += 1;
+//                    }
+
+                    if(count > 0) {
+                        NBTHelper.setInt(soulStealer, "SoulsTaken", count - 1);
+                    } else {
+                        NBTHelper.setInt(soulStealer, "SoulsTaken", 0);
+                    }
+                }
+
+                dirty = true;
+            }
+        }
+
+        if(soulEnchanterBlock.canInfuse()) {
+            soulEnchanterBlock.progress++;
+
+            soulEnchanterBlock.totalFuelStored--;
+
+            if(soulEnchanterBlock.progress >= getOperationTime()) {
+                soulEnchanterBlock.infuse();
+                soulEnchanterBlock.progress = 0;
+
+                if(soulEnchanterBlock.getFuelStored() <= 0) {
+                    soulEnchanterBlock.setFuelStored(0);
+                }
+
+                dirty = true;
+            }
+        } else {
+            if(soulEnchanterBlock.progress > 0) {
+                soulEnchanterBlock.progress = 0;
+                dirty = true;
+            }
+        }
+
+        if(dirty) {
+            setChanged(world, blockPos, blockState);
+        }
+    }
+
+    protected static void setChanged(Level world, BlockPos blockPos, BlockState blockState) {
+        world.blockEntityChanged(blockPos);
+        if (!blockState.isAir()) {
+            world.updateNeighbourForOutputSignal(blockPos, blockState.getBlock());
+        }
     }
 
     @Override
@@ -143,7 +239,7 @@ public class SoulEnchanterBlockEntity extends BaseContainerBlockEntity
 
     @Override
     protected AbstractContainerMenu createMenu(int windowId, Inventory inventory) {
-        return SoulEnchanterMenu.create(this, inventory, windowId);
+        return SoulEnchanterContainerMenu.create(this, inventory, windowId);
     }
 
     @Override
@@ -173,13 +269,19 @@ public class SoulEnchanterBlockEntity extends BaseContainerBlockEntity
     }
 
     @Override
-    public ItemStack removeItemNoUpdate(int p_18951_) {
-        return ContainerHelper.takeItem(this.getInventory().getStacks(), p_18951_);
+    public ItemStack removeItemNoUpdate(int slotIndex) {
+        return ContainerHelper.takeItem(this.getInventory().getStacks(), slotIndex);
     }
 
     @Override
-    public void setItem(int p_18944_, ItemStack p_18945_) {
+    public void setItem(int slotIndex, ItemStack stack) {
+        ItemStack itemstack = this.getInventory().getStacks().get(slotIndex);
+        boolean flag = !stack.isEmpty() && stack.sameItem(itemstack) && ItemStack.tagMatches(stack, itemstack);
+        this.getInventory().getStacks().set(slotIndex, stack);
 
+        if (stack.getCount() > this.getMaxStackSize()) {
+            stack.setCount(this.getMaxStackSize());
+        }
     }
 
     @Override
@@ -193,6 +295,6 @@ public class SoulEnchanterBlockEntity extends BaseContainerBlockEntity
 
     @Override
     public void clearContent() {
-
+        this.getInventory().getStacks().clear();
     }
 }

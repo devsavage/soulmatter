@@ -46,7 +46,7 @@ public class ModBlockEntities
 {
     public static final List<Supplier<BlockEntityType<?>>> ENTRIES = new ArrayList<>();
 
-    public static final RegistryObject<BlockEntityType<SoulEnchanterBlockEntity>> SOUL_ENCHANTER = register(ModNames.Blocks.SOUL_ENCHANTER, SoulEnchanterBlockEntity::new, SoulEnchanterBlock::new);
+    public static final RegistryObject<BlockEntityType<SoulEnchanterBlockEntity>> SOUL_ENCHANTER = register(ModNames.Blocks.SOUL_ENCHANTER, SoulEnchanterBlockEntity::new, ModBlocks.SOUL_ENCHANTER);
 
     @SubscribeEvent
     public void onRegisterTypes(RegistryEvent.Register<BlockEntityType<?>> event) {

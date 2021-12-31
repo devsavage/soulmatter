@@ -35,6 +35,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -86,16 +87,16 @@ public class SMToolItem extends DiggerItem
             }
 
             stack.hurtAndBreak(1, attacker, (event) -> {
-                event.broadcastBreakEvent(attacker.getUsedItemHand());
+                event.broadcastBreakEvent(InteractionHand.MAIN_HAND);
             });
         } else {
             if(ModConfig.SHOULD_DAMAGE_MAX_TOOL.get()) {
                 stack.hurtAndBreak(1, attacker, (event) -> {
-                    event.broadcastBreakEvent(attacker.getUsedItemHand());
+                    event.broadcastBreakEvent(InteractionHand.MAIN_HAND);
                 });
             } else {
                 stack.hurtAndBreak(0, attacker, (event) -> {
-                    event.broadcastBreakEvent(attacker.getUsedItemHand());
+                    event.broadcastBreakEvent(InteractionHand.MAIN_HAND);
                 });
             }
         }
