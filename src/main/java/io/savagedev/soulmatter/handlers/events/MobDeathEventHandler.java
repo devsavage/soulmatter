@@ -1,4 +1,4 @@
-package io.savagedev.soulmatter.handlers;
+package io.savagedev.soulmatter.handlers.events;
 
 /*
  * MobDeathEventHandler.java

@@ -25,7 +25,8 @@ package io.savagedev.soulmatter;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
-import io.savagedev.soulmatter.handlers.MobDeathEventHandler;
+import io.savagedev.soulmatter.handlers.events.MobDeathEventHandler;
+import io.savagedev.soulmatter.handlers.events.MobDropsHandler;
 import io.savagedev.soulmatter.init.*;
 import io.savagedev.soulmatter.util.ModReference;
 import net.minecraft.world.item.CreativeModeTab;
@@ -81,5 +82,6 @@ public class SoulMatter
     public void onCommonSetup(FMLCommonSetupEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new MobDeathEventHandler());
+        MinecraftForge.EVENT_BUS.register(new MobDropsHandler());
     }
 }

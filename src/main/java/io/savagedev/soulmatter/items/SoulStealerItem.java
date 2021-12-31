@@ -35,6 +35,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -66,14 +67,26 @@ public class SoulStealerItem extends SMItem
 
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
-        if(target instanceof Monster) {
-            Level world = player.level;
+        Level world = player.level;
 
+        if(target instanceof Monster) {
             if(world.isClientSide) {
                 world.addParticle(ParticleTypes.DAMAGE_INDICATOR, target.getX(), target.getEyeY() + 0.3D, target.getZ(), 0, 0, 0);
             }
 
             int damage = random.nextInt(10);
+
+            target.hurt(DamageSource.playerAttack(player), damage);
+
+            return InteractionResult.SUCCESS;
+        }
+
+        if(target instanceof EnderDragon) {
+            if(world.isClientSide) {
+                world.addParticle(ParticleTypes.DAMAGE_INDICATOR, target.getX(), target.getEyeY() + 0.3D, target.getZ(), 0, 0, 0);
+            }
+
+            int damage = random.nextInt(20);
 
             target.hurt(DamageSource.playerAttack(player), damage);
 
