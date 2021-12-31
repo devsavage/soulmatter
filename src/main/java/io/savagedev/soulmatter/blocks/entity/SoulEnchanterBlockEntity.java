@@ -1,4 +1,4 @@
-package io.savagedev.soulmatter.blocks;
+package io.savagedev.soulmatter.blocks.entity;
 
 /*
  * SoulEnchanterBlockEntity.java
@@ -27,6 +27,7 @@ import io.savagedev.savagecore.item.BaseItemStackHandler;
 import io.savagedev.savagecore.nbt.NBTHelper;
 import io.savagedev.soulmatter.init.ModBlockEntities;
 import io.savagedev.soulmatter.init.ModItems;
+import io.savagedev.soulmatter.menus.SoulEnchanterContainerMenu;
 import io.savagedev.soulmatter.util.ModNames;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -118,7 +119,7 @@ public class SoulEnchanterBlockEntity extends BaseContainerBlockEntity
         return this.getFuelStored() >= getFuelCapacity();
     }
 
-    protected static int getFuelCapacity() {
+    public static int getFuelCapacity() {
         return fuelCapacity;
     }
 
@@ -162,9 +163,9 @@ public class SoulEnchanterBlockEntity extends BaseContainerBlockEntity
                 final int count = NBTHelper.getInt(soulStealer, "SoulsTaken");
 
                 if(!soulEnchanterBlock.isFuelFull()) {
-//                    for(int i = 0; i < 1000; i++) {
-//                        soulEnchanterBlock.totalFuelStored += 1;
-//                    }
+                    for(int i = 0; i < count; i++) {
+                        soulEnchanterBlock.totalFuelStored += 1;
+                    }
 
                     if(count > 0) {
                         NBTHelper.setInt(soulStealer, "SoulsTaken", count - 1);

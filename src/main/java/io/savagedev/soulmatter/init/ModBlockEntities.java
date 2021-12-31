@@ -23,8 +23,7 @@ package io.savagedev.soulmatter.init;
  * THE SOFTWARE.
  */
 
-import io.savagedev.soulmatter.blocks.SoulEnchanterBlock;
-import io.savagedev.soulmatter.blocks.SoulEnchanterBlockEntity;
+import io.savagedev.soulmatter.blocks.entity.SoulEnchanterBlockEntity;
 import io.savagedev.soulmatter.util.ModNames;
 import io.savagedev.soulmatter.util.ModReference;
 import net.minecraft.resources.ResourceLocation;

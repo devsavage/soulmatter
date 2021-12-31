@@ -1,4 +1,4 @@
-package io.savagedev.soulmatter.blocks;
+package io.savagedev.soulmatter.client.gui;
 
 /*
  * SoulEnchanterScreen.java
@@ -25,7 +25,7 @@ package io.savagedev.soulmatter.blocks;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.savagedev.savagecore.util.logger.LogHelper;
+import io.savagedev.soulmatter.menus.SoulEnchanterContainerMenu;
 import io.savagedev.soulmatter.util.ModReference;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;

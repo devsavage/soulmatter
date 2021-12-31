@@ -1,4 +1,4 @@
-package io.savagedev.soulmatter.blocks;
+package io.savagedev.soulmatter.menus;
 
 /*
  * SoulEnchanterContainerMenu.java
@@ -25,6 +25,7 @@ package io.savagedev.soulmatter.blocks;
 
 import io.savagedev.savagecore.item.BaseItemStackHandler;
 import io.savagedev.soulmatter.base.BaseContainerMenu;
+import io.savagedev.soulmatter.blocks.entity.SoulEnchanterBlockEntity;
 import io.savagedev.soulmatter.init.ModContainerMenus;
 import io.savagedev.soulmatter.init.ModItems;
 import net.minecraft.world.entity.player.Inventory;
@@ -70,7 +71,7 @@ public class SoulEnchanterContainerMenu extends BaseContainerMenu
         return this.getProgress() > 0;
     }
 
-    protected int getFuelCapacity() {
+    public int getFuelCapacity() {
         return SoulEnchanterBlockEntity.getFuelCapacity();
     }
 

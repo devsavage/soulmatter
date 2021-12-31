@@ -23,8 +23,8 @@ package io.savagedev.soulmatter.init;
  * THE SOFTWARE.
  */
 
-import io.savagedev.soulmatter.blocks.SoulEnchanterContainerMenu;
-import io.savagedev.soulmatter.blocks.SoulEnchanterScreen;
+import io.savagedev.soulmatter.menus.SoulEnchanterContainerMenu;
+import io.savagedev.soulmatter.client.gui.SoulEnchanterScreen;
 import io.savagedev.soulmatter.base.BaseContainerMenu;
 import io.savagedev.soulmatter.util.ModNames;
 import io.savagedev.soulmatter.util.ModReference;
