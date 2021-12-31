@@ -26,6 +26,7 @@ package io.savagedev.soulmatter.items;
 import io.savagedev.savagecore.nbt.NBTHelper;
 import io.savagedev.soulmatter.SoulMatter;
 import io.savagedev.soulmatter.handlers.SMToolLevelHandler;
+import io.savagedev.soulmatter.util.ModNames;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -84,8 +85,8 @@ public class SoulStealerItem extends SMItem
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag) {
-        if(NBTHelper.hasTag(stack, "SoulsTaken")) {
-            tooltip.add(new TextComponent("Souls Taken: " + ChatFormatting.DARK_RED + NBTHelper.getInt(stack, "SoulsTaken")));
+        if(NBTHelper.hasTag(stack, ModNames.Tags.SOULS_TAKEN)) {
+            tooltip.add(new TextComponent("Souls Taken: " + ChatFormatting.DARK_RED + NBTHelper.getInt(stack, ModNames.Tags.SOULS_TAKEN)));
         }
     }
 }

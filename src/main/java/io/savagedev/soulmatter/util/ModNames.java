@@ -55,4 +55,9 @@ public class ModNames
         public static final String SOUL_ENCHANTER = "menu.soulmatter.soul_enchanter";
         public static final String SOUL_PRESSER = "menu.soulmatter.soul_presser";
     }
+
+    public static class Tags
+    {
+        public static final String SOULS_TAKEN = "SoulsTaken";
+    }
 }

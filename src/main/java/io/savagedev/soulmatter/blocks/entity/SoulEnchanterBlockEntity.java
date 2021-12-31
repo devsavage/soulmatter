@@ -159,8 +159,8 @@ public class SoulEnchanterBlockEntity extends BaseContainerBlockEntity
 
         if(!soulEnchanterBlock.getInventory().getStackInSlot(0).isEmpty()) {
             ItemStack soulStealer = soulEnchanterBlock.getInventory().getStackInSlot(0);
-            if(NBTHelper.hasTag(soulStealer, "SoulsTaken")) {
-                final int count = NBTHelper.getInt(soulStealer, "SoulsTaken");
+            if(NBTHelper.hasTag(soulStealer, ModNames.Tags.SOULS_TAKEN)) {
+                final int count = NBTHelper.getInt(soulStealer, ModNames.Tags.SOULS_TAKEN);
 
                 if(!soulEnchanterBlock.isFuelFull()) {
                     for(int i = 0; i < count; i++) {
@@ -168,9 +168,9 @@ public class SoulEnchanterBlockEntity extends BaseContainerBlockEntity
                     }
 
                     if(count > 0) {
-                        NBTHelper.setInt(soulStealer, "SoulsTaken", count - 1);
+                        NBTHelper.setInt(soulStealer, ModNames.Tags.SOULS_TAKEN, count - 1);
                     } else {
-                        NBTHelper.setInt(soulStealer, "SoulsTaken", 0);
+                        NBTHelper.setInt(soulStealer, ModNames.Tags.SOULS_TAKEN, 0);
                     }
                 }
 
