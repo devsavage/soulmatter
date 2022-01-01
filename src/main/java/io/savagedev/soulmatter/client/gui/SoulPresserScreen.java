@@ -1,7 +1,7 @@
 package io.savagedev.soulmatter.client.gui;
 
 /*
- * SoulEnchanterScreen.java
+ * SoulPresserScreen.java
  * Copyright (C) 2014 - 2021 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,31 +25,23 @@ package io.savagedev.soulmatter.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.savagedev.soulmatter.menus.SoulEnchanterContainerMenu;
+import io.savagedev.soulmatter.menus.SoulPresserContainerMenu;
 import io.savagedev.soulmatter.util.ModReference;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterContainerMenu>
+public class SoulPresserScreen extends AbstractContainerScreen<SoulPresserContainerMenu>
 {
-    private static final ResourceLocation background = new ResourceLocation(ModReference.MOD_ID, "textures/gui/gui_soul_enchanter.png");
+    private static final ResourceLocation background = new ResourceLocation(ModReference.MOD_ID, "textures/gui/gui_soul_presser.png");
 
-    public SoulEnchanterScreen(SoulEnchanterContainerMenu screenContainer, Inventory inventory, Component titleIn) {
+    public SoulPresserScreen(SoulPresserContainerMenu screenContainer, Inventory inventory, Component titleIn) {
         super(screenContainer, inventory, titleIn);
 
         this.imageWidth = 176;
         this.imageHeight = 166;
-    }
-
-    @Override
-    public void render(PoseStack matrixStack, int x, int y, float partialTicks) {
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, x, y, partialTicks);
-        this.renderTooltip(matrixStack, x, y);
     }
 
     @Override
@@ -58,21 +50,7 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, background);
 
-        int xStart = (this.width - this.imageWidth) / 2;
-        int yStart = (this.height - this.imageHeight) / 2;
-
         blit(matrixStack, leftPos, topPos, 0, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
-
-        SoulEnchanterContainerMenu soulEnchanterMenu = this.getMenu();
-
-        int bufferScale = soulEnchanterMenu.getFuelLeftScaled(39);
-
-        this.blit(matrixStack, xStart + 10, yStart + 57 - bufferScale + 1, 0, 206 - bufferScale, 12, bufferScale);
-
-        if(soulEnchanterMenu.isInfusing()) {
-            int progressScaled = soulEnchanterMenu.getInfuseProgressScaled(24);
-            this.blit(matrixStack, xStart + 74, yStart + 35, 176, 0, progressScaled + 1, 16);
-        }
     }
 
     @Override
@@ -80,17 +58,12 @@ public class SoulEnchanterScreen extends AbstractContainerScreen<SoulEnchanterCo
         String title = this.getTitle().getString();
 
         this.font.draw(matrixStack, title, (float) (this.imageWidth / 2 - this.font.width(title) / 2), 6.0F, 4210752);
-        this.font.draw(matrixStack, this.playerInventoryTitle, this.imageWidth - 58, this.imageHeight - 96 + 2, 4210752);
+        this.font.draw(matrixStack, this.playerInventoryTitle, 8.0F, (float)(this.imageHeight - 96 + 2), 4210752);
     }
 
     @Override
-    protected void renderTooltip(PoseStack matrixStack, int mouseX, int mouseY) {
-        super.renderTooltip(matrixStack, mouseX, mouseY);
-
-        SoulEnchanterContainerMenu soulEnchanterMenu = this.getMenu();
-
-        if(mouseX > this.getGuiLeft() + 10 && mouseX < this.getGuiLeft() + 23 && mouseY > this.getGuiTop() + 19 && mouseY < this.getGuiTop() + 60) {
-            this.renderTooltip(matrixStack, new TextComponent(soulEnchanterMenu.getFuelStored() + " / " + soulEnchanterMenu.getFuelCapacity()), mouseX, mouseY);
-        }
+    public void render(PoseStack matrixStack, int x, int y, float partialTicks) {
+        this.renderBackground(matrixStack);
+        super.render(matrixStack, x, y, partialTicks);
     }
 }

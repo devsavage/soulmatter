@@ -13,18 +13,23 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public class BaseContainerMenu extends AbstractContainerMenu
+public class BaseContainerMenu<T extends BaseContainerBlockEntity> extends AbstractContainerMenu
 {
-    public static BaseContainerMenu create(MenuType<?> type, int windowId, Inventory playerInv) {
-        return new BaseContainerMenu(type, windowId).init(playerInv);
+    protected final T blockEntity;
+
+    public static BaseContainerMenu create(MenuType<?> type, int windowId, Inventory playerInv, BaseContainerBlockEntity blockEntity) {
+        return new BaseContainerMenu(type, windowId, blockEntity).init(playerInv);
     }
 
     protected int containerSlots; // The number of slots in the container (not including the player inventory)
 
-    protected BaseContainerMenu(MenuType<?> type, int windowId) {
+    protected BaseContainerMenu(MenuType<?> type, int windowId, T blockEntity) {
         super(type, windowId);
+
+        this.blockEntity = blockEntity;
     }
 
     /**
@@ -77,7 +82,7 @@ public class BaseContainerMenu extends AbstractContainerMenu
 
     @Override
     public boolean stillValid(Player playerIn) {
-        return true;
+        return blockEntity.stillValid(playerIn);
     }
 
     /**

@@ -39,7 +39,7 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 
 
-public class SoulEnchanterContainerMenu extends BaseContainerMenu
+public class SoulEnchanterContainerMenu extends BaseContainerMenu<SoulEnchanterBlockEntity>
 {
     private SoulEnchanterBlockEntity soulEnchanter;
     private final BaseItemStackHandler inventory;
@@ -50,7 +50,7 @@ public class SoulEnchanterContainerMenu extends BaseContainerMenu
     }
 
     protected SoulEnchanterContainerMenu(int windowId, SoulEnchanterBlockEntity soulEnchanter) {
-        super(ModContainerMenus.SOUL_ENCHANTER.get(), windowId);
+        super(ModContainerMenus.SOUL_ENCHANTER.get(), windowId, soulEnchanter);
 
         this.soulEnchanter = soulEnchanter;
         this.inventory = soulEnchanter.getInventory();

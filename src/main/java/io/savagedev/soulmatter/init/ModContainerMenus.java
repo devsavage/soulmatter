@@ -23,9 +23,11 @@ package io.savagedev.soulmatter.init;
  * THE SOFTWARE.
  */
 
+import io.savagedev.soulmatter.client.gui.SoulPresserScreen;
 import io.savagedev.soulmatter.menus.SoulEnchanterContainerMenu;
 import io.savagedev.soulmatter.client.gui.SoulEnchanterScreen;
 import io.savagedev.soulmatter.base.BaseContainerMenu;
+import io.savagedev.soulmatter.menus.SoulPresserContainerMenu;
 import io.savagedev.soulmatter.util.ModNames;
 import io.savagedev.soulmatter.util.ModReference;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -55,6 +57,7 @@ public class ModContainerMenus
     public static final List<Supplier<MenuType<?>>> ENTRIES = new ArrayList<>();
 
     public static final RegistryObject<MenuType<SoulEnchanterContainerMenu>> SOUL_ENCHANTER = registerBlock(ModNames.Blocks.SOUL_ENCHANTER, ModBlockEntities.SOUL_ENCHANTER, SoulEnchanterContainerMenu::create);
+    public static final RegistryObject<MenuType<SoulPresserContainerMenu>> SOUL_PRESSER = registerBlock(ModNames.Blocks.SOUL_PRESSER, ModBlockEntities.SOUL_PRESSER, SoulPresserContainerMenu::create);
 
     @SubscribeEvent
     public void onRegisterMenuTypes(RegistryEvent.Register<MenuType<?>> event) {
@@ -66,6 +69,7 @@ public class ModContainerMenus
     @OnlyIn(Dist.CLIENT)
     public static void onClientSetup() {
         SOUL_ENCHANTER.ifPresent(menu -> MenuScreens.register(menu, SoulEnchanterScreen::new));
+        SOUL_PRESSER.ifPresent(menu -> MenuScreens.register(menu, SoulPresserScreen::new));
     }
 
     private static <T extends BlockEntity, C extends BaseContainerMenu> RegistryObject<MenuType<C>> registerBlock(String name, Supplier<BlockEntityType<T>> type, BaseContainerMenu.Factory<T, C> factory)

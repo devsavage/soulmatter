@@ -50,6 +50,7 @@ public class SoulEnchanterBlockEntity extends BaseContainerBlockEntity
     private int totalFuelStored;
     protected static int fuelCapacity = 14000;
     public static int operationTime = 5;
+    public static int operationCost = 200;
 
     private final ContainerData containerData = new ContainerData() {
         @Override
@@ -96,11 +97,11 @@ public class SoulEnchanterBlockEntity extends BaseContainerBlockEntity
     }
 
     public static int getOperationTime() {
-        return 200;
+        return operationTime;
     }
 
     public static int getOperationCost() {
-        return getOperationTime();
+        return operationCost;
     }
 
     private int getFuelStored() {
@@ -265,8 +266,8 @@ public class SoulEnchanterBlockEntity extends BaseContainerBlockEntity
     }
 
     @Override
-    public ItemStack removeItem(int slot, int index) {
-        return ContainerHelper.removeItem(this.getInventory().getStacks(), slot, index);
+    public ItemStack removeItem(int slot, int amount) {
+        return ContainerHelper.removeItem(this.getInventory().getStacks(), slot, amount);
     }
 
     @Override
@@ -282,6 +283,11 @@ public class SoulEnchanterBlockEntity extends BaseContainerBlockEntity
 
         if (stack.getCount() > this.getMaxStackSize()) {
             stack.setCount(this.getMaxStackSize());
+        }
+
+        if(slotIndex == 0 && !flag) {
+            this.progress = 0;
+            this.setChanged();
         }
     }
 

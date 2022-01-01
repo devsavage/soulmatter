@@ -24,6 +24,7 @@ package io.savagedev.soulmatter.init;
  */
 
 import io.savagedev.soulmatter.blocks.entity.SoulEnchanterBlockEntity;
+import io.savagedev.soulmatter.blocks.entity.SoulPresserBlockEntity;
 import io.savagedev.soulmatter.util.ModNames;
 import io.savagedev.soulmatter.util.ModReference;
 import net.minecraft.resources.ResourceLocation;
@@ -46,6 +47,7 @@ public class ModBlockEntities
     public static final List<Supplier<BlockEntityType<?>>> ENTRIES = new ArrayList<>();
 
     public static final RegistryObject<BlockEntityType<SoulEnchanterBlockEntity>> SOUL_ENCHANTER = register(ModNames.Blocks.SOUL_ENCHANTER, SoulEnchanterBlockEntity::new, ModBlocks.SOUL_ENCHANTER);
+    public static final RegistryObject<BlockEntityType<SoulPresserBlockEntity>> SOUL_PRESSER = register(ModNames.Blocks.SOUL_PRESSER, SoulPresserBlockEntity::new, ModBlocks.SOUL_PRESSER);
 
     @SubscribeEvent
     public void onRegisterTypes(RegistryEvent.Register<BlockEntityType<?>> event) {
