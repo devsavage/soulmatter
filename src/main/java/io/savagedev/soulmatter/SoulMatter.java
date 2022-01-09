@@ -25,15 +25,19 @@ package io.savagedev.soulmatter;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
+import io.savagedev.savagecore.util.updater.Updater;
+import io.savagedev.savagecore.util.updater.UpdaterUtils;
 import io.savagedev.soulmatter.handlers.events.MobDeathEventHandler;
 import io.savagedev.soulmatter.handlers.events.MobDropsHandler;
 import io.savagedev.soulmatter.init.*;
 import io.savagedev.soulmatter.util.ModReference;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -46,6 +50,10 @@ import java.nio.file.Path;
 @Mod(ModReference.MOD_ID)
 public class SoulMatter
 {
+    public static ModContainer MOD_CONTAINER;
+
+    public Updater UPDATER;
+
     public SoulMatter() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
@@ -54,6 +62,9 @@ public class SoulMatter
         modEventBus.register(new ModItems());
         modEventBus.register(new ModBlockEntities());
         modEventBus.register(new ModContainerMenus());
+
+        MOD_CONTAINER = ModLoadingContext.get().getActiveContainer();
+        UPDATER = new Updater().setModId(ModReference.MOD_ID).setMinecraftVersion(Minecraft.getInstance().getLaunchedVersion()).setCurrentVersion(MOD_CONTAINER.getModInfo().getVersion().toString());
 
         ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.CLIENT, ModConfig.CLIENT);
         ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, ModConfig.COMMON);
@@ -83,5 +94,7 @@ public class SoulMatter
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new MobDeathEventHandler());
         MinecraftForge.EVENT_BUS.register(new MobDropsHandler());
+
+        UpdaterUtils.initializeUpdateCheck(UPDATER);
     }
 }
