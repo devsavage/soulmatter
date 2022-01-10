@@ -27,6 +27,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import io.savagedev.savagecore.item.ItemHelper;
 import io.savagedev.soulmatter.SoulMatter;
+import io.savagedev.soulmatter.blocks.SoulPresserBlock;
+import io.savagedev.soulmatter.blocks.entity.SoulPresserBlockEntity;
 import io.savagedev.soulmatter.handlers.SMToolLevelHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
@@ -36,6 +38,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
 
@@ -65,20 +68,13 @@ public class SoulMatterHammerItem extends SMToolItem
         if(context.getPlayer().isCrouching()) {
             Level world = context.getLevel();
             BlockPos blockPos = new BlockPos(context.getClickedPos());
-            BlockState blockStateAtPos = world.getBlockState(blockPos);
-            Block blockAtPos = world.getBlockState(blockPos).getBlock();
+            BlockEntity blockEntity = world.getBlockEntity(blockPos);
 
-            // TODO: Add this back when we add soul presser back
-//            if(blockAtPos instanceof BlockSoulPresser) {
-//                if(blockAtPos.hasTileEntity(blockStateAtPos)) {
-//                    TileEntity tileAtPos = iWorld.getTileEntity(blockPos);
-//                    if(tileAtPos instanceof TileEntitySoulPresser) {
-//                        ((TileEntitySoulPresser) tileAtPos).setActiveStatus(true);
-//
-//                        return InteractionResult.SUCCESS;
-//                    }
-//                }
-//            }
+            if(blockEntity instanceof SoulPresserBlockEntity) {
+                ((SoulPresserBlockEntity) blockEntity).setActiveStatus(true);
+
+                return InteractionResult.SUCCESS;
+            }
         }
 
         return InteractionResult.FAIL;

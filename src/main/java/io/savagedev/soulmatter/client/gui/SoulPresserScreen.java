@@ -65,5 +65,6 @@ public class SoulPresserScreen extends AbstractContainerScreen<SoulPresserContai
     public void render(PoseStack matrixStack, int x, int y, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, x, y, partialTicks);
+        this.renderTooltip(matrixStack, x, y);
     }
 }

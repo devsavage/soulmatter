@@ -75,6 +75,8 @@ public class SoulMatter
 
         configData.load();
         ModConfig.COMMON.setConfig(configData);
+
+        MinecraftForge.EVENT_BUS.register(new ModCommands());
     }
 
     @SubscribeEvent
