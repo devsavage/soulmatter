@@ -35,6 +35,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModContainer;
@@ -44,6 +45,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.versions.mcp.MCPVersion;
 
 import java.nio.file.Path;
 
@@ -64,7 +66,10 @@ public class SoulMatter
         modEventBus.register(new ModContainerMenus());
 
         MOD_CONTAINER = ModLoadingContext.get().getActiveContainer();
-        UPDATER = new Updater().setModId(ModReference.MOD_ID).setMinecraftVersion(Minecraft.getInstance().getLaunchedVersion()).setCurrentVersion(MOD_CONTAINER.getModInfo().getVersion().toString());
+        UPDATER = new Updater()
+                .setModId(ModReference.MOD_ID)
+                .setMinecraftVersion(MCPVersion.getMCVersion())
+                .setCurrentVersion(MOD_CONTAINER.getModInfo().getVersion().toString());
 
         ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.CLIENT, ModConfig.CLIENT);
         ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, ModConfig.COMMON);
@@ -98,5 +103,10 @@ public class SoulMatter
         MinecraftForge.EVENT_BUS.register(new MobDropsHandler());
 
         UpdaterUtils.initializeUpdateCheck(UPDATER);
+    }
+
+    @SubscribeEvent
+    public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        UpdaterUtils.sendUpdateMessageIfOutdated(ModReference.MOD_NAME, event, UPDATER);
     }
 }

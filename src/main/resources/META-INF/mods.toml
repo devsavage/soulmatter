@@ -7,7 +7,7 @@ license="MIT"
     modId="soulmatter"
     version="${file.jarVersion}"
     displayName="SoulMatter"
-    updateJSONURL="https://api.savagedev.io/mc-mods/soulmatter/versions?forge=true"
+    updateJSONURL="https://api.savagedev.io/mc-mods/soulmatter/versions?forge=true&version=1.17.1"
     displayURL="https://nlcc.savagedev.io/minecraft-mods/soulmatter/"
     authors="savagedev"
     description='''
@@ -27,6 +27,6 @@ license="MIT"
 [[dependencies.soulmatter]]
     modId="savagecore"
     mandatory=true
-    versionRange="[1.17.1-3.1.0,]"
+    versionRange="[1.17.1-3.2.0,]"
     ordering="BEFORE"
     side="BOTH"
