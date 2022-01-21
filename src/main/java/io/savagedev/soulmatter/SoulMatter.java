@@ -29,6 +29,7 @@ import io.savagedev.savagecore.util.updater.Updater;
 import io.savagedev.savagecore.util.updater.UpdaterUtils;
 import io.savagedev.soulmatter.handlers.events.MobDeathEventHandler;
 import io.savagedev.soulmatter.handlers.events.MobDropsHandler;
+import io.savagedev.soulmatter.handlers.events.ModPlayerLoggedInEvent;
 import io.savagedev.soulmatter.init.*;
 import io.savagedev.soulmatter.util.ModReference;
 import net.minecraft.client.Minecraft;
@@ -103,10 +104,7 @@ public class SoulMatter
         MinecraftForge.EVENT_BUS.register(new MobDropsHandler());
 
         UpdaterUtils.initializeUpdateCheck(UPDATER);
-    }
 
-    @SubscribeEvent
-    public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        UpdaterUtils.sendUpdateMessageIfOutdated(ModReference.MOD_NAME, event, UPDATER);
+        MinecraftForge.EVENT_BUS.register(new ModPlayerLoggedInEvent(UPDATER));
     }
 }
