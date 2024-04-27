@@ -31,6 +31,6 @@ import java.util.function.Function;
 public class SoulMatterItem extends SMItem
 {
     public SoulMatterItem() {
-        super(properties -> properties.tab(SoulMatter.creativeModeTab).rarity(Rarity.UNCOMMON));
+        super(properties -> properties.rarity(Rarity.UNCOMMON));
     }
 }

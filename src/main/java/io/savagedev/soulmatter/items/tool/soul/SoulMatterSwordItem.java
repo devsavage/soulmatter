@@ -25,6 +25,8 @@ package io.savagedev.soulmatter.items.tool.soul;
 
 import com.google.common.collect.Sets;
 import io.savagedev.soulmatter.SoulMatter;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
@@ -32,9 +34,9 @@ import java.util.Set;
 
 public class SoulMatterSwordItem extends SMToolItem
 {
-    private static final Set<Block> EFFECTIVE_ON = Sets.newHashSet(Blocks.COBWEB);
-
+//    private static final Set<Block> EFFECTIVE_ON = Sets.newHashSet(Blocks.COBWEB);
+private static final TagKey<Block> EFFECTIVE_ON = BlockTags.WOOL;
     public SoulMatterSwordItem() {
-        super("sword", 9, EFFECTIVE_ON, properties -> properties.tab(SoulMatter.creativeModeTab));
+        super("sword", 9, EFFECTIVE_ON, properties -> new Properties());
     }
 }

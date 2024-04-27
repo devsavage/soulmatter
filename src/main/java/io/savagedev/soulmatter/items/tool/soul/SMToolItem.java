@@ -29,12 +29,14 @@ import io.savagedev.soulmatter.handlers.SMToolLevelHandler;
 import io.savagedev.soulmatter.init.ModConfig;
 import io.savagedev.soulmatter.init.ModItems;
 import io.savagedev.soulmatter.init.ModToolTier;
+import io.savagedev.soulmatter.util.ModNames;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -46,7 +48,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -57,17 +58,17 @@ import java.util.function.Function;
 public class SMToolItem extends DiggerItem
 {
     private final String toolName;
-    private Tag<Block> effectiveBlocks;
+    private TagKey<Block> effectiveBlocks;
 
-    public SMToolItem(String toolName, float attackDamageIn, Set<Block> effectiveBlocksIn, Function<Properties, Properties> properties) {
-        super(attackDamageIn, 2, ModToolTier.SOUL_MATTER, Tag.fromSet(Sets.newHashSet(effectiveBlocksIn)), properties.apply(new Properties()));
+    public SMToolItem(String toolName, float attackDamageIn, TagKey<Block> effectiveBlocksIn, Function<Properties, Properties> properties) {
+        super(attackDamageIn, 2, ModToolTier.SOUL_MATTER, effectiveBlocksIn, properties.apply(new Properties()));
         this.toolName = toolName;
-        this.effectiveBlocks = Tag.fromSet(Sets.newHashSet(effectiveBlocksIn));
+        this.effectiveBlocks = effectiveBlocksIn;
     }
 
     @Override
     public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean isSelected) {
-        if(!NBTHelper.hasTag(stack, SMToolLevelHandler.SOUL_TOOL_TAG) && !world.isClientSide()) {
+        if(stack.hasTag() && !stack.getTag().contains(SMToolLevelHandler.SOUL_TOOL_TAG) && !world.isClientSide()) {
             NBTHelper.setString(stack, SMToolLevelHandler.SOUL_TOOL_TAG, stack.getDisplayName().toString());
             SMToolLevelHandler.addLevelTag(stack);
         } else {
@@ -82,7 +83,7 @@ public class SMToolItem extends DiggerItem
         if(!SMToolLevelHandler.isMaxToolLevel(stack)) {
             if(stack.getItem() == ModItems.SOUL_MATTER_SWORD.get()) {
                 if(attacker instanceof Player) {
-                    SMToolLevelHandler.addXp(stack, (Player) attacker, Mth.nextInt(new Random(), 2, 2));
+                    SMToolLevelHandler.addXp(stack, (Player) attacker, Mth.nextInt(RandomSource.create(), 2, 2));
                 }
             }
 
@@ -111,7 +112,7 @@ public class SMToolItem extends DiggerItem
         }
 
         if(SMToolLevelHandler.hasLevelTags(stack)) {
-            if(effectiveBlocks.contains(state.getBlock()) || isCorrectToolForDrops(stack, state)) {
+            if(state.is(effectiveBlocks) || isCorrectToolForDrops(stack, state)) {
                 if(!SMToolLevelHandler.isMaxToolLevel(stack)) {
                     SMToolLevelHandler.addXp(stack, (Player) entityLiving, entityLiving.getRandom().nextInt(6));
                     stack.hurtAndBreak(1, entityLiving, (event) -> {
@@ -159,10 +160,10 @@ public class SMToolItem extends DiggerItem
     public float getDestroySpeed(ItemStack stack, BlockState state) {
         if(isCorrectToolForDrops(stack, state)) {
             if(SMToolLevelHandler.isMaxToolLevel(stack)) {
-                return this.effectiveBlocks.contains(state.getBlock()) ? getTier().getSpeed() * SMToolLevelHandler.getToolLevel(stack) : getTier().getSpeed();
+                return state.is(effectiveBlocks) ? getTier().getSpeed() * SMToolLevelHandler.getToolLevel(stack) : getTier().getSpeed();
             }
 
-            return this.effectiveBlocks.contains(state.getBlock()) ? getTier().getSpeed() : 1.0F;
+            return state.is(effectiveBlocks) ? getTier().getSpeed() : 1.0F;
         }
 
         return 1.0F;
@@ -173,24 +174,16 @@ public class SMToolItem extends DiggerItem
         switch (toolName) {
             case "pickaxe":
             case "hammer":
-                return effectiveBlocks.contains(state.getBlock()) ||
-                        state.getMaterial() == Material.STONE ||
-                        state.getMaterial() == Material.HEAVY_METAL;
+                return state.is(effectiveBlocks) ||
+                        state.is(BlockTags.MINEABLE_WITH_PICKAXE);
             case "axe":
-                return effectiveBlocks.contains(state.getBlock()) ||
-                        state.getMaterial() == Material.WOOD &&
-                                state.getMaterial() == Material.PLANT &&
-                                state.getMaterial() == Material.REPLACEABLE_PLANT &&
-                                state.getMaterial() == Material.BAMBOO;
+                return state.is(effectiveBlocks) ||
+                        state.is(BlockTags.MINEABLE_WITH_AXE);
             case "sword":
-                return effectiveBlocks.contains(state.getBlock()) ||
-                        state.getBlock() == Blocks.COBWEB;
+                return state.is(effectiveBlocks) ||
+                        state.is(Blocks.COBWEB);
             case "shovel":
-                return effectiveBlocks.contains(state.getBlock()) ||
-                        state.getMaterial() == Material.DIRT ||
-                        state.getMaterial() == Material.GRASS ||
-                        state.getMaterial() == Material.SAND ||
-                        state.getMaterial() == Material.SNOW;
+                return state.is(effectiveBlocks) || state.is(BlockTags.MINEABLE_WITH_SHOVEL);
             default:
                 return super.isCorrectToolForDrops(stack, state);
         }
@@ -199,10 +192,10 @@ public class SMToolItem extends DiggerItem
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if(!SMToolLevelHandler.isMaxToolLevel(stack)) {
-            tooltip.add(new TextComponent("Level: " + ChatFormatting.AQUA + SMToolLevelHandler.getToolLevel(stack)));
-            tooltip.add(new TextComponent("XP: " + ChatFormatting.GREEN + SMToolLevelHandler.getToolXp(stack)));
+            tooltip.add(Component.literal("Level: " + ChatFormatting.AQUA + SMToolLevelHandler.getToolLevel(stack)));
+            tooltip.add(Component.literal("XP: " + ChatFormatting.GREEN + SMToolLevelHandler.getToolXp(stack)));
         } else {
-            tooltip.add(new TextComponent("Level: " + ChatFormatting.AQUA + SMToolLevelHandler.getToolLevel(stack) + " (Max Level)"));
+            tooltip.add(Component.literal("Level: " + ChatFormatting.AQUA + SMToolLevelHandler.getToolLevel(stack) + " (Max Level)"));
         }
     }
 }

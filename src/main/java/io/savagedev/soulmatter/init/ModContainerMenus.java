@@ -23,11 +23,8 @@ package io.savagedev.soulmatter.init;
  * THE SOFTWARE.
  */
 
-import io.savagedev.soulmatter.client.gui.SoulPresserScreen;
-import io.savagedev.soulmatter.menus.SoulEnchanterContainerMenu;
-import io.savagedev.soulmatter.client.gui.SoulEnchanterScreen;
+
 import io.savagedev.soulmatter.base.BaseContainerMenu;
-import io.savagedev.soulmatter.menus.SoulPresserContainerMenu;
 import io.savagedev.soulmatter.util.ModNames;
 import io.savagedev.soulmatter.util.ModReference;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -40,13 +37,14 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.extensions.IForgeContainerType;
-import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fmllegacy.RegistryObject;
-import net.minecraftforge.fmllegacy.network.IContainerFactory;
+import net.minecraftforge.network.IContainerFactory;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,40 +52,13 @@ import java.util.function.Supplier;
 
 public class ModContainerMenus
 {
-    public static final List<Supplier<MenuType<?>>> ENTRIES = new ArrayList<>();
-
-    public static final RegistryObject<MenuType<SoulEnchanterContainerMenu>> SOUL_ENCHANTER = registerBlock(ModNames.Blocks.SOUL_ENCHANTER, ModBlockEntities.SOUL_ENCHANTER, SoulEnchanterContainerMenu::create);
-    public static final RegistryObject<MenuType<SoulPresserContainerMenu>> SOUL_PRESSER = registerBlock(ModNames.Blocks.SOUL_PRESSER, ModBlockEntities.SOUL_PRESSER, SoulPresserContainerMenu::create);
-
-    @SubscribeEvent
-    public void onRegisterMenuTypes(RegistryEvent.Register<MenuType<?>> event) {
-        IForgeRegistry<MenuType<?>> registry = event.getRegistry();
-
-        ENTRIES.stream().map(Supplier::get).forEach(registry::register);
+    public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, ModReference.MOD_ID);
+//    public static final RegistryObject<MenuType<SoulEnchanterContainerMenu>> SOUL_ENCHANTER = registerMenuType(ModNames.Blocks.SOUL_ENCHANTER, SoulEnchanterContainerMenu::new);
+//    public static final RegistryObject<MenuType<SoulPresserContainerMenu>> SOUL_PRESSER = registerMenuType(ModNames.Blocks.SOUL_PRESSER, SoulPresserContainerMenu::new);
+    private static <T extends AbstractContainerMenu>RegistryObject<MenuType<T>> registerMenuType(String name, IContainerFactory<T> factory) {
+        return MENUS.register(name, () -> IForgeMenuType.create(factory));
     }
-
-    @OnlyIn(Dist.CLIENT)
-    public static void onClientSetup() {
-        SOUL_ENCHANTER.ifPresent(menu -> MenuScreens.register(menu, SoulEnchanterScreen::new));
-        SOUL_PRESSER.ifPresent(menu -> MenuScreens.register(menu, SoulPresserScreen::new));
-    }
-
-    private static <T extends BlockEntity, C extends BaseContainerMenu> RegistryObject<MenuType<C>> registerBlock(String name, Supplier<BlockEntityType<T>> type, BaseContainerMenu.Factory<T, C> factory)
-    {
-        return register(name, (windowId, playerInventory, buffer) -> {
-            final Level world = playerInventory.player.level;
-            final BlockPos pos = buffer.readBlockPos();
-            final T entity = world.getBlockEntity(pos, type.get()).orElseThrow();
-
-            return factory.create(entity, playerInventory, windowId);
-        });
-    }
-
-    private static <C extends AbstractContainerMenu> RegistryObject<MenuType<C>> register(String name, IContainerFactory<C> menu) {
-        ResourceLocation location = new ResourceLocation(ModReference.MOD_ID, name);
-
-        ENTRIES.add(() -> IForgeContainerType.create(menu).setRegistryName(location));
-
-        return RegistryObject.of(location, ForgeRegistries.CONTAINERS);
+    public static void register(IEventBus eventBus) {
+        MENUS.register(eventBus);
     }
 }

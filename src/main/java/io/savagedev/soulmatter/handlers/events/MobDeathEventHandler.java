@@ -41,11 +41,11 @@ public class MobDeathEventHandler
     public void onLivingDeath(LivingDeathEvent event) {
         if(event.getSource().getDirectEntity() instanceof Player) {
             Player player = (Player) event.getSource().getDirectEntity();
-            if(event.getEntityLiving() instanceof Monster) {
+            if(event.getEntity() instanceof Monster) {
                 if(player.getItemInHand(InteractionHand.MAIN_HAND).getItem() == ModItems.SOUL_STEALER.get()) {
                     ItemStack soulStealer = player.getItemInHand(InteractionHand.MAIN_HAND);
                     LogHelper.info(soulStealer.getDisplayName().getString());
-                    if(!NBTHelper.hasTag(soulStealer, ModNames.Tags.SOULS_TAKEN)) {
+                    if(soulStealer.hasTag() && !soulStealer.getTag().contains(ModNames.Tags.SOULS_TAKEN)) {
                         NBTHelper.setInt(soulStealer, ModNames.Tags.SOULS_TAKEN, 1);
                     } else {
                         int count = NBTHelper.getInt(soulStealer, ModNames.Tags.SOULS_TAKEN);

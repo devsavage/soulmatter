@@ -31,6 +31,6 @@ import java.util.function.Function;
 public class RawSoulMatterItem extends SMItem
 {
     public RawSoulMatterItem() {
-        super(properties -> properties.tab(SoulMatter.creativeModeTab));
+        super(properties -> new Properties());
     }
 }

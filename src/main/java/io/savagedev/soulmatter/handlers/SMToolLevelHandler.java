@@ -28,7 +28,8 @@ import io.savagedev.soulmatter.init.ModConfig;
 import io.savagedev.soulmatter.init.ModItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
@@ -42,28 +43,53 @@ public class SMToolLevelHandler
     public static final int SOUL_TOOL_MAX_LEVEL = ModConfig.MAX_SOUL_TOOL_LEVEL.get();
 
     public static int getToolLevel(ItemStack soulTool) {
-        return NBTHelper.getInt(soulTool, SOUL_TOOL_TAG_LEVEL);
+        if (soulTool.getTag() == null) {
+            soulTool.setTag(new CompoundTag());
+        }
+
+        if (!soulTool.getTag().contains(SOUL_TOOL_TAG_LEVEL)) {
+            soulTool.getTag().putInt(SOUL_TOOL_TAG_LEVEL, 0);
+        }
+
+        return soulTool.getTag().getInt(SOUL_TOOL_TAG_LEVEL);
     }
 
     public static long getToolXp(ItemStack soulTool) {
-        return NBTHelper.getLong(soulTool, SOUL_TOOL_TAG_XP);
+        if (soulTool.getTag() == null) {
+            soulTool.setTag(new CompoundTag());
+        }
+
+        if (!soulTool.getTag().contains(SOUL_TOOL_TAG_XP)) {
+            soulTool.getTag().putLong(SOUL_TOOL_TAG_XP, 0L);
+        }
+
+        return soulTool.getTag().getLong(SOUL_TOOL_TAG_XP);
     }
 
     public static boolean hasXp(ItemStack tool) {
-        return NBTHelper.hasTag(tool, SOUL_TOOL_TAG_XP);
+        return tool.hasTag() && tool.getTag().contains(SOUL_TOOL_TAG_XP);
     }
 
     public static boolean hasToolLevel(ItemStack soulTool) {
-        return NBTHelper.hasTag(soulTool, SOUL_TOOL_TAG_LEVEL);
+        return soulTool.hasTag() && soulTool.getTag().contains(SOUL_TOOL_TAG_LEVEL);
     }
 
     public static void addLevelTag(ItemStack stack) {
-        NBTHelper.setInt(stack, SOUL_TOOL_TAG_LEVEL, 1);
-        NBTHelper.setLong(stack, SOUL_TOOL_TAG_XP, 0);
+        if (stack.getTag() == null) {
+            stack.setTag(new CompoundTag());
+        }
+
+        if (!stack.getTag().contains(SOUL_TOOL_TAG_LEVEL)) {
+            stack.getTag().putInt(SOUL_TOOL_TAG_LEVEL, 1);
+        }
+
+        if (!stack.getTag().contains(SOUL_TOOL_TAG_XP)) {
+            stack.getTag().putLong(SOUL_TOOL_TAG_XP, 0L);
+        }
     }
 
     public static boolean hasLevelTags(ItemStack soulTool) {
-        return NBTHelper.hasTag(soulTool, SOUL_TOOL_TAG_LEVEL) && NBTHelper.hasTag(soulTool, SOUL_TOOL_TAG_XP);
+        return soulTool.hasTag() && soulTool.getTag().contains(SOUL_TOOL_TAG_LEVEL) && soulTool.getTag().contains(SOUL_TOOL_TAG_XP);
     }
 
     public static boolean isMaxToolLevel(ItemStack soulTool) {
@@ -91,7 +117,7 @@ public class SMToolLevelHandler
 
         baseXp *= 150 / 100F;
 
-        int toolLevel = NBTHelper.getInt(tool, SOUL_TOOL_TAG_LEVEL);
+        int toolLevel = getToolLevel(tool);
         if (toolLevel >= 1)
             baseXp *= Math.pow(1.15F, toolLevel - 1);
 
@@ -124,7 +150,7 @@ public class SMToolLevelHandler
         boolean levelUpTool = false;
 
         if(newToolXp >= 0 && hasXp(soulTool) && toolLevel > 0 && !isMaxToolLevel(soulTool)) {
-            NBTHelper.setLong(soulTool, SOUL_TOOL_TAG_XP, newToolXp);
+            soulTool.getTag().putLong(SOUL_TOOL_TAG_XP, newToolXp);
 
             if(newToolXp >= getRequiredXp(soulTool)) {
                 increaseToolLevel(soulTool, player);
@@ -132,31 +158,31 @@ public class SMToolLevelHandler
             }
         }
 
-        if((levelUpTool) && !player.level.isClientSide) {
+        if((levelUpTool) && !player.level().isClientSide) {
             int level = getToolLevel(soulTool);
 
             if(isMaxToolLevel(soulTool))
                 triggerMaxLevel(soulTool, player);
             else {
-                player.sendMessage(new TextComponent("Your " +
+                player.sendSystemMessage(Component.translatable("Your " +
                         ChatFormatting.DARK_AQUA + soulTool.getDisplayName().getString() +
-                        ChatFormatting.RESET + " has been leveled up to level " + ChatFormatting.AQUA + level + ChatFormatting.RESET + "!"), Util.NIL_UUID);
+                        ChatFormatting.RESET + " has been leveled up to level " + ChatFormatting.AQUA + level + ChatFormatting.RESET + "!"));
                 player.playNotifySound(SoundEvents.FIREWORK_ROCKET_BLAST, SoundSource.AMBIENT, 1.0F, 1.0F);
             }
         }
     }
 
     public static void increaseToolLevel(ItemStack soulTool, Player playerEntity) {
-        int level = NBTHelper.getInt(soulTool, SOUL_TOOL_TAG_LEVEL);
+        int level = getToolLevel(soulTool);
         level++;
 
-        NBTHelper.setInt(soulTool, SOUL_TOOL_TAG_LEVEL, level);
-        NBTHelper.setLong(soulTool, SOUL_TOOL_TAG_XP, 0L);
+        soulTool.getTag().putInt(SOUL_TOOL_TAG_LEVEL, level);
+        soulTool.getTag().putLong(SOUL_TOOL_TAG_XP, 0L);
     }
 
     public static void triggerMaxLevel(ItemStack tool, Player player) {
-        player.sendMessage(new TextComponent(ChatFormatting.GOLD + "You have reached the max level for your " + ChatFormatting.AQUA +
-                tool.getDisplayName().getString() + ChatFormatting.GOLD + "!"), Util.NIL_UUID);
+        player.sendSystemMessage(Component.translatable(ChatFormatting.GOLD + "You have reached the max level for your " + ChatFormatting.AQUA +
+                tool.getDisplayName().getString() + ChatFormatting.GOLD + "!"));
         player.playNotifySound(SoundEvents.FIREWORK_ROCKET_LARGE_BLAST, SoundSource.AMBIENT, 1.0F, 1.0F);
     }
 
@@ -164,7 +190,10 @@ public class SMToolLevelHandler
         if(!hasToolLevel(soulTool))
             return;
 
-        NBTHelper.setInt(soulTool, SOUL_TOOL_TAG_LEVEL, SOUL_TOOL_MAX_LEVEL);
+        if (!soulTool.getTag().contains(SOUL_TOOL_TAG_LEVEL)) {
+            soulTool.getTag().putInt(SOUL_TOOL_TAG_LEVEL, SOUL_TOOL_MAX_LEVEL);
+        }
+
         triggerMaxLevel(soulTool, playerEntity);
     }
 }

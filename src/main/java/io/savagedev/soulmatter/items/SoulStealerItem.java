@@ -24,35 +24,28 @@ package io.savagedev.soulmatter.items;
  */
 
 import io.savagedev.savagecore.nbt.NBTHelper;
-import io.savagedev.soulmatter.SoulMatter;
-import io.savagedev.soulmatter.handlers.SMToolLevelHandler;
 import io.savagedev.soulmatter.util.ModNames;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Function;
 
 public class SoulStealerItem extends SMItem
 {
     public SoulStealerItem() {
-        super(properties -> properties.tab(SoulMatter.creativeModeTab).stacksTo(1));
+        super(properties -> properties.stacksTo(1));
     }
 
     @Override
@@ -67,7 +60,7 @@ public class SoulStealerItem extends SMItem
 
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
-        Level world = player.level;
+        Level world = player.level();
 
         if(target instanceof Monster) {
             if(world.isClientSide) {
@@ -76,7 +69,7 @@ public class SoulStealerItem extends SMItem
 
             int damage = random.nextInt(10);
 
-            target.hurt(DamageSource.playerAttack(player), damage);
+            target.hurt(player.damageSources().playerAttack(player), damage);
 
             return InteractionResult.SUCCESS;
         }
@@ -88,7 +81,7 @@ public class SoulStealerItem extends SMItem
 
             int damage = random.nextInt(20);
 
-            target.hurt(DamageSource.playerAttack(player), damage);
+            target.hurt(player.damageSources().playerAttack(player), damage);
 
             return InteractionResult.SUCCESS;
         }
@@ -98,8 +91,9 @@ public class SoulStealerItem extends SMItem
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag) {
-        if(NBTHelper.hasTag(stack, ModNames.Tags.SOULS_TAKEN)) {
-            tooltip.add(new TextComponent("Souls Taken: " + ChatFormatting.DARK_RED + NBTHelper.getInt(stack, ModNames.Tags.SOULS_TAKEN)));
+        if(stack.hasTag() && stack.getTag().contains(ModNames.Tags.SOULS_TAKEN)) {
+            tooltip.add(Component.literal("Souls Taken: " + ChatFormatting.DARK_RED + NBTHelper.getInt(stack, ModNames.Tags.SOULS_TAKEN)));
         }
     }
 }
+// stack.hasTag() && !stack.getTag().contains(SMToolLevelHandler.SOUL_TOOL_TAG)

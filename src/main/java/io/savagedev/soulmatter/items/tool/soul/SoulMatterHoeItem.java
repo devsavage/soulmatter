@@ -26,6 +26,7 @@ package io.savagedev.soulmatter.items.tool.soul;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.mojang.datafixers.util.Pair;
 import io.savagedev.soulmatter.SoulMatter;
 import io.savagedev.soulmatter.handlers.SMToolLevelHandler;
 import io.savagedev.soulmatter.init.ModConfig;
@@ -33,7 +34,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.UseOnContext;
@@ -46,14 +50,18 @@ import net.minecraftforge.event.ForgeEventFactory;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
+import static net.minecraft.world.item.HoeItem.changeIntoState;
 
 public class SoulMatterHoeItem extends SMToolItem
 {
-    private static Set<Block> EFFECTIVE_ON = Sets.newHashSet(new Block[]{});
-    protected static final Map<Block, BlockState> HOE_LOOKUP = Maps.newHashMap(ImmutableMap.of(Blocks.GRASS_BLOCK, Blocks.FARMLAND.defaultBlockState(), Blocks.DIRT_PATH, Blocks.FARMLAND.defaultBlockState(), Blocks.DIRT, Blocks.FARMLAND.defaultBlockState(), Blocks.COARSE_DIRT, Blocks.DIRT.defaultBlockState()));
-
+//    private static Set<Block> EFFECTIVE_ON = Sets.newHashSet(new Block[]{});
+protected static final Map<Block, BlockState> HOE_LOOKUP = Maps.newHashMap(ImmutableMap.of(Blocks.GRASS_BLOCK, Blocks.FARMLAND.defaultBlockState(), Blocks.DIRT_PATH, Blocks.FARMLAND.defaultBlockState(), Blocks.DIRT, Blocks.FARMLAND.defaultBlockState(), Blocks.COARSE_DIRT, Blocks.DIRT.defaultBlockState()));
+private static final TagKey<Block> EFFECTIVE_ON = BlockTags.MINEABLE_WITH_HOE;
     public SoulMatterHoeItem() {
-        super("hoe", 1, EFFECTIVE_ON, properties -> properties.tab(SoulMatter.creativeModeTab));
+        super("hoe", 1, EFFECTIVE_ON, properties -> new Properties());
     }
 
     @Override
@@ -84,9 +92,10 @@ public class SoulMatterHoeItem extends SMToolItem
 
             Level world = context.getLevel();
             BlockPos blockpos = context.getClickedPos();
-            int hook = ForgeEventFactory.onHoeUse(context);
-            if (hook != 0)
-                return hook > 0 ? InteractionResult.SUCCESS : InteractionResult.FAIL;
+            BlockState toolModifiedState = world.getBlockState(blockpos).getToolModifiedState(context, net.minecraftforge.common.ToolActions.HOE_TILL, false);
+            Pair<Predicate<UseOnContext>, Consumer<UseOnContext>> pair = toolModifiedState == null ? null : Pair.of(ctx -> true, changeIntoState(toolModifiedState));
+            if (pair == null)
+                return InteractionResult.PASS;
             if (context.getClickedFace() != Direction.DOWN && world.isEmptyBlock(blockpos.above())) {
                 BlockState blockstate = HOE_LOOKUP.get(world.getBlockState(blockpos).getBlock());
                 if (blockstate != null) {
@@ -96,7 +105,7 @@ public class SoulMatterHoeItem extends SMToolItem
                         world.setBlock(blockpos, blockstate, 11);
                         if (player != null) {
                             if(!SMToolLevelHandler.isMaxToolLevel(context.getItemInHand())) {
-                                SMToolLevelHandler.addXp(context.getItemInHand(), player, Mth.nextInt(new Random(), 2, 8));
+                                SMToolLevelHandler.addXp(context.getItemInHand(), player, Mth.nextInt(RandomSource.create(), 2, 8));
 
                                 context.getItemInHand().hurtAndBreak(1, player, (hand) -> {
                                     hand.broadcastBreakEvent(context.getHand());

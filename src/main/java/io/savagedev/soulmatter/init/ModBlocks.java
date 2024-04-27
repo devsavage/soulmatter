@@ -23,53 +23,35 @@ package io.savagedev.soulmatter.init;
  * THE SOFTWARE.
  */
 
-import io.savagedev.soulmatter.SoulMatter;
-import io.savagedev.soulmatter.blocks.SoulEnchanterBlock;
-import io.savagedev.soulmatter.blocks.SoulPresserBlock;
 import io.savagedev.soulmatter.util.ModNames;
 import io.savagedev.soulmatter.util.ModReference;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fmllegacy.RegistryObject;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.RegistryObject;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ModBlocks
 {
-    public static final List<Supplier<? extends Block>> ENTRIES = new ArrayList<>();
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ModReference.MOD_ID);
+//    public static final RegistryObject<SoulEnchanterBlock> SOUL_ENCHANTER = registerBlock(ModNames.Blocks.SOUL_ENCHANTER, SoulEnchanterBlock::new);
+//    public static final RegistryObject<SoulPresserBlock> SOUL_PRESSER = registerBlock(ModNames.Blocks.SOUL_PRESSER, SoulPresserBlock::new);
 
-    public static final RegistryObject<SoulEnchanterBlock> SOUL_ENCHANTER = register(ModNames.Blocks.SOUL_ENCHANTER, SoulEnchanterBlock::new);
-    public static final RegistryObject<SoulPresserBlock> SOUL_PRESSER = register(ModNames.Blocks.SOUL_PRESSER, SoulPresserBlock::new);
-
-    @SubscribeEvent
-    public void onRegisterBlocks(RegistryEvent.Register<Block> event) {
-        IForgeRegistry<Block> registry = event.getRegistry();
-
-        ENTRIES.stream().map(Supplier::get).forEach(registry::register);
+    public static void register(IEventBus eventBus) {
+        BLOCKS.register(eventBus);
     }
 
-    private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> block) {
-        return register(name, block, b -> () -> new BlockItem(b.get(), new Item.Properties().tab(SoulMatter.creativeModeTab)));
-    }
-
-    private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> block, Function<RegistryObject<T>, Supplier<? extends BlockItem>> item) {
-        ResourceLocation loc = new ResourceLocation(ModReference.MOD_ID, name);
-
-        ENTRIES.add(() -> block.get().setRegistryName(loc));
-
-        RegistryObject<T> registryObject = RegistryObject.of(loc, ForgeRegistries.BLOCKS);
-
-        ModItems.BLOCK_ENTRIES.add(() -> item.apply(registryObject).get().setRegistryName(loc));
-
+    private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
+        RegistryObject<T> registryObject = BLOCKS.register(name, block);
+        registerBlockItem(name, registryObject);
         return registryObject;
+    }
+
+    private static <T extends Block> void registerBlockItem(String name, RegistryObject<T> block) {
+        ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
     }
 }

@@ -44,8 +44,8 @@ public class MobDropsHandler
 {
     @SubscribeEvent
     public void onLivingDrops(LivingDropsEvent event) {
-        LivingEntity target = event.getEntityLiving();
-        Level world = target.level;
+        LivingEntity target = event.getEntity();
+        Level world = target.level();
         BlockPos blockPos = target.getOnPos();
         Collection<ItemEntity> drops = event.getDrops();
 

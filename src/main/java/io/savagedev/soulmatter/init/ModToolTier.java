@@ -34,14 +34,12 @@ public enum ModToolTier implements Tier
     SOUL_MATTER(4, 4096, 9.0F, 4.0F, 24, () -> {
         return Ingredient.of(ModItems.SOUL_MATTER.get());
     });
-
     private final int harvestLevel;
     private final int maxUses;
     private final float efficiency;
     private final float attackDamage;
     private final int enchantability;
     private final LazyLoadedValue<Ingredient> repairIngredient;
-
     ModToolTier(int harvestLevel, int maxUses, float efficiency, float attackDamage, int enchantability, Supplier<Ingredient> repairMaterial) {
         this.harvestLevel = harvestLevel;
         this.maxUses = maxUses;

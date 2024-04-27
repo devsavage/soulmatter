@@ -23,19 +23,18 @@ package io.savagedev.soulmatter.init;
  * THE SOFTWARE.
  */
 
-import io.savagedev.soulmatter.blocks.entity.SoulEnchanterBlockEntity;
-import io.savagedev.soulmatter.blocks.entity.SoulPresserBlockEntity;
 import io.savagedev.soulmatter.util.ModNames;
 import io.savagedev.soulmatter.util.ModReference;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fmllegacy.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,31 +43,17 @@ import java.util.stream.Stream;
 
 public class ModBlockEntities
 {
-    public static final List<Supplier<BlockEntityType<?>>> ENTRIES = new ArrayList<>();
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
+            DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, ModReference.MOD_ID);
 
-    public static final RegistryObject<BlockEntityType<SoulEnchanterBlockEntity>> SOUL_ENCHANTER = register(ModNames.Blocks.SOUL_ENCHANTER, SoulEnchanterBlockEntity::new, ModBlocks.SOUL_ENCHANTER);
-    public static final RegistryObject<BlockEntityType<SoulPresserBlockEntity>> SOUL_PRESSER = register(ModNames.Blocks.SOUL_PRESSER, SoulPresserBlockEntity::new, ModBlocks.SOUL_PRESSER);
+//    public static final RegistryObject<BlockEntityType<SoulEnchanterBlockEntity>> SOUL_ENCHANTER =
+//            BLOCK_ENTITIES.register(ModNames.Blocks.SOUL_ENCHANTER,
+//                    () -> BlockEntityType.Builder.of(SoulEnchanterBlockEntity::new, ModBlocks.SOUL_ENCHANTER.get()).build(null));
+//    public static final RegistryObject<BlockEntityType<SoulPresserBlockEntity>> SOUL_PRESSER =
+//            BLOCK_ENTITIES.register(ModNames.Blocks.SOUL_PRESSER,
+//                    () -> BlockEntityType.Builder.of(SoulPresserBlockEntity::new, ModBlocks.SOUL_PRESSER.get()).build(null));
 
-    @SubscribeEvent
-    public void onRegisterTypes(RegistryEvent.Register<BlockEntityType<?>> event) {
-        IForgeRegistry<BlockEntityType<?>> registry = event.getRegistry();
-
-        ENTRIES.stream().map(Supplier::get).forEach(registry::register);
-    }
-
-    private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> register(String name, BlockEntityType.BlockEntitySupplier<T> blockEntity, Stream<? extends Supplier<? extends Block>> blocks) {
-        ResourceLocation location = new ResourceLocation(ModReference.MOD_ID, name);
-
-        ENTRIES.add(() -> BlockEntityType.Builder.of(blockEntity, blocks.map(Supplier::get).toArray(Block[]::new)).build(null).setRegistryName(name));
-
-        return RegistryObject.of(location, ForgeRegistries.BLOCK_ENTITIES);
-    }
-
-    private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> register(String name, BlockEntityType.BlockEntitySupplier<T> supplier, Supplier<? extends Block> block) {
-        ResourceLocation location = new ResourceLocation(ModReference.MOD_ID, name);
-
-        ENTRIES.add(() -> BlockEntityType.Builder.of(supplier, block.get()).build(null).setRegistryName(location));
-
-        return RegistryObject.of(location, ForgeRegistries.BLOCK_ENTITIES);
+    public static void register(IEventBus eventBus) {
+        BLOCK_ENTITIES.register(eventBus);
     }
 }

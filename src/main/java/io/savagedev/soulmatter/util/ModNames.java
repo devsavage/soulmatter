@@ -60,4 +60,10 @@ public class ModNames
     {
         public static final String SOULS_TAKEN = "SoulsTaken";
     }
+
+    public static class Tabs
+    {
+        public static final String SM_TAB = "soulmatter_tab";
+        public static final String SM_TAB_TITLE = "itemGroup.soulmatter";
+    }
 }

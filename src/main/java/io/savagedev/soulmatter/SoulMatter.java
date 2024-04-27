@@ -61,10 +61,11 @@ public class SoulMatter
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         modEventBus.register(this);
-        modEventBus.register(new ModBlocks());
-        modEventBus.register(new ModItems());
-        modEventBus.register(new ModBlockEntities());
-        modEventBus.register(new ModContainerMenus());
+//        modEventBus.register(new ModBlocks());
+        ModCreativeTab.TABS.register(modEventBus);
+        ModItems.init(modEventBus);
+//        modEventBus.register(new ModBlockEntities());
+//        modEventBus.register(new ModContainerMenus());
 
         MOD_CONTAINER = ModLoadingContext.get().getActiveContainer();
         UPDATER = new Updater()
@@ -87,15 +88,8 @@ public class SoulMatter
 
     @SubscribeEvent
     public void onClientSetup(FMLClientSetupEvent event) {
-        ModContainerMenus.onClientSetup();
+//        ModContainerMenus.onClientSetup();
     }
-
-    public static CreativeModeTab creativeModeTab = new CreativeModeTab(ModReference.MOD_ID) {
-        @Override
-        public ItemStack makeIcon() {
-            return new ItemStack(ModItems.SOUL_MATTER.get());
-        }
-    };
 
     @SubscribeEvent
     public void onCommonSetup(FMLCommonSetupEvent event) {

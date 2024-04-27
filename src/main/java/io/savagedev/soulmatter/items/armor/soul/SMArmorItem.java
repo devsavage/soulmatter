@@ -2,7 +2,7 @@ package io.savagedev.soulmatter.items.armor.soul;
 
 /*
  * SMArmorItem.java
- * Copyright (C) 2014 - 2021 Savage - github.com/devsavage
+ * Copyright (C) 2014 - 2024 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,6 @@ import io.savagedev.soulmatter.util.ModReference;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
@@ -37,8 +36,8 @@ import java.util.function.Function;
 
 public class SMArmorItem extends ArmorItem
 {
-    public SMArmorItem(EquipmentSlot slot, Function<Properties, Properties> properties) {
-        super(ModArmorMaterial.SOUL_MATTER, slot, properties.apply(new Properties()));
+    public SMArmorItem(EquipmentSlot slot, ArmorItem.Type type, Function<Properties, Properties> properties) {
+        super(ModArmorMaterial.SOUL_MATTER, type, properties.apply(new Properties()));
     }
 
     @Nullable

@@ -29,7 +29,7 @@ import io.savagedev.soulmatter.handlers.SMToolLevelHandler;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -49,7 +49,7 @@ public class CommandSMTool
             Player player = (Player) source.getEntity();
 
             if(!player.isCreative()) {
-                source.sendFailure(new TranslatableComponent("command.soulmatter.smtool.maxlevel.fail"));
+                source.sendFailure(Component.translatable("command.soulmatter.smtool.maxlevel.fail"));
                 return 0;
             }
 
@@ -60,11 +60,11 @@ public class CommandSMTool
                         SMToolLevelHandler.setMaxLevelCreative(heldItemStack, player);
                         return 1;
                     } else {
-                        source.sendFailure(new TranslatableComponent("command.soulmatter.smtool.maxlevel.pass"));
+                        source.sendFailure(Component.translatable("command.soulmatter.smtool.maxlevel.pass"));
                         return 0;
                     }
                 } else {
-                    source.sendFailure(new TranslatableComponent("command.soulmatter.smtool.maxlevel.error"));
+                    source.sendFailure(Component.translatable("command.soulmatter.smtool.maxlevel.error"));
                     return 0;
                 }
             }

@@ -28,6 +28,6 @@ import io.savagedev.soulmatter.SoulMatter;
 public class EmeraldRodItem extends SMItem
 {
     public EmeraldRodItem() {
-        super(properties -> properties.tab(SoulMatter.creativeModeTab));
+        super(properties -> new Properties());
     }
 }
