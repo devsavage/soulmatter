@@ -64,6 +64,20 @@ public class ModCreativeTab
     public static void buildContents(BuildCreativeModeTabContentsEvent event) {
         if(event.getTab() == SM_CREATIVE_TAB.get()) {
             event.accept(ModItems.EMERALD_ROD.get());
+            event.accept(ModItems.SOUL_MATTER.get());
+            event.accept(ModItems.RAW_SOUL_MATTER.get());
+            event.accept(ModItems.SOUL_MATTER_COMPACT.get());
+            event.accept(ModItems.SOUL_STEALER.get());
+            event.accept(ModItems.SOUL_MATTER_SWORD.get());
+            event.accept(ModItems.SOUL_MATTER_AXE.get());
+            event.accept(ModItems.SOUL_MATTER_HAMMER.get());
+            event.accept(ModItems.SOUL_MATTER_PICKAXE.get());
+            event.accept(ModItems.SOUL_MATTER_HOE.get());
+            event.accept(ModItems.SOUL_MATTER_SHOVEL.get());
+            event.accept(ModItems.SOUL_MATTER_HELMET.get());
+            event.accept(ModItems.SOUL_MATTER_CHESTPLATE.get());
+            event.accept(ModItems.SOUL_MATTER_LEGGINGS.get());
+            event.accept(ModItems.SOUL_MATTER_BOOTS.get());
         }
     }
 }

@@ -37,9 +37,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
 
 import java.util.Set;
@@ -77,7 +75,7 @@ public class SoulMatterHammerItem extends SMToolItem
 //            }
         }
 
-        return InteractionResult.FAIL;
+        return InteractionResult.PASS;
     }
 
     public ImmutableList<BlockPos> getAOEBlocks(ItemStack tool, Level world, Player playerEntity, BlockPos origin) {
