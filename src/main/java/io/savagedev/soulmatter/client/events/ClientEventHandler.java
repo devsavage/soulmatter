@@ -1,7 +1,7 @@
-package io.savagedev.soulmatter.items.tool.soul;
+package io.savagedev.soulmatter.client.events;
 
 /*
- * SoulMatterSwordItem.java
+ * ClientEventHandler.java
  * Copyright (C) 2014 - 2024 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,20 +23,26 @@ package io.savagedev.soulmatter.items.tool.soul;
  * THE SOFTWARE.
  */
 
-import com.google.common.collect.Sets;
-import io.savagedev.soulmatter.SoulMatter;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import io.savagedev.soulmatter.client.gui.SoulEnchanterScreen;
+import io.savagedev.soulmatter.client.gui.SoulPresserScreen;
+import io.savagedev.soulmatter.init.ModContainerMenus;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import java.util.Set;
-
-public class SoulMatterSwordItem extends SMToolItem
+public class ClientEventHandler
 {
-//    private static final Set<Block> EFFECTIVE_ON = Sets.newHashSet(Blocks.COBWEB);
-private static final TagKey<Block> EFFECTIVE_ON = BlockTags.WOOL;
-    public SoulMatterSwordItem() {
-        super("sword", 9, EFFECTIVE_ON, properties -> new Properties());
+    public static void init() {
+        final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        bus.addListener(ClientEventHandler::clientSetup);
+    }
+
+    public static void clientSetup(FMLClientSetupEvent event) {
+        event.enqueueWork(() -> {
+            MenuScreens.register(ModContainerMenus.SOUL_ENCHANTER.get(), SoulEnchanterScreen::new);
+            MenuScreens.register(ModContainerMenus.SOUL_PRESSER.get(), SoulPresserScreen::new);
+        });
     }
 }

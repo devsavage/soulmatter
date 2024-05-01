@@ -38,29 +38,36 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Locale;
+import java.util.function.Supplier;
+
 public class ModItems
 {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ModReference.MOD_ID);
-    public static final RegistryObject<SMItem> EMERALD_ROD = ITEMS.register(ModNames.Items.EMERALD_ROD, EmeraldRodItem::new);
-    public static final RegistryObject<SMItem> SOUL_MATTER = ITEMS.register(ModNames.Items.SOUL_MATTER, SoulMatterItem::new);
-    public static final RegistryObject<SMItem> RAW_SOUL_MATTER = ITEMS.register(ModNames.Items.RAW_SOUL_MATTER, RawSoulMatterItem::new);
-    public static final RegistryObject<SMItem> SOUL_MATTER_COMPACT = ITEMS.register(ModNames.Items.SOUL_MATTER_COMPACT, SoulMatterCompactItem::new);
-    public static final RegistryObject<SMItem> SOUL_STEALER = ITEMS.register(ModNames.Items.SOUL_STEALER, SoulStealerItem::new);
+    public static final RegistryObject<SMItem> EMERALD_ROD = register(ModNames.Items.EMERALD_ROD, EmeraldRodItem::new);
+    public static final RegistryObject<SMItem> SOUL_MATTER = register(ModNames.Items.SOUL_MATTER, SoulMatterItem::new);
+    public static final RegistryObject<SMItem> RAW_SOUL_MATTER = register(ModNames.Items.RAW_SOUL_MATTER, RawSoulMatterItem::new);
+    public static final RegistryObject<SMItem> SOUL_MATTER_COMPACT = register(ModNames.Items.SOUL_MATTER_COMPACT, SoulMatterCompactItem::new);
+    public static final RegistryObject<SMItem> SOUL_STEALER = register(ModNames.Items.SOUL_STEALER, SoulStealerItem::new);
 
-    public static final RegistryObject<SMToolItem> SOUL_MATTER_SWORD = ITEMS.register(ModNames.Items.SOUL_MATTER_SWORD, SoulMatterSwordItem::new);
-    public static final RegistryObject<SMToolItem> SOUL_MATTER_AXE = ITEMS.register(ModNames.Items.SOUL_MATTER_AXE, SoulMatterAxeItem::new);
-    public static final RegistryObject<SMToolItem> SOUL_MATTER_HAMMER = ITEMS.register(ModNames.Items.SOUL_MATTER_HAMMER, SoulMatterHammerItem::new);
-    public static final RegistryObject<SMToolItem> SOUL_MATTER_PICKAXE = ITEMS.register(ModNames.Items.SOUL_MATTER_PICKAXE, SoulMatterAxeItem::new);
-    public static final RegistryObject<SMToolItem> SOUL_MATTER_HOE = ITEMS.register(ModNames.Items.SOUL_MATTER_HOE, SoulMatterHoeItem::new);
-    public static final RegistryObject<SMToolItem> SOUL_MATTER_SHOVEL = ITEMS.register(ModNames.Items.SOUL_MATTER_SHOVEL, SoulMatterShovelItem::new);
+    public static final RegistryObject<SMToolItem> SOUL_MATTER_SWORD = register(ModNames.Items.SOUL_MATTER_SWORD, SoulMatterSwordItem::new);
+    public static final RegistryObject<SMToolItem> SOUL_MATTER_AXE = register(ModNames.Items.SOUL_MATTER_AXE, SoulMatterAxeItem::new);
+    public static final RegistryObject<SMToolItem> SOUL_MATTER_HAMMER = register(ModNames.Items.SOUL_MATTER_HAMMER, SoulMatterHammerItem::new);
+    public static final RegistryObject<SMToolItem> SOUL_MATTER_PICKAXE = register(ModNames.Items.SOUL_MATTER_PICKAXE, SoulMatterAxeItem::new);
+    public static final RegistryObject<SMToolItem> SOUL_MATTER_HOE = register(ModNames.Items.SOUL_MATTER_HOE, SoulMatterHoeItem::new);
+    public static final RegistryObject<SMToolItem> SOUL_MATTER_SHOVEL = register(ModNames.Items.SOUL_MATTER_SHOVEL, SoulMatterShovelItem::new);
 
-    public static final RegistryObject<SMArmorItem> SOUL_MATTER_HELMET = ITEMS.register(ModNames.Items.SOUL_MATTER_HELMET, () -> new SMArmorItem(EquipmentSlot.HEAD, ArmorItem.Type.HELMET, properties -> properties));
-    public static final RegistryObject<SMArmorItem> SOUL_MATTER_CHESTPLATE = ITEMS.register(ModNames.Items.SOUL_MATTER_CHESTPLATE, () -> new SMArmorItem(EquipmentSlot.CHEST, ArmorItem.Type.CHESTPLATE, properties -> properties));
-    public static final RegistryObject<SMArmorItem> SOUL_MATTER_LEGGINGS = ITEMS.register(ModNames.Items.SOUL_MATTER_LEGGINGS, () -> new SMArmorItem(EquipmentSlot.LEGS, ArmorItem.Type.LEGGINGS, properties -> properties));
-    public static final RegistryObject<SMArmorItem> SOUL_MATTER_BOOTS = ITEMS.register(ModNames.Items.SOUL_MATTER_BOOTS, () -> new SMArmorItem(EquipmentSlot.FEET, ArmorItem.Type.BOOTS, properties -> properties));
+    public static final RegistryObject<SMArmorItem> SOUL_MATTER_HELMET = register(ModNames.Items.SOUL_MATTER_HELMET, () -> new SMArmorItem(EquipmentSlot.HEAD, ArmorItem.Type.HELMET, properties -> properties));
+    public static final RegistryObject<SMArmorItem> SOUL_MATTER_CHESTPLATE = register(ModNames.Items.SOUL_MATTER_CHESTPLATE, () -> new SMArmorItem(EquipmentSlot.CHEST, ArmorItem.Type.CHESTPLATE, properties -> properties));
+    public static final RegistryObject<SMArmorItem> SOUL_MATTER_LEGGINGS = register(ModNames.Items.SOUL_MATTER_LEGGINGS, () -> new SMArmorItem(EquipmentSlot.LEGS, ArmorItem.Type.LEGGINGS, properties -> properties));
+    public static final RegistryObject<SMArmorItem> SOUL_MATTER_BOOTS = register(ModNames.Items.SOUL_MATTER_BOOTS, () -> new SMArmorItem(EquipmentSlot.FEET, ArmorItem.Type.BOOTS, properties -> properties));
 
-    public static void init(IEventBus modEventBus) {
-        ITEMS.register(modEventBus);
+    private static RegistryObject<Item> register(String name) {
+        return register(name, () -> new Item(new Item.Properties()));
+    }
+
+    private static <T extends Item> RegistryObject<T> register(String name, Supplier<T> item) {
+        return ITEMS.register(name.toLowerCase(Locale.ROOT), item);
     }
 }
 

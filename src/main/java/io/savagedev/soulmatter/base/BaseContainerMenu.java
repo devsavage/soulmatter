@@ -15,21 +15,29 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import org.jetbrains.annotations.Nullable;
 
 public class BaseContainerMenu<T extends BaseContainerBlockEntity> extends AbstractContainerMenu
 {
+    @Nullable
+    protected Player player;
     protected final T blockEntity;
-
-    public static BaseContainerMenu create(MenuType<?> type, int windowId, Inventory playerInv, BaseContainerBlockEntity blockEntity) {
-        return new BaseContainerMenu(type, windowId, blockEntity).init(playerInv);
-    }
-
     protected int containerSlots; // The number of slots in the container (not including the player inventory)
+    public static BaseContainerMenu create(MenuType<?> type, int windowId, Inventory playerInv) {
+        return new BaseContainerMenu(type, windowId).init(playerInv);
+    }
 
     protected BaseContainerMenu(MenuType<?> type, int windowId, T blockEntity) {
         super(type, windowId);
-
         this.blockEntity = blockEntity;
+    }
+
+    public static BaseContainerMenu create(MenuType<?> type, int windowId, Inventory playerInv, BaseContainerBlockEntity blockEntity) {
+        return new BaseContainerMenu(type, windowId, blockEntity);
+    }
+
+    protected BaseContainerMenu(MenuType<?> type, int windowId) {
+        this( type, windowId, null);
     }
 
     /**
@@ -44,11 +52,16 @@ public class BaseContainerMenu<T extends BaseContainerBlockEntity> extends Abstr
         addContainerSlots();
         containerSlots = slots.size();
         addPlayerInventorySlots(playerInventory, yOffset);
+        player = playerInventory.player;
         return (C) this;
     }
 
     public <C extends BaseContainerMenu> C init(Inventory playerInventory) {
         return init(playerInventory, 0);
+    }
+
+    public T getBlockEntity() {
+        return blockEntity;
     }
 
     @Override
@@ -77,12 +90,13 @@ public class BaseContainerMenu<T extends BaseContainerBlockEntity> extends Abstr
             slot.onTake(player, stack);
             return original;
         }
+
         return ItemStack.EMPTY;
     }
 
     @Override
     public boolean stillValid(Player playerIn) {
-        return blockEntity.stillValid(playerIn);
+        return this.blockEntity.stillValid(playerIn);
     }
 
     /**
@@ -140,7 +154,7 @@ public class BaseContainerMenu<T extends BaseContainerBlockEntity> extends Abstr
     }
 
     @FunctionalInterface
-    public interface Factory<T extends BlockEntity, C extends BaseContainerMenu>
+    public interface Factory<T extends BaseContainerBlockEntity, C extends BaseContainerMenu>
     {
         C create(T tile, Inventory playerInventory, int windowId);
     }

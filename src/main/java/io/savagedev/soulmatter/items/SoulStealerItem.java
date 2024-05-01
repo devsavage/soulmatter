@@ -2,7 +2,7 @@ package io.savagedev.soulmatter.items;
 
 /*
  * SoulStealerItem.java
- * Copyright (C) 2014 - 2021 Savage - github.com/devsavage
+ * Copyright (C) 2014 - 2024 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -44,6 +44,7 @@ import java.util.List;
 
 public class SoulStealerItem extends SMItem
 {
+    public static int MAX_SOULS = Integer.MAX_VALUE;
     public SoulStealerItem() {
         super(properties -> properties.stacksTo(1));
     }
@@ -96,4 +97,3 @@ public class SoulStealerItem extends SMItem
         }
     }
 }
-// stack.hasTag() && !stack.getTag().contains(SMToolLevelHandler.SOUL_TOOL_TAG)

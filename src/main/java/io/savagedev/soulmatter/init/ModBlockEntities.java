@@ -2,7 +2,7 @@ package io.savagedev.soulmatter.init;
 
 /*
  * ModBlockEntities.java
- * Copyright (C) 2014 - 2021 Savage - github.com/devsavage
+ * Copyright (C) 2014 - 2024 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,37 +23,29 @@ package io.savagedev.soulmatter.init;
  * THE SOFTWARE.
  */
 
+import io.savagedev.soulmatter.blocks.entity.SoulEnchanterBlockEntity;
+import io.savagedev.soulmatter.blocks.entity.SoulPresserBlockEntity;
 import io.savagedev.soulmatter.util.ModNames;
 import io.savagedev.soulmatter.util.ModReference;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class ModBlockEntities
 {
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
-            DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, ModReference.MOD_ID);
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, ModReference.MOD_ID);
 
-//    public static final RegistryObject<BlockEntityType<SoulEnchanterBlockEntity>> SOUL_ENCHANTER =
-//            BLOCK_ENTITIES.register(ModNames.Blocks.SOUL_ENCHANTER,
-//                    () -> BlockEntityType.Builder.of(SoulEnchanterBlockEntity::new, ModBlocks.SOUL_ENCHANTER.get()).build(null));
-//    public static final RegistryObject<BlockEntityType<SoulPresserBlockEntity>> SOUL_PRESSER =
-//            BLOCK_ENTITIES.register(ModNames.Blocks.SOUL_PRESSER,
-//                    () -> BlockEntityType.Builder.of(SoulPresserBlockEntity::new, ModBlocks.SOUL_PRESSER.get()).build(null));
+    public static final RegistryObject<BlockEntityType<SoulEnchanterBlockEntity>> SOUL_ENCHANTER = register(ModNames.Blocks.SOUL_ENCHANTER, SoulEnchanterBlockEntity::new, ModBlocks.SOUL_ENCHANTER);
+    public static final RegistryObject<BlockEntityType<SoulPresserBlockEntity>> SOUL_PRESSER = register(ModNames.Blocks.SOUL_PRESSER, SoulPresserBlockEntity::new, ModBlocks.SOUL_PRESSER);
 
-    public static void register(IEventBus eventBus) {
-        BLOCK_ENTITIES.register(eventBus);
+    private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> register(String name, BlockEntityType.BlockEntitySupplier<T> factory, Supplier<? extends Block> block) {
+        return BLOCK_ENTITIES.register(name, () -> BlockEntityType.Builder.of(factory, block.get()).build(null));
     }
 }

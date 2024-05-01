@@ -27,6 +27,7 @@ import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
 import io.savagedev.savagecore.util.updater.Updater;
 import io.savagedev.savagecore.util.updater.UpdaterUtils;
+import io.savagedev.soulmatter.client.events.ClientEventHandler;
 import io.savagedev.soulmatter.handlers.events.MobDeathEventHandler;
 import io.savagedev.soulmatter.handlers.events.MobDropsHandler;
 import io.savagedev.soulmatter.handlers.events.ModPlayerLoggedInEvent;
@@ -35,6 +36,7 @@ import io.savagedev.soulmatter.util.ModReference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -45,6 +47,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.versions.mcp.MCPVersion;
 
@@ -61,11 +64,12 @@ public class SoulMatter
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         modEventBus.register(this);
-//        modEventBus.register(new ModBlocks());
+
         ModCreativeTab.TABS.register(modEventBus);
-        ModItems.init(modEventBus);
-//        modEventBus.register(new ModBlockEntities());
-//        modEventBus.register(new ModContainerMenus());
+        ModBlocks.BLOCKS.register(modEventBus);
+        ModItems.ITEMS.register(modEventBus);
+        ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
+        ModContainerMenus.MENUS.register(modEventBus);
 
         MOD_CONTAINER = ModLoadingContext.get().getActiveContainer();
         UPDATER = new Updater()
@@ -84,11 +88,10 @@ public class SoulMatter
         ModConfig.COMMON.setConfig(configData);
 
         MinecraftForge.EVENT_BUS.register(new ModCommands());
-    }
 
-    @SubscribeEvent
-    public void onClientSetup(FMLClientSetupEvent event) {
-//        ModContainerMenus.onClientSetup();
+        if(FMLEnvironment.dist == Dist.CLIENT) {
+            ClientEventHandler.init();
+        }
     }
 
     @SubscribeEvent

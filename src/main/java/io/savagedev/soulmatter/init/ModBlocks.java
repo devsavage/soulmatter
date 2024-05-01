@@ -2,7 +2,7 @@ package io.savagedev.soulmatter.init;
 
 /*
  * ModBlocks.java
- * Copyright (C) 2014 - 2021 Savage - github.com/devsavage
+ * Copyright (C) 2014 - 2024 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,35 +23,50 @@ package io.savagedev.soulmatter.init;
  * THE SOFTWARE.
  */
 
+import io.savagedev.soulmatter.blocks.SoulEnchanterBlock;
+import io.savagedev.soulmatter.blocks.SoulPresserBlock;
+import io.savagedev.soulmatter.items.blockitems.SoulEnchanterBlockItem;
 import io.savagedev.soulmatter.util.ModNames;
 import io.savagedev.soulmatter.util.ModReference;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ModBlocks
 {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ModReference.MOD_ID);
-//    public static final RegistryObject<SoulEnchanterBlock> SOUL_ENCHANTER = registerBlock(ModNames.Blocks.SOUL_ENCHANTER, SoulEnchanterBlock::new);
-//    public static final RegistryObject<SoulPresserBlock> SOUL_PRESSER = registerBlock(ModNames.Blocks.SOUL_PRESSER, SoulPresserBlock::new);
+    public static final RegistryObject<Block> SOUL_ENCHANTER = register(ModNames.Blocks.SOUL_ENCHANTER, SoulEnchanterBlock::new, block -> new SoulEnchanterBlockItem(block, new Item.Properties()));
+    public static final RegistryObject<Block> SOUL_PRESSER = register(ModNames.Blocks.SOUL_PRESSER, SoulPresserBlock::new, block -> new SoulEnchanterBlockItem(block, new Item.Properties()));
 
-    public static void register(IEventBus eventBus) {
+    private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier, @Nullable Function<T, ? extends BlockItem> blockItemFactory)
+    {
+        return registerBlock(ModBlocks.BLOCKS, ModItems.ITEMS, name, blockSupplier, blockItemFactory);
+    }
+    public static <T extends Block> RegistryObject<T> registerBlock(DeferredRegister<Block> blocks, DeferredRegister<Item> items, String name, Supplier<T> blockSupplier, @Nullable Function<T, ? extends BlockItem> blockItemFactory)
+    {
+        final String actualName = name.toLowerCase(Locale.ROOT);
+        final RegistryObject<T> block = blocks.register(actualName, blockSupplier);
+
+        if (blockItemFactory != null) {
+            items.register(actualName, () -> blockItemFactory.apply(block.get()));
+        }
+
+        return block;
+    }
+
+    public static void init(IEventBus eventBus) {
         BLOCKS.register(eventBus);
     }
 
-    private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
-        RegistryObject<T> registryObject = BLOCKS.register(name, block);
-        registerBlockItem(name, registryObject);
-        return registryObject;
-    }
-
-    private static <T extends Block> void registerBlockItem(String name, RegistryObject<T> block) {
-        ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
-    }
 }

@@ -1,7 +1,7 @@
 package io.savagedev.soulmatter.client.commands;
 
 /*
- * CommandSMTool.java
+ * CommandSMStealer.java
  * Copyright (C) 2014 - 2024 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,27 +24,35 @@ package io.savagedev.soulmatter.client.commands;
  */
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import io.savagedev.soulmatter.handlers.SMToolLevelHandler;
-import net.minecraft.commands.CommandSource;
+import io.savagedev.savagecore.nbt.NBTHelper;
+import io.savagedev.savagecore.util.logger.LogHelper;
+import io.savagedev.soulmatter.init.ModItems;
+import io.savagedev.soulmatter.items.SoulStealerItem;
+import io.savagedev.soulmatter.util.ModNames;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import org.apache.logging.log4j.Level;
 
-public class CommandSMTool
+public class CommandSMStealer
 {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        LiteralArgumentBuilder<CommandSourceStack> smToolCommand = Commands.literal("smtool")
+        LiteralArgumentBuilder<CommandSourceStack> smStealerCommand = Commands.literal("smstealer")
                 .requires((commandSource) -> commandSource.hasPermission(2))
-                .then(Commands.literal("maxlevel").executes((context) -> handleToolLevel(context.getSource())));
+                .then(Commands.literal("setsouls")
+                        .then(Commands.argument("amount", IntegerArgumentType.integer(1, SoulStealerItem.MAX_SOULS)).executes((context) -> handleAddSouls(context.getSource(), IntegerArgumentType.getInteger(context, "amount")))));
 
-        dispatcher.register(smToolCommand);
+        dispatcher.register(smStealerCommand);
     }
 
-    public static int handleToolLevel(CommandSourceStack source) {
+    public static int handleAddSouls(CommandSourceStack source, int amount) {
+        LogHelper.log(Level.DEBUG, amount);
+        LogHelper.log(Level.DEBUG, source);
         if(source.getEntity() instanceof Player) {
             Player player = (Player) source.getEntity();
 
@@ -55,18 +63,25 @@ public class CommandSMTool
 
             if(!player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
                 ItemStack heldItemStack = player.getItemInHand(InteractionHand.MAIN_HAND);
-                if(SMToolLevelHandler.hasLevelTags(heldItemStack)) {
-                    if(!SMToolLevelHandler.isMaxToolLevel(heldItemStack)) {
-                        SMToolLevelHandler.setMaxLevelCreative(heldItemStack, player);
-                        return 1;
-                    } else {
-                        source.sendFailure(Component.translatable("command.soulmatter.smtool.maxlevel.pass"));
-                        return 0;
-                    }
-                } else {
-                    source.sendFailure(Component.translatable("command.soulmatter.smtool.maxlevel.error"));
+                if(!(heldItemStack.getItem() == ModItems.SOUL_STEALER.get())) {
+                    source.sendFailure(Component.translatable("command.soulmatter.smstealer.addsouls.error"));
                     return 0;
                 }
+
+                if(amount <= 0 || amount > SoulStealerItem.MAX_SOULS) {
+                    source.sendFailure(Component.translatable("command.soulmatter.smstealer.addsouls.invalid"));
+                    return 0;
+                }
+
+                if(!NBTHelper.hasTag(heldItemStack, ModNames.Tags.SOULS_TAKEN)) {
+                    NBTHelper.setInt(heldItemStack, ModNames.Tags.SOULS_TAKEN, amount);
+                } else {
+                    NBTHelper.setInt(heldItemStack, ModNames.Tags.SOULS_TAKEN, amount);
+                }
+
+                source.sendSuccess(() -> Component.translatable("command.soulmatter.smstealer.addsouls.success", amount), true);
+
+                return 1;
             }
         }
 

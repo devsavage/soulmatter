@@ -78,6 +78,8 @@ public class ModCreativeTab
             event.accept(ModItems.SOUL_MATTER_CHESTPLATE.get());
             event.accept(ModItems.SOUL_MATTER_LEGGINGS.get());
             event.accept(ModItems.SOUL_MATTER_BOOTS.get());
+            event.accept(ModBlocks.SOUL_PRESSER.get());
+            event.accept(ModBlocks.SOUL_ENCHANTER.get());
         }
     }
 }

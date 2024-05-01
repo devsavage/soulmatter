@@ -26,6 +26,7 @@ package io.savagedev.soulmatter.handlers.events;
 import io.savagedev.savagecore.nbt.NBTHelper;
 import io.savagedev.savagecore.util.logger.LogHelper;
 import io.savagedev.soulmatter.init.ModItems;
+import io.savagedev.soulmatter.items.SoulStealerItem;
 import io.savagedev.soulmatter.util.ModNames;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.monster.Monster;
@@ -49,10 +50,13 @@ public class MobDeathEventHandler
                         NBTHelper.setInt(soulStealer, ModNames.Tags.SOULS_TAKEN, 1);
                     } else {
                         int count = NBTHelper.getInt(soulStealer, ModNames.Tags.SOULS_TAKEN);
-                        if(count >= 0)
-                            NBTHelper.setInt(soulStealer, ModNames.Tags.SOULS_TAKEN, count + 1);
-                        else
+                        if(count >= 0) {
+                            if(count < SoulStealerItem.MAX_SOULS) {
+                                NBTHelper.setInt(soulStealer, ModNames.Tags.SOULS_TAKEN, count + 1);
+                            }
+                        } else {
                             NBTHelper.setInt(soulStealer, ModNames.Tags.SOULS_TAKEN, 0);
+                        }
                     }
                 }
             }

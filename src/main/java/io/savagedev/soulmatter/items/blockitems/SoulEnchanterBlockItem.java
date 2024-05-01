@@ -1,7 +1,7 @@
-package io.savagedev.soulmatter.items.tool.soul;
+package io.savagedev.soulmatter.items.blockitems;
 
 /*
- * SoulMatterSwordItem.java
+ * SoulEnchanterBlockItem.java
  * Copyright (C) 2014 - 2024 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,20 +23,12 @@ package io.savagedev.soulmatter.items.tool.soul;
  * THE SOFTWARE.
  */
 
-import com.google.common.collect.Sets;
-import io.savagedev.soulmatter.SoulMatter;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 
-import java.util.Set;
-
-public class SoulMatterSwordItem extends SMToolItem
+public class SoulEnchanterBlockItem extends BlockItem
 {
-//    private static final Set<Block> EFFECTIVE_ON = Sets.newHashSet(Blocks.COBWEB);
-private static final TagKey<Block> EFFECTIVE_ON = BlockTags.WOOL;
-    public SoulMatterSwordItem() {
-        super("sword", 9, EFFECTIVE_ON, properties -> new Properties());
+    public SoulEnchanterBlockItem(Block block, Properties properties) {
+        super(block, properties);
     }
 }

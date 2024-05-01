@@ -23,6 +23,7 @@ package io.savagedev.soulmatter.init;
  * THE SOFTWARE.
  */
 
+import io.savagedev.soulmatter.client.commands.CommandSMStealer;
 import io.savagedev.soulmatter.client.commands.CommandSMTool;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -32,5 +33,6 @@ public class ModCommands
     @SubscribeEvent
     public void registerCommands(RegisterCommandsEvent event) {
         CommandSMTool.register(event.getDispatcher());
+        CommandSMStealer.register(event.getDispatcher());
     }
 }

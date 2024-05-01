@@ -2,7 +2,7 @@ package io.savagedev.soulmatter.menus;
 
 /*
  * SoulEnchanterContainerMenu.java
- * Copyright (C) 2014 - 2021 Savage - github.com/devsavage
+ * Copyright (C) 2014 - 2024 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,173 +25,170 @@ package io.savagedev.soulmatter.menus;
 
 import io.savagedev.savagecore.item.BaseItemStackHandler;
 import io.savagedev.soulmatter.base.BaseContainerMenu;
+import io.savagedev.soulmatter.blocks.entity.SoulEnchanterBlockEntity;
+import io.savagedev.soulmatter.init.ModBlocks;
 import io.savagedev.soulmatter.init.ModContainerMenus;
 import io.savagedev.soulmatter.init.ModItems;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
+public class SoulEnchanterContainerMenu extends BaseContainerMenu<SoulEnchanterBlockEntity>
+{
+    private SoulEnchanterBlockEntity soulEnchanter;
+    private final BaseItemStackHandler inventory;
+    private final ContainerData containerData;
 
-//public class SoulEnchanterContainerMenu extends AbstractContainerMenu
-//{
-//    private SoulEnchanterBlockEntity soulEnchanter;
-//    private final BaseItemStackHandler inventory;
-//    private final ContainerData containerData;
-//
-//    public SoulEnchanterContainerMenu(int windowId, Inventory inv, FriendlyByteBuf extraData) {
-//        this(windowId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
-//    }
-//
-//    public SoulEnchanterContainerMenu(int windowId, Inventory inv, BlockEntity entity, ContainerData data) {
-//        super(ModContainerMenus.SOUL_ENCHANTER.get(), windowId);
-//
-//        this.inventory = soulEnchanter.getInventory();
-//        this.containerData = soulEnchanter.getContainerData();
-//
-//        this.addDataSlots(this.containerData);
-//    }
-//
-//    public int getProgress() {
-//        return this.containerData.get(0);
-//    }
-//
-//    public int getFuelStored() {
-//        return this.containerData.get(1);
-//    }
-//
-//    public boolean isInfusing() {
-//        return this.getProgress() > 0;
-//    }
-//
-//    public int getFuelCapacity() {
-//        return SoulEnchanterBlockEntity.getFuelCapacity();
-//    }
-//
-//    public int getInfuseProgressScaled(int pixels) {
-//        int i = this.getProgress();
-//        int j = SoulEnchanterBlockEntity.getOperationTime();
-//
-//        return j != 0 && i != 0 ? i * pixels / j : 0;
-//    }
-//
-//    @OnlyIn(Dist.CLIENT)
-//    public int getFuelLeftScaled(int scale) {
-//        double stored = this.getFuelStored();
-//        double max = this.getFuelCapacity();
-//        double value = ((stored /max) * scale);
-//
-//        return (int)value;
-//    }
-////
-////    @Override
-////    protected void addContainerSlots() {
-////        this.addSlot(new SlotSoulStealer(this.inventory, 0, 8, 62));
-////        this.addSlot(new SlotInput(this.inventory, 1, 49, 35));
-////        this.addSlot(new SlotSoulStealer(this.inventory, 2, 111, 35));
-////    }
-//
-//    @Override
-//    public ItemStack quickMoveStack(Player p_38941_, int p_38942_) {
-//        return null;
-//    }
-//
-//    @Override
-//    public boolean stillValid(Player playerIn) {
-//        return this.soulEnchanter.stillValid(playerIn);
-//    }
-//
-//    private final class SlotSoulStealer extends SlotItemHandler
-//    {
-//        private final BaseItemStackHandler inventory;
-//        private final int slotIndex;
-//
-//        public SlotSoulStealer(BaseItemStackHandler itemHandler, int index, int xPosition, int yPosition) {
-//            super(itemHandler, index, xPosition, yPosition);
-//            this.inventory = itemHandler;
-//            this.slotIndex = index;
-//        }
-//
-//        @Override
-//        public boolean mayPickup(Player playerIn) {
-//            return !this.inventory.extractItemSuper(this.slotIndex, 1, true).isEmpty();
-//        }
-//
-//        @Nonnull
-//        @Override
-//        public ItemStack remove(int amount) {
-//            return this.inventory.extractItemSuper(this.slotIndex, amount, false);
-//        }
-//
-//        @Override
-//        public boolean mayPlace(@Nonnull ItemStack stack) {
-//            return stack.getItem() == ModItems.SOUL_STEALER.get();
-//        }
-//    }
-//
-//    private final class SlotInput extends SlotItemHandler
-//    {
-//        private final BaseItemStackHandler inventory;
-//        private final int slotIndex;
-//
-//        public SlotInput(BaseItemStackHandler itemHandler, int index, int xPosition, int yPosition) {
-//            super(itemHandler, index, xPosition, yPosition);
-//            this.inventory = itemHandler;
-//            this.slotIndex = index;
-//        }
-//
-//        @Override
-//        public boolean mayPickup(Player playerIn) {
-//            return !this.inventory.extractItemSuper(this.slotIndex, 1, true).isEmpty();
-//        }
-//
-//        @Nonnull
-//        @Override
-//        public ItemStack remove(int amount) {
-//            return this.inventory.extractItemSuper(this.slotIndex, amount, false);
-//        }
-//
-//        @Override
-//        public boolean mayPlace(@Nonnull ItemStack stack) {
-//            return stack.getItem() == ModItems.RAW_SOUL_MATTER.get();
-//        }
-//    }
-//
-//    private final class SlotOutput extends SlotItemHandler
-//    {
-//        private final BaseItemStackHandler inventory;
-//        private final int slotIndex;
-//
-//        public SlotOutput(BaseItemStackHandler itemHandler, int index, int xPosition, int yPosition) {
-//            super(itemHandler, index, xPosition, yPosition);
-//            this.inventory = itemHandler;
-//            this.slotIndex = index;
-//        }
-//
-//        @Override
-//        public boolean mayPickup(Player playerIn) {
-//            return !this.inventory.extractItemSuper(this.slotIndex, 1, true).isEmpty();
-//        }
-//
-//        @Nonnull
-//        @Override
-//        public ItemStack remove(int amount) {
-//            return this.inventory.extractItemSuper(this.slotIndex, amount, false);
-//        }
-//
-//        @Override
-//        public boolean mayPlace(@Nonnull ItemStack stack) {
-//            return false;
-//        }
-//    }
-//}
+    private final ContainerLevelAccess levelAccess;
+
+    public static SoulEnchanterContainerMenu create(SoulEnchanterBlockEntity soulEnchanter, Inventory playerInv, int windowId) {
+        return new SoulEnchanterContainerMenu(soulEnchanter, windowId).init(playerInv);
+    }
+
+    public SoulEnchanterContainerMenu(SoulEnchanterBlockEntity soulEnchanter, int windowId) {
+        super(ModContainerMenus.SOUL_ENCHANTER.get(), windowId, soulEnchanter);
+
+        this.soulEnchanter = soulEnchanter;
+        this.inventory = soulEnchanter.getInventory();
+        this.containerData = soulEnchanter.getContainerData();
+
+        this.levelAccess = ContainerLevelAccess.create(soulEnchanter.getLevel(), soulEnchanter.getBlockPos());
+
+        this.addDataSlots(this.containerData);
+    }
+
+    public int getProgress() {
+        return this.containerData.get(0);
+    }
+
+    public int getFuelStored() {
+        return this.containerData.get(1);
+    }
+
+    public boolean isInfusing() {
+        return this.getProgress() > 0;
+    }
+
+    public int getFuelCapacity() {
+        return SoulEnchanterBlockEntity.getFuelCapacity();
+    }
+
+    public int getInfuseProgressScaled(int pixels) {
+        int i = this.getProgress();
+        int j = SoulEnchanterBlockEntity.getOperationTime();
+
+        return j != 0 && i != 0 ? i * pixels / j : 0;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public int getFuelLeftScaled(int scale) {
+        double stored = this.getFuelStored();
+        double max = this.getFuelCapacity();
+        double value = ((stored /max) * scale);
+
+        return (int)value;
+    }
+
+    @Override
+    protected void addContainerSlots() {
+        this.addSlot(new SlotSoulStealer(this.inventory, 0, 8, 62));
+        this.addSlot(new SlotInput(this.inventory, 1, 49, 35));
+        this.addSlot(new SlotOutput(this.inventory, 2, 111, 35));
+    }
+
+    @Override
+    public boolean stillValid(Player playerIn) {
+        return stillValid(this.levelAccess, playerIn, ModBlocks.SOUL_ENCHANTER.get());
+    }
+
+    private final class SlotSoulStealer extends SlotItemHandler
+    {
+        private final BaseItemStackHandler inventory;
+        private final int slotIndex;
+
+        public SlotSoulStealer(BaseItemStackHandler itemHandler, int index, int xPosition, int yPosition) {
+            super(itemHandler, index, xPosition, yPosition);
+            this.inventory = itemHandler;
+            this.slotIndex = index;
+        }
+
+        @Override
+        public boolean mayPickup(Player playerIn) {
+            return !this.inventory.extractItemSuper(this.slotIndex, 1, true).isEmpty();
+        }
+
+        @Nonnull
+        @Override
+        public ItemStack remove(int amount) {
+            return this.inventory.extractItemSuper(this.slotIndex, amount, false);
+        }
+
+        @Override
+        public boolean mayPlace(@Nonnull ItemStack stack) {
+            return stack.getItem() == ModItems.SOUL_STEALER.get();
+        }
+    }
+
+    private final class SlotInput extends SlotItemHandler
+    {
+        private final BaseItemStackHandler inventory;
+        private final int slotIndex;
+
+        public SlotInput(BaseItemStackHandler itemHandler, int index, int xPosition, int yPosition) {
+            super(itemHandler, index, xPosition, yPosition);
+            this.inventory = itemHandler;
+            this.slotIndex = index;
+        }
+
+        @Override
+        public boolean mayPickup(Player playerIn) {
+            return !this.inventory.extractItemSuper(this.slotIndex, 1, true).isEmpty();
+        }
+
+        @Nonnull
+        @Override
+        public ItemStack remove(int amount) {
+            return this.inventory.extractItemSuper(this.slotIndex, amount, false);
+        }
+
+        @Override
+        public boolean mayPlace(@Nonnull ItemStack stack) {
+            return stack.getItem() == ModItems.RAW_SOUL_MATTER.get();
+        }
+    }
+
+    private final class SlotOutput extends SlotItemHandler
+    {
+        private final BaseItemStackHandler inventory;
+        private final int slotIndex;
+
+        public SlotOutput(BaseItemStackHandler itemHandler, int index, int xPosition, int yPosition) {
+            super(itemHandler, index, xPosition, yPosition);
+            this.inventory = itemHandler;
+            this.slotIndex = index;
+        }
+
+        @Override
+        public boolean mayPickup(Player playerIn) {
+            return !this.inventory.extractItemSuper(this.slotIndex, 1, true).isEmpty();
+        }
+
+        @Nonnull
+        @Override
+        public ItemStack remove(int amount) {
+            return this.inventory.extractItemSuper(this.slotIndex, amount, false);
+        }
+
+        @Override
+        public boolean mayPlace(@Nonnull ItemStack stack) {
+            return false;
+        }
+    }
+}

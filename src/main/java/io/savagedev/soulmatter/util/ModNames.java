@@ -2,7 +2,7 @@ package io.savagedev.soulmatter.util;
 
 /*
  * ModNames.java
- * Copyright (C) 2014 - 2021 Savage - github.com/devsavage
+ * Copyright (C) 2014 - 2024 Savage - github.com/devsavage
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -65,5 +65,10 @@ public class ModNames
     {
         public static final String SM_TAB = "soulmatter_tab";
         public static final String SM_TAB_TITLE = "itemGroup.soulmatter";
+    }
+
+    public static class Screens
+    {
+        public static final String ENCHANTER_BLOCK = "soulmatter.screen.enchanter_block";
     }
 }
