@@ -1,0 +1,24 @@
+{
+  "type": "crafting_shaped",
+  "key": {
+    "#": {
+      "item": "soulmatter:cobble_rod"
+    },
+    "X": [
+      {
+        "item": "minecraft:coal"
+      },
+      {
+        "item": "minecraft:charcoal"
+      }
+    ]
+  },
+  "pattern": [
+    "X",
+    "#"
+  ],
+  "result": {
+    "count": 4,
+    "item": "soulmatter:cobble_torch"
+  }
+}

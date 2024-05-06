@@ -23,8 +23,10 @@ package io.savagedev.soulmatter.init;
  * THE SOFTWARE.
  */
 
+import io.savagedev.soulmatter.blocks.CobbleTorchBlock;
 import io.savagedev.soulmatter.blocks.SoulEnchanterBlock;
 import io.savagedev.soulmatter.blocks.SoulPresserBlock;
+import io.savagedev.soulmatter.items.blockitems.CobbleTorchBlockItem;
 import io.savagedev.soulmatter.items.blockitems.SoulEnchanterBlockItem;
 import io.savagedev.soulmatter.util.ModNames;
 import io.savagedev.soulmatter.util.ModReference;
@@ -48,6 +50,7 @@ public class ModBlocks
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ModReference.MOD_ID);
     public static final RegistryObject<Block> SOUL_ENCHANTER = register(ModNames.Blocks.SOUL_ENCHANTER, SoulEnchanterBlock::new, block -> new SoulEnchanterBlockItem(block, new Item.Properties()));
     public static final RegistryObject<Block> SOUL_PRESSER = register(ModNames.Blocks.SOUL_PRESSER, SoulPresserBlock::new, block -> new SoulEnchanterBlockItem(block, new Item.Properties()));
+    public static final RegistryObject<Block> COBBLE_TORCH = register(ModNames.Blocks.COBBLE_TORCH, CobbleTorchBlock::new, block -> new CobbleTorchBlockItem(block, new Item.Properties()));
 
     private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> blockSupplier, @Nullable Function<T, ? extends BlockItem> blockItemFactory)
     {

@@ -42,12 +42,14 @@ public class ModNames
         public static final String SOUL_MATTER_HAMMER = "soul_matter_hammer";
         public static final String SOUL_MATTER_COMPACT = "soul_matter_compact";
         public static final String EMERALD_ROD = "emerald_rod";
+        public static final String COBBLE_ROD = "cobble_rod";
     }
 
     public static class Blocks
     {
         public static final String SOUL_ENCHANTER = "soul_enchanter";
         public static final String SOUL_PRESSER = "soul_presser";
+        public static final String COBBLE_TORCH = "cobble_torch";
     }
 
     public static class Menus

@@ -49,6 +49,7 @@ public class ModItems
     public static final RegistryObject<SMItem> RAW_SOUL_MATTER = register(ModNames.Items.RAW_SOUL_MATTER, RawSoulMatterItem::new);
     public static final RegistryObject<SMItem> SOUL_MATTER_COMPACT = register(ModNames.Items.SOUL_MATTER_COMPACT, SoulMatterCompactItem::new);
     public static final RegistryObject<SMItem> SOUL_STEALER = register(ModNames.Items.SOUL_STEALER, SoulStealerItem::new);
+    public static final RegistryObject<SMItem> COBBLE_ROD = register(ModNames.Items.COBBLE_ROD, CobbleRodItem::new);
 
     public static final RegistryObject<SMToolItem> SOUL_MATTER_SWORD = register(ModNames.Items.SOUL_MATTER_SWORD, SoulMatterSwordItem::new);
     public static final RegistryObject<SMToolItem> SOUL_MATTER_AXE = register(ModNames.Items.SOUL_MATTER_AXE, SoulMatterAxeItem::new);

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "soulmatter:block/cobble_torch"
+    }
+  }
+}

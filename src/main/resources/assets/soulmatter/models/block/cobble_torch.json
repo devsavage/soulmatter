@@ -1,0 +1,7 @@
+{
+  "render_type": "minecraft:cutout",
+  "parent": "soulmatter:block/template_cobble_torch",
+  "textures": {
+    "cobble_torch": "soulmatter:block/cobble_torch"
+  }
+}

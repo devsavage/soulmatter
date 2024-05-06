@@ -80,6 +80,8 @@ public class ModCreativeTab
             event.accept(ModItems.SOUL_MATTER_BOOTS.get());
             event.accept(ModBlocks.SOUL_PRESSER.get());
             event.accept(ModBlocks.SOUL_ENCHANTER.get());
+            event.accept(ModBlocks.COBBLE_TORCH.get());
+            event.accept(ModItems.COBBLE_ROD.get());
         }
     }
 }

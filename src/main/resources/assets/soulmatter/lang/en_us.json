@@ -16,9 +16,11 @@
   "item.soulmatter.soul_matter_boots": "Soul Matter Boots",
   "item.soulmatter.soul_matter_compact": "Compacted Soul Matter",
   "item.soulmatter.emerald_rod": "Emerald Rod",
+  "item.soulmatter.cobble_rod": "Cobblestone Rod",
 
   "block.soulmatter.soul_enchanter": "Soul Enchanter",
   "block.soulmatter.soul_presser": "Soul Presser",
+  "block.soulmatter.cobble_torch": "Cobblestone Torch",
 
   "menu.soulmatter.soul_enchanter": "Soul Enchanter",
   "menu.soulmatter.soul_presser": "Soul Presser",
